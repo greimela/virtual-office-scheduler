@@ -1,0 +1,17 @@
+{
+  "name": "virtual-office-schedule-updater",
+  "version": "1.0.0",
+  "description": "Update the sessions displayed in an virtual office instance from a predefined schedule",
+  "main": "./build/index.js",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf ./build"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^13.13.5",
+    "ts-node": "^8.10.1",
+    "typescript": "^3.8.3"
+  }
+}
