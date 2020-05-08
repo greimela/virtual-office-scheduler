@@ -1,17 +1,37 @@
 {
-  "name": "virtual-office-schedule-updater",
-  "version": "1.0.0",
-  "description": "Update the sessions displayed in an virtual office instance from a predefined schedule",
-  "main": "./build/index.js",
-  "license": "Apache-2.0",
-  "scripts": {
-    "build": "tsc",
-    "clean": "rm -rf ./build"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "@types/node": "^13.13.5",
-    "ts-node": "^8.10.1",
-    "typescript": "^3.8.3"
-  }
+    "name": "virtual-office-schedule-updater",
+    "version": "1.0.0",
+    "description": "Update the sessions displayed in an virtual office instance from a predefined schedule",
+    "main": "./build/index.js",
+    "license": "Apache-2.0",
+    "scripts": {
+        "build": "tsc",
+        "clean": "rm -rf ./build",
+        "test": "run-s test:unit test:lint test:build",
+        "test:lint": "eslint .",
+        "test:unit": "jest",
+        "test:watch": "jest --watch"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@types/node": "^13.13.5",
+        "@types/jest": "^25.2.1",
+        "@typescript-eslint/eslint-plugin": "^2.26.0",
+        "@typescript-eslint/parser": "^2.26.0",
+        "eslint": "^7.0.0-rc.0",
+        "eslint-config-prettier": "^6.7.0",
+        "eslint-config-standard": "^14.1.0",
+        "eslint-plugin-import": "^2.18.2",
+        "eslint-plugin-jest": "^23.8.2",
+        "eslint-plugin-node": "^11.0.0",
+        "eslint-plugin-prettier": "^3.1.1",
+        "eslint-plugin-promise": "^4.2.1",
+        "eslint-plugin-standard": "^4.0.1",
+        "npm-run-all": "^4.1.5",
+        "jest": "^25.5.1",
+        "prettier": "^2.0.4",
+        "ts-jest": "^25.4.0",
+        "ts-node": "^8.10.1",
+        "typescript": "^3.8.3"
+    }
 }

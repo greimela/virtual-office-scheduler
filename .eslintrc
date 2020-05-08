@@ -1,0 +1,33 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+        "standard",
+        "plugin:prettier/recommended",
+        "prettier/standard",
+        // See https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/README.md
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier/@typescript-eslint"
+    ],
+    "env": {
+        "jest": true,
+        "node": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "sourceType": "module"
+    },
+    "rules": {
+        // Ignore unused arguments starting with '_'
+        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+        // Allow (arrow) function declaration before defining (function -> 'functions' and arrow function -> 'variables')
+        "@typescript-eslint/no-use-before-define": [
+            "error",
+            { "classes": true, "enums": true, "functions": false, "typedefs": true, "variables": false }
+        ]
+    }
+}
