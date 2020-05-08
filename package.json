@@ -6,7 +6,7 @@
     "license": "Apache-2.0",
     "scripts": {
         "build": "tsc",
-        "clean": "rm -rf ./build",
+        "clean": "shx rm -rf ./build",
         "test": "run-s test:unit test:lint test:build",
         "test:lint": "eslint .",
         "test:unit": "jest",
@@ -32,6 +32,7 @@
         "prettier": "^2.0.4",
         "ts-jest": "^25.4.0",
         "ts-node": "^8.10.1",
-        "typescript": "^3.8.3"
+        "typescript": "^3.8.3",
+        "shx": "^0.3.2"
     }
 }
