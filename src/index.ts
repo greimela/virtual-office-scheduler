@@ -1,5 +1,10 @@
 #!/usr/bin/env node
 
-export type Dummy = string;
+import dotenv from "dotenv";
 
-console.log("Hello, here is my first CLI tool");
+const result = dotenv.config();
+if (result.error) {
+    console.log(`Configuration error '${result.error}.`);
+    process.exit(1);
+}
+console.log(result.parsed);
