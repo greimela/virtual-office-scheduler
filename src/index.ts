@@ -2,11 +2,14 @@
 
 import { Configuration, parseConfig } from "./config";
 import chalk from "chalk";
+import fetch from "node-fetch";
 
 const main = (): void => {
     const config = getConfigOrExit();
 
-    console.log(config);
+    fetch(`https://docs.google.com/spreadsheets/u/0/d/${config.googleSpreadsheetId}/export?format=csv`, { method: "GET" })
+        .then((res) => res.text())
+        .then((json) => console.log(json));
 };
 
 const getConfigOrExit = (): Configuration => {
