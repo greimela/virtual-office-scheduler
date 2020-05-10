@@ -7,12 +7,14 @@
     "scripts": {
         "build": "tsc",
         "clean": "shx rm -rf ./build",
+        "start": "npx ts-node ./src/index.ts",
         "test": "run-s test:unit test:lint test:build",
         "test:lint": "eslint .",
         "test:unit": "jest",
         "test:watch": "jest --watch"
     },
     "dependencies": {
+        "chalk": "^4.0.0",
         "dotenv": "^8.2.0",
         "fp-ts": "^2.5.4",
         "io-ts": "^2.2.2"
