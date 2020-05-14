@@ -1,10 +1,19 @@
 import fetch from "node-fetch";
 import parse from "csv-parse/lib/sync";
 import * as t from "io-ts";
+import { parseTime, Time } from "./time";
 import { isRight } from "fp-ts/lib/Either";
 import { PathReporter } from "io-ts/lib/PathReporter";
 
-export const getTimetable = (googleSpreadsheetId: string): Promise<t.TypeOf<typeof SpreadsheetCodec>> => {
+export type Timetable = Activity[];
+
+export interface Activity {
+    startTime: Time | undefined;
+    endTime: Time | undefined;
+    name: string;
+}
+
+export const getTimetable = (googleSpreadsheetId: string): Promise<Timetable> => {
     return fetch(`https://docs.google.com/spreadsheets/u/0/d/${googleSpreadsheetId}/export?format=csv`, { method: "GET" })
         .then((res) => res.text())
         .then((text) =>
@@ -21,7 +30,8 @@ export const getTimetable = (googleSpreadsheetId: string): Promise<t.TypeOf<type
                 return spreadsheet.right;
             }
             throw Error(`Parsing spreadsheet failed due to '${PathReporter.report(spreadsheet)}'.`);
-        });
+        })
+        .then(mapActivities);
 };
 
 const SpreadsheetCodec = t.array(
@@ -31,7 +41,15 @@ const SpreadsheetCodec = t.array(
             Name: t.string,
             Session: t.string,
         },
-        "SpreadsheetColumn",
+        "SpreadsheetRow",
     ),
     "Spreadsheet",
 );
+
+const mapActivities = (spreadsheet: t.TypeOf<typeof SpreadsheetCodec>): Timetable => {
+    return spreadsheet.map((row, i, spreadsheet) => ({
+        name: row.Name,
+        startTime: parseTime(row.Zeit),
+        endTime: i + 1 < spreadsheet.length ? parseTime(spreadsheet[i + 1].Zeit) : undefined,
+    }));
+};
