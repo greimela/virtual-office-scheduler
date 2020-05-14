@@ -3,12 +3,17 @@
 import { Configuration, parseConfig } from "./config";
 import chalk from "chalk";
 import { getTimetable } from "./timetable";
+import fetch from "node-fetch";
 
 const main = (): void => {
     const config = getConfigOrExit();
 
     getTimetable(config.googleSpreadsheetId)
         .then(console.log);
+
+    fetch(`${config.virtualOfficeBaseUrl}/api/monitoring/health`, { method: "GET"})
+        .then(res => res.text())
+        .then(console.log)
 };
 
 const getConfigOrExit = (): Configuration => {

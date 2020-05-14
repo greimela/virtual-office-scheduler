@@ -5,6 +5,7 @@ import { isRight } from "fp-ts/lib/Either";
 
 export interface Configuration {
     googleSpreadsheetId: string;
+    virtualOfficeBaseUrl: string;
 }
 
 /**
@@ -26,6 +27,7 @@ export const parseConfig = (): Configuration => {
 const EnvironmentCodec = t.type(
     {
         GOOGLE_SPREADSHEET_ID: t.string,
+        VIRTUAL_OFFICE_BASE_URL: t.string,
     },
     "env",
 );
@@ -33,4 +35,5 @@ type Environment = t.TypeOf<typeof EnvironmentCodec>;
 
 const envToConfig = (parsed: Environment): Configuration => ({
     googleSpreadsheetId: parsed.GOOGLE_SPREADSHEET_ID,
+    virtualOfficeBaseUrl: parsed.VIRTUAL_OFFICE_BASE_URL,
 });
