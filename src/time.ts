@@ -15,9 +15,9 @@ export const parseTime = (arg: string): Time | undefined => {
     return undefined;
 };
 
-const isHour = (hour: number): hour is Hour => 0 <= hour && hour < 24;
+const isHour = (hour: number): hour is Hour => hour >= 0 && hour < 24;
 
-const isMinute = (minute: number): minute is Minute => 0 <= minute && minute < 60;
+const isMinute = (minute: number): minute is Minute => minute >= 0 && minute < 60;
 
 type Hour = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23;
 

@@ -18,8 +18,10 @@ export const getTimetable = (googleSpreadsheetId: string): Promise<Timetable> =>
         .then((res) => res.text())
         .then((text) =>
             parse(text, {
+                // eslint-disable-next-line @typescript-eslint/camelcase
                 cast_date: true,
                 columns: true,
+                // eslint-disable-next-line @typescript-eslint/camelcase
                 skip_empty_lines: true,
                 trim: true,
             }),
