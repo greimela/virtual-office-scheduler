@@ -8,12 +8,11 @@ import fetch from "node-fetch";
 const main = (): void => {
     const config = getConfigOrExit();
 
-    getTimetable(config.googleSpreadsheetId)
-        .then(console.log);
+    getTimetable(config.googleSpreadsheetId).then(console.log);
 
-    fetch(`${config.virtualOfficeBaseUrl}/api/monitoring/health`, { method: "GET"})
-        .then(res => res.text())
-        .then(console.log)
+    fetch(`${config.virtualOfficeBaseUrl}/api/monitoring/health`, { method: "GET" })
+        .then((res) => res.text())
+        .then(console.log);
 };
 
 const getConfigOrExit = (): Configuration => {
