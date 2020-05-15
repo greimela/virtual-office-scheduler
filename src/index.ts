@@ -1,17 +1,19 @@
 #!/usr/bin/env node
 
 import { parseConfig } from "./config";
-import { getTimetable } from "./timetable";
-import fetch from "node-fetch";
+import { fetchSpreadsheet } from "./fetchSpreadsheet";
+
+import { generateOffice } from "./generateOffice";
+import { updateOffice } from "./updateOffice";
 
 async function main(): Promise<void> {
     const config = parseConfig();
+    console.log(config);
 
-    const timetable = await getTimetable(config.googleSpreadsheetId);
-    console.log(timetable);
+    const spreadsheet = await fetchSpreadsheet(config.GOOGLE_SPREADSHEET_ID, config.GOOGLE_SHEET_NAME);
+    const office = generateOffice(spreadsheet);
 
-    const health = await fetch(`${config.virtualOfficeBaseUrl}/api/monitoring/health`, { method: "GET" });
-    console.log(await health.text());
+    await updateOffice(config.VIRTUAL_OFFICE_BASE_URL, office);
 }
 
 main();
