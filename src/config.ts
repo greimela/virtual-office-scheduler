@@ -11,7 +11,7 @@ export interface Configuration {
 /**
  * @throws {Error} if env could not be processed or env does not have the correct structure
  */
-export const parseConfig = (): Configuration => {
+export function parseConfig(): Configuration {
     const result = config();
     if (result.error) {
         throw result.error;
@@ -22,7 +22,7 @@ export const parseConfig = (): Configuration => {
         return envToConfig(configuration.right);
     }
     throw Error(`Parsing env failed due to '${PathReporter.report(configuration)}'.`);
-};
+}
 
 const EnvironmentCodec = t.type(
     {

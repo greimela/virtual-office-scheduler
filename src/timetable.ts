@@ -13,28 +13,24 @@ export interface Activity {
     name: string;
 }
 
-export const getTimetable = (googleSpreadsheetId: string): Promise<Timetable> => {
-    return fetch(`https://docs.google.com/spreadsheets/u/0/d/${googleSpreadsheetId}/export?format=csv`, { method: "GET" })
-        .then((res) => res.text())
-        .then((text) =>
-            parse(text, {
-                // eslint-disable-next-line @typescript-eslint/camelcase
-                cast_date: true,
-                columns: true,
-                // eslint-disable-next-line @typescript-eslint/camelcase
-                skip_empty_lines: true,
-                trim: true,
-            }),
-        )
-        .then((v) => {
-            const spreadsheet = SpreadsheetCodec.decode(v);
-            if (isRight(spreadsheet)) {
-                return spreadsheet.right;
-            }
-            throw Error(`Parsing spreadsheet failed due to '${PathReporter.report(spreadsheet)}'.`);
-        })
-        .then(mapActivities);
-};
+export async function getTimetable(googleSpreadsheetId: string): Promise<Timetable> {
+    const spreadsheetDataResponse = await fetch(`https://docs.google.com/spreadsheets/u/0/d/${googleSpreadsheetId}/export?format=csv`, {
+        method: "GET",
+    });
+    const parseResult = await parse(await spreadsheetDataResponse.text(), {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        cast_date: true,
+        columns: true,
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        skip_empty_lines: true,
+        trim: true,
+    });
+    const spreadsheet = SpreadsheetCodec.decode(parseResult);
+    if (isRight(spreadsheet)) {
+        return mapActivities(spreadsheet.right);
+    }
+    throw Error(`Parsing spreadsheet failed due to '${PathReporter.report(spreadsheet)}'.`);
+}
 
 const SpreadsheetCodec = t.array(
     t.type(

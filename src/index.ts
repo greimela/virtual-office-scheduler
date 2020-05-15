@@ -1,27 +1,17 @@
 #!/usr/bin/env node
 
-import { Configuration, parseConfig } from "./config";
-import chalk from "chalk";
+import { parseConfig } from "./config";
 import { getTimetable } from "./timetable";
 import fetch from "node-fetch";
 
-const main = (): void => {
-    const config = getConfigOrExit();
+async function main(): Promise<void> {
+    const config = parseConfig();
 
-    getTimetable(config.googleSpreadsheetId).then(console.log);
+    const timetable = await getTimetable(config.googleSpreadsheetId);
+    console.log(timetable);
 
-    fetch(`${config.virtualOfficeBaseUrl}/api/monitoring/health`, { method: "GET" })
-        .then((res) => res.text())
-        .then(console.log);
-};
-
-const getConfigOrExit = (): Configuration => {
-    try {
-        return parseConfig();
-    } catch (e) {
-        console.log(chalk.red(e));
-        process.exit(1);
-    }
-};
+    const health = await fetch(`${config.virtualOfficeBaseUrl}/api/monitoring/health`, { method: "GET" });
+    console.log(await health.text());
+}
 
 main();

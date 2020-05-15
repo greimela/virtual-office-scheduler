@@ -3,7 +3,7 @@ export interface Time {
     minute: Minute;
 }
 
-export const parseTime = (arg: string): Time | undefined => {
+export function parseTime(arg: string): Time | undefined {
     const matches = arg.match(/^(\d\d):(\d\d)$/);
     if (matches) {
         const hour = parseInt(matches[1]);
@@ -13,7 +13,7 @@ export const parseTime = (arg: string): Time | undefined => {
         }
     }
     return undefined;
-};
+}
 
 const isHour = (hour: number): hour is Hour => hour >= 0 && hour < 24;
 
