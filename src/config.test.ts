@@ -26,17 +26,18 @@ describe("'config' should", () => {
     });
 
     it("return correctly parsed configuration", () => {
-        const googleSpreadsheetId = "1";
-        const virtualOfficeBaseUrl = "http://example.com";
+        const env = {
+            GOOGLE_SPREADSHEET_ID: "1",
+            GOOGLE_SHEET_NAME: "Day 1",
+            VIRTUAL_OFFICE_BASE_URL: "http://example.com",
+        };
 
         mockConfig.mockImplementation(
             (): DotenvConfigOutput => {
-                return { parsed: { GOOGLE_SPREADSHEET_ID: googleSpreadsheetId, VIRTUAL_OFFICE_BASE_URL: virtualOfficeBaseUrl } };
+                return { parsed: env };
             },
         );
-        expect(parseConfig()).toStrictEqual({
-            googleSpreadsheetId,
-            virtualOfficeBaseUrl,
-        });
+
+        expect(parseConfig()).toStrictEqual(env);
     });
 });
