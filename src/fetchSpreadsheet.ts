@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+import axios from "axios";
 import parse from "csv-parse/lib/sync";
 import * as t from "io-ts";
 import { isLeft } from "fp-ts/lib/Either";
@@ -20,14 +20,11 @@ const SpreadsheetCodec = t.array(
 export type Spreadsheet = t.TypeOf<typeof SpreadsheetCodec>;
 
 export async function fetchSpreadsheet(googleSpreadsheetId: string, googleSheetName: string): Promise<Spreadsheet> {
-    const spreadsheetResponse = await fetch(
+    const spreadsheetResponse = await axios.get(
         `https://docs.google.com/spreadsheets/u/0/d/${googleSpreadsheetId}/gviz/tq?tqx=out:csv&sheet=${googleSheetName}`,
-        {
-            method: "GET",
-        },
     );
 
-    const spreadsheetCsv = await spreadsheetResponse.text();
+    const spreadsheetCsv = await spreadsheetResponse.data;
     return parseSpreadsheetCsv(spreadsheetCsv);
 }
 

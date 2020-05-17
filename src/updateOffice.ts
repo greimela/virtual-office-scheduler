@@ -1,9 +1,16 @@
 import { Office } from "./generateOffice";
-import fetch from "node-fetch";
+import axios from "axios";
+import { Environment } from "./config";
 
-export async function updateOffice(virtualOfficeUrl: string, office: Office): Promise<void> {
-    console.log(office);
+export async function updateOffice(config: Environment, office: Office): Promise<void> {
+    const response = await axios.post(`${config.VIRTUAL_OFFICE_BASE_URL}/api/admin/replaceOffice`, office, {
+        auth: {
+            username: config.VIRTUAL_OFFICE_USERNAME,
+            password: config.VIRTUAL_OFFICE_PASSWORD,
+        },
+    });
 
-    const health = await fetch(`${virtualOfficeUrl}/api/monitoring/health`, { method: "GET" });
-    console.log(await health.text());
+    if (response.status !== 200) {
+        throw new Error(`could not update virtual office, got response code ${response.status}`);
+    }
 }

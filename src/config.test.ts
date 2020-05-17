@@ -30,6 +30,8 @@ describe("'config' should", () => {
             GOOGLE_SPREADSHEET_ID: "1",
             GOOGLE_SHEET_NAME: "Day 1",
             VIRTUAL_OFFICE_BASE_URL: "http://example.com",
+            VIRTUAL_OFFICE_USERNAME: "username",
+            VIRTUAL_OFFICE_PASSWORD: "password",
         };
 
         mockConfig.mockImplementation(

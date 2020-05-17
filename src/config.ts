@@ -7,9 +7,11 @@ const EnvironmentCodec = t.type({
     GOOGLE_SPREADSHEET_ID: t.string,
     GOOGLE_SHEET_NAME: t.string,
     VIRTUAL_OFFICE_BASE_URL: t.string,
+    VIRTUAL_OFFICE_USERNAME: t.string,
+    VIRTUAL_OFFICE_PASSWORD: t.string,
 });
 
-type Environment = t.TypeOf<typeof EnvironmentCodec>;
+export type Environment = t.TypeOf<typeof EnvironmentCodec>;
 
 /**
  * @throws {Error} if env could not be processed or env does not have the correct structure

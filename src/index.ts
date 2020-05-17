@@ -13,7 +13,7 @@ async function main(): Promise<void> {
     const spreadsheet = await fetchSpreadsheet(config.GOOGLE_SPREADSHEET_ID, config.GOOGLE_SHEET_NAME);
     const office = generateOffice(spreadsheet);
 
-    await updateOffice(config.VIRTUAL_OFFICE_BASE_URL, office);
+    await updateOffice(config, office);
 }
 
 main();
