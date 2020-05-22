@@ -7,19 +7,19 @@ import { CastingContext } from "csv-parse";
 
 import { logger } from "./log";
 
-const SpreadsheetCodec = t.array(
-  t.type({
-    Start: t.string,
-    Title: t.string,
-    Subtitle: t.string,
-    Link: t.string,
-    MeetingIds: t.array(t.string),
-    ReservedIds: t.array(t.string),
-    RandomJoin: t.boolean,
-  })
-);
+const SpreadsheetRowCodec = t.type({
+  Start: t.string,
+  Title: t.string,
+  Subtitle: t.string,
+  Link: t.string,
+  MeetingIds: t.array(t.string),
+  ReservedIds: t.array(t.string),
+  RandomJoin: t.boolean,
+});
+const SpreadsheetCodec = t.array(SpreadsheetRowCodec);
 
 export type Spreadsheet = t.TypeOf<typeof SpreadsheetCodec>;
+export type SpreadsheetRow = t.TypeOf<typeof SpreadsheetRowCodec>;
 
 export async function fetchSpreadsheet(googleSpreadsheetId: string, googleSheetName: string): Promise<Spreadsheet> {
   const url = `https://docs.google.com/spreadsheets/u/0/d/${googleSpreadsheetId}/gviz/tq?tqx=out:csv&sheet=${googleSheetName}`;
