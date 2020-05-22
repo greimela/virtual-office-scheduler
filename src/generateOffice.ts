@@ -66,8 +66,8 @@ function mapSpreadsheetGroup(start: string, end: string | undefined, rows: Sprea
       minimumParticipantCount: 5,
       description: "You can randomly join one of our coffee rooms. Try it out and meet interesting new people! :)",
     },
-    startTime: DateTime.fromISO(start).toString(),
-    endTime: end ? DateTime.fromISO(end).toString() : undefined,
+    startTime: sanitizeDateTime(start),
+    endTime: sanitizeDateTime(end),
   };
 
   const rooms: Room[] = rows.flatMap((row) =>
@@ -90,4 +90,8 @@ function mapSpreadsheetGroup(start: string, end: string | undefined, rows: Sprea
     rooms: rooms,
     groups: [group],
   };
+}
+
+function sanitizeDateTime(dateString: string | undefined): string {
+  return DateTime.fromISO(dateString || "23:59:59", { zone: "Europe/Berlin" }).toISO();
 }

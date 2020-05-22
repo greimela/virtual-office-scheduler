@@ -237,6 +237,7 @@ describe("generateOffice", () => {
               "You can randomly join one of our coffee rooms. Try it out and meet interesting new people! :)",
           },
           startTime: "2020-05-22T12:00:00.000+02:00",
+          endTime: "2020-05-22T23:59:59.000+02:00",
         },
       ],
     });
