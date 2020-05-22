@@ -8,9 +8,10 @@
         "build": "tsc",
         "clean": "shx rm -rf ./build",
         "start": "npx ts-node ./src/index.ts",
+        "dev": "ts-node-dev --inspect --respawn ./src",
+        "format": "prettier --ignore-path .gitignore --write '**/*.{ts,js}' && eslint --fix .",
         "test": "run-s test:unit test:lint",
         "test:lint": "eslint .",
-        "test:format": "eslint --fix .",
         "test:unit": "jest",
         "test:watch": "jest --watch"
     },
@@ -20,14 +21,19 @@
         "csv-parse": "^4.9.0",
         "dotenv": "^8.2.0",
         "fp-ts": "^2.5.4",
-        "io-ts": "^2.2.2"
+        "io-ts": "^2.2.2",
+        "lodash": "^4.17.15",
+        "pino": "^6.2.1",
+        "pino-pretty": "^4.0.0"
     },
     "devDependencies": {
         "@types/axios": "^0.14.0",
         "@types/dotenv": "^8.2.0",
         "@types/jest": "^25.2.1",
+        "@types/lodash": "^4.14.152",
         "@types/node": "^13.13.5",
         "@types/node-fetch": "^2.5.7",
+        "@types/pino": "^6.0.1",
         "@typescript-eslint/eslint-plugin": "^2.26.0",
         "@typescript-eslint/parser": "^2.26.0",
         "eslint": "^7.0.0-rc.0",
@@ -47,6 +53,7 @@
         "shx": "^0.3.2",
         "ts-jest": "^25.4.0",
         "ts-node": "^8.10.1",
+        "ts-node-dev": "^1.0.0-pre.44",
         "typescript": "^3.8.3"
     },
     "husky": {
