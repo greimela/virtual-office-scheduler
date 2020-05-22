@@ -1,11 +1,12 @@
 import { fetchSpreadsheet } from "./fetchSpreadsheet";
+import { Environment } from "./config";
 
 describe("fetchSpreadsheet", () => {
   it("works with example document", async () => {
-    const spreadsheetId = "16U7bjY7d-Ba7iq9c7V4M1D9QVXWZilOo1XukeT6WpOE";
-    const sheetName = "IntegrationTest";
-
-    const spreadsheet = await fetchSpreadsheet(spreadsheetId, sheetName);
+    const spreadsheet = await fetchSpreadsheet({
+      GOOGLE_SPREADSHEET_ID: "16U7bjY7d-Ba7iq9c7V4M1D9QVXWZilOo1XukeT6WpOE",
+      GOOGLE_SHEET_NAME: "IntegrationTest",
+    } as Environment);
 
     expect(spreadsheet).toEqual([
       {

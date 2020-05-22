@@ -11,6 +11,7 @@ const EnvironmentCodec = t.type({
   VIRTUAL_OFFICE_BASE_URL: t.string,
   VIRTUAL_OFFICE_USERNAME: t.string,
   VIRTUAL_OFFICE_PASSWORD: t.string,
+  MEETING_PASSWORD: t.string,
 });
 
 export type Environment = t.TypeOf<typeof EnvironmentCodec>;

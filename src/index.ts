@@ -12,10 +12,10 @@ async function main(): Promise<void> {
     logger.info("Updating virtual office from spreadsheet");
     const config = parseConfig();
 
-    const spreadsheet = await fetchSpreadsheet(config.GOOGLE_SPREADSHEET_ID, config.GOOGLE_SHEET_NAME);
+    const spreadsheet = await fetchSpreadsheet(config);
     validateSpreadsheet(spreadsheet);
 
-    const office = generateOffice(spreadsheet);
+    const office = generateOffice(config, spreadsheet);
     await updateOffice(config, office);
 
     logger.info("Successfully updated virtual office");

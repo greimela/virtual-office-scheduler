@@ -5,6 +5,7 @@ import { isLeft } from "fp-ts/lib/Either";
 import { PathReporter } from "io-ts/lib/PathReporter";
 import { CastingContext } from "csv-parse";
 
+import { Environment } from "./config";
 import { logger } from "./log";
 
 const SpreadsheetRowCodec = t.type({
@@ -21,7 +22,9 @@ const SpreadsheetCodec = t.array(SpreadsheetRowCodec);
 export type Spreadsheet = t.TypeOf<typeof SpreadsheetCodec>;
 export type SpreadsheetRow = t.TypeOf<typeof SpreadsheetRowCodec>;
 
-export async function fetchSpreadsheet(googleSpreadsheetId: string, googleSheetName: string): Promise<Spreadsheet> {
+export async function fetchSpreadsheet(config: Environment): Promise<Spreadsheet> {
+  const googleSpreadsheetId = config.GOOGLE_SPREADSHEET_ID;
+  const googleSheetName = config.GOOGLE_SHEET_NAME;
   const url = `https://docs.google.com/spreadsheets/u/0/d/${googleSpreadsheetId}/gviz/tq?tqx=out:csv&sheet=${googleSheetName}`;
   logger.info("Downloading spreadsheet from Google Docs", { url });
 

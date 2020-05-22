@@ -1,6 +1,7 @@
 import { groupBy } from "lodash";
 import { DateTime } from "luxon";
 
+import { Environment } from "./config";
 import { Spreadsheet, SpreadsheetRow } from "./fetchSpreadsheet";
 import { logger } from "./log";
 
@@ -39,15 +40,16 @@ export type GroupJoinConfig = {
   description: string;
 };
 
-export function generateOffice(spreadsheet: Spreadsheet): Office {
+export function generateOffice(config: Environment, spreadsheet: Spreadsheet): Office {
   logger.info("Generating office based on spreadsheet", { spreadsheet });
+  const password = config.MEETING_PASSWORD;
 
   const groups = groupBy(spreadsheet, (row) => row.Start);
   const groupStarts = Object.keys(groups).sort();
 
   const groupConfigs = groupStarts.map((groupStart, index) => {
     const groupEnd = groupStarts[index + 1];
-    return mapSpreadsheetGroup(groupStart, groupEnd, groups[groupStart]);
+    return mapSpreadsheetGroup(groupStart, groupEnd, groups[groupStart], password);
   });
 
   return {
@@ -56,7 +58,7 @@ export function generateOffice(spreadsheet: Spreadsheet): Office {
   };
 }
 
-function mapSpreadsheetGroup(start: string, end: string | undefined, rows: SpreadsheetRow[]): Office {
+function mapSpreadsheetGroup(start: string, end: string | undefined, rows: SpreadsheetRow[], password: string): Office {
   const groupId = `group-${start}`;
   const groupJoinRow = rows.find((row) => row.RandomJoin);
   const group: Group = {
@@ -79,7 +81,7 @@ function mapSpreadsheetGroup(start: string, end: string | undefined, rows: Sprea
         meetingId,
         groupId,
         name: `${row.Title}${roomNumber}`,
-        joinUrl: `https://zoom.us/s/${meetingId}`,
+        joinUrl: `https://zoom.us/s/${meetingId}?pwd=${password}`,
       };
 
       return room;

@@ -32,6 +32,7 @@ describe("'config' should", () => {
       VIRTUAL_OFFICE_BASE_URL: "http://example.com",
       VIRTUAL_OFFICE_USERNAME: "username",
       VIRTUAL_OFFICE_PASSWORD: "password",
+      MEETING_PASSWORD: "secret",
     };
 
     mockConfig.mockImplementation(

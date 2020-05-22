@@ -1,3 +1,4 @@
+import { Environment } from "./config";
 import { generateOffice } from "./generateOffice";
 
 describe("generateOffice", () => {
@@ -86,7 +87,7 @@ describe("generateOffice", () => {
       },
     ];
 
-    const office = generateOffice(spreadsheet);
+    const office = generateOffice({ MEETING_PASSWORD: "secret" } as Environment, spreadsheet);
     expect(office).toEqual({
       rooms: [
         {
@@ -94,91 +95,91 @@ describe("generateOffice", () => {
           meetingId: "2",
           groupId: "group-08:30:00",
           name: "Break (1)",
-          joinUrl: "https://zoom.us/s/2",
+          joinUrl: "https://zoom.us/s/2?pwd=secret",
         },
         {
           roomId: "group-08:30:00:room-3",
           meetingId: "3",
           groupId: "group-08:30:00",
           name: "Break (2)",
-          joinUrl: "https://zoom.us/s/3",
+          joinUrl: "https://zoom.us/s/3?pwd=secret",
         },
         {
           roomId: "group-09:00:00:room-1",
           meetingId: "1",
           groupId: "group-09:00:00",
           name: "Welcome",
-          joinUrl: "https://zoom.us/s/1",
+          joinUrl: "https://zoom.us/s/1?pwd=secret",
         },
         {
           roomId: "group-09:05:00:room-1",
           meetingId: "1",
           groupId: "group-09:05:00",
           name: "Keynote",
-          joinUrl: "https://zoom.us/s/1",
+          joinUrl: "https://zoom.us/s/1?pwd=secret",
         },
         {
           roomId: "group-10:05:00:room-3",
           meetingId: "3",
           groupId: "group-10:05:00",
           name: "The Funnel",
-          joinUrl: "https://zoom.us/s/3",
+          joinUrl: "https://zoom.us/s/3?pwd=secret",
         },
         {
           roomId: "group-10:15:00:room-1",
           meetingId: "1",
           groupId: "group-10:15:00",
           name: "Break (1)",
-          joinUrl: "https://zoom.us/s/1",
+          joinUrl: "https://zoom.us/s/1?pwd=secret",
         },
         {
           roomId: "group-10:15:00:room-2",
           meetingId: "2",
           groupId: "group-10:15:00",
           name: "Break (2)",
-          joinUrl: "https://zoom.us/s/2",
+          joinUrl: "https://zoom.us/s/2?pwd=secret",
         },
         {
           roomId: "group-10:15:00:room-3",
           meetingId: "3",
           groupId: "group-10:15:00",
           name: "Break (3)",
-          joinUrl: "https://zoom.us/s/3",
+          joinUrl: "https://zoom.us/s/3?pwd=secret",
         },
         {
           roomId: "group-10:15:00:room-4",
           meetingId: "4",
           groupId: "group-10:15:00",
           name: "Break (4)",
-          joinUrl: "https://zoom.us/s/4",
+          joinUrl: "https://zoom.us/s/4?pwd=secret",
         },
         {
           roomId: "group-10:30:00:room-1",
           meetingId: "1",
           groupId: "group-10:30:00",
           name: "Topic A",
-          joinUrl: "https://zoom.us/s/1",
+          joinUrl: "https://zoom.us/s/1?pwd=secret",
         },
         {
           roomId: "group-10:30:00:room-2",
           meetingId: "2",
           groupId: "group-10:30:00",
           name: "Topic B 1",
-          joinUrl: "https://zoom.us/s/2",
+          joinUrl: "https://zoom.us/s/2?pwd=secret",
         },
         {
           roomId: "group-10:30:00:room-4",
           meetingId: "4",
           groupId: "group-10:30:00",
           name: "Topic B 2",
-          joinUrl: "https://zoom.us/s/4",
+          joinUrl: "https://zoom.us/s/4?pwd=secret",
         },
         {
           roomId: "group-12:00:00:room-1",
           meetingId: "1",
           groupId: "group-12:00:00",
           name: "Break",
-          joinUrl: "https://zoom.us/s/1",
+          joinUrl: "https://zoom.us/s/1?pwd=secret",
         },
       ],
       groups: [
