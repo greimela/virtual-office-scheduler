@@ -9,7 +9,7 @@
         "clean": "shx rm -rf ./build",
         "start": "npx ts-node ./src/index.ts",
         "dev": "ts-node-dev --inspect --respawn ./src",
-        "format": "prettier --ignore-path .gitignore --write '**/*.{ts,tsx}' && eslint --fix",
+        "format": "prettier --ignore-path .gitignore --write '**/*.{ts,js}' && eslint --fix",
         "test": "run-s test:unit test:lint",
         "test:lint": "eslint .",
         "test:format": "eslint --fix .",
