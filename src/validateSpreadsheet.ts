@@ -1,11 +1,11 @@
 import { groupBy, intersection, isEmpty } from "lodash";
-import { logger } from "./log";
 
 import { Spreadsheet } from "./fetchSpreadsheet";
 import { ValidationError, Violation } from "./ValidationError";
+import { logger } from "./log";
 
 export function validateSpreadsheet(spreadsheet: Spreadsheet): void {
-  logger.info("Validating parsed spreadsheet", { spreadsheet });
+  logger.info("Validating parsed spreadsheet");
 
   const violations: Violation[] = [];
   function violation(group: string, rule: string, rows: any[] = []): void {

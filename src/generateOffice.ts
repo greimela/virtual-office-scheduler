@@ -1,4 +1,9 @@
-import { Spreadsheet } from "./fetchSpreadsheet";
+import { groupBy } from "lodash";
+import { DateTime } from "luxon";
+
+import { Environment } from "./config";
+import { Spreadsheet, SpreadsheetRow } from "./fetchSpreadsheet";
+import { logger } from "./log";
 
 export interface Office {
   rooms: Room[];
@@ -35,10 +40,60 @@ export type GroupJoinConfig = {
   description: string;
 };
 
-export function generateOffice(spreadsheet: Spreadsheet): Office {
-  console.log(spreadsheet);
+export function generateOffice(config: Environment, spreadsheet: Spreadsheet): Office {
+  logger.info("Generating office based on spreadsheet", { spreadsheet });
+  const password = config.MEETING_PASSWORD;
+
+  const groups = groupBy(spreadsheet, (row) => row.Start);
+  const groupStarts = Object.keys(groups).sort();
+
+  const groupConfigs = groupStarts.map((groupStart, index) => {
+    const groupEnd = groupStarts[index + 1];
+    return mapSpreadsheetGroup(groupStart, groupEnd, groups[groupStart], password);
+  });
+
   return {
-    rooms: [],
-    groups: [],
+    rooms: groupConfigs.flatMap((groupConfig) => groupConfig.rooms),
+    groups: groupConfigs.flatMap((groupConfig) => groupConfig.groups),
   };
+}
+
+function mapSpreadsheetGroup(start: string, end: string | undefined, rows: SpreadsheetRow[], password: string): Office {
+  const groupId = `group-${start}`;
+  const groupJoinRow = rows.find((row) => row.RandomJoin);
+  const group: Group = {
+    id: groupId,
+    name: start,
+    groupJoin: groupJoinRow && {
+      minimumParticipantCount: 5,
+      description: "You can randomly join one of our coffee rooms. Try it out and meet interesting new people! :)",
+    },
+    startTime: sanitizeDateTime(start),
+    endTime: sanitizeDateTime(end),
+  };
+
+  const rooms: Room[] = rows.flatMap((row) =>
+    row.MeetingIds.sort().map((meetingId, index) => {
+      const roomId = `${groupId}:room-${meetingId}`;
+      const roomNumber = row.MeetingIds.length > 1 ? ` (${index + 1})` : "";
+      const room: Room = {
+        roomId,
+        meetingId,
+        groupId,
+        name: `${row.Title}${roomNumber}`,
+        joinUrl: `https://zoom.us/s/${meetingId}?pwd=${password}`,
+      };
+
+      return room;
+    })
+  );
+
+  return {
+    rooms: rooms,
+    groups: [group],
+  };
+}
+
+function sanitizeDateTime(dateString: string | undefined): string {
+  return DateTime.fromISO(dateString || "23:59:59", { zone: "Europe/Berlin" }).toISO();
 }
