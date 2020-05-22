@@ -22,7 +22,7 @@ describe("'config' should", () => {
       }
     );
 
-    expect(() => parseConfig()).toThrowError(/Parsing env failed due to 'Invalid value undefined supplied to .*'\./);
+    expect(() => parseConfig()).toThrowError(/Parsing dotenv config failed: Invalid value undefined supplied to .*/);
   });
 
   it("return correctly parsed configuration", () => {
