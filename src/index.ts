@@ -21,6 +21,8 @@ async function main(): Promise<void> {
     logger.info("Successfully updated virtual office");
   } catch (error) {
     logger.error("Failed to update virtual office", error);
+    // ugly workaround to get logs printed on the console and still being able to set an exit code
+    setTimeout(() => process.exit(1), 10);
   }
 }
 

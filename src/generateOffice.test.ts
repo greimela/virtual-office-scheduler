@@ -1,7 +1,18 @@
 import { Environment } from "./config";
 import { generateOffice } from "./generateOffice";
+import fakeTimers, { InstalledClock } from "@sinonjs/fake-timers";
 
 describe("generateOffice", () => {
+  let clock: InstalledClock;
+
+  afterEach(() => {
+    clock.uninstall();
+  });
+
+  beforeEach(() => {
+    clock = fakeTimers.install({ now: 1590130800000 });
+  });
+
   it("works with valid spreadsheet", () => {
     const spreadsheet = [
       {

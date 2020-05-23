@@ -28,6 +28,7 @@
         "pino-pretty": "^4.0.0"
     },
     "devDependencies": {
+        "@sinonjs/fake-timers": "^6.0.1",
         "@types/axios": "^0.14.0",
         "@types/dotenv": "^8.2.0",
         "@types/jest": "^25.2.1",
@@ -36,6 +37,7 @@
         "@types/node": "^13.13.5",
         "@types/node-fetch": "^2.5.7",
         "@types/pino": "^6.0.1",
+        "@types/sinonjs__fake-timers": "^6.0.1",
         "@types/uuid": "^8.0.0",
         "@typescript-eslint/eslint-plugin": "^2.26.0",
         "@typescript-eslint/parser": "^2.26.0",
