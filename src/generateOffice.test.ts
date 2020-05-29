@@ -99,6 +99,9 @@ describe("generateOffice", () => {
     ];
 
     const office = generateOffice({ MEETING_PASSWORD: "secret" } as Environment, spreadsheet);
+    const groupJoinDescription =
+      'Wenn ihr mögt, könnt ihr durch den untenstehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.';
+    const confluenceIcon = "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/confluence-icon.png";
     expect(office).toEqual({
       rooms: [
         {
@@ -106,6 +109,7 @@ describe("generateOffice", () => {
           meetingId: "2",
           groupId: "group-08:30",
           name: "Break (1)",
+          subtitle: "",
           joinUrl: "https://zoom.us/s/2?pwd=secret",
           links: [],
         },
@@ -114,6 +118,7 @@ describe("generateOffice", () => {
           meetingId: "3",
           groupId: "group-08:30",
           name: "Break (2)",
+          subtitle: "",
           joinUrl: "https://zoom.us/s/3?pwd=secret",
           links: [],
         },
@@ -122,6 +127,7 @@ describe("generateOffice", () => {
           meetingId: "1",
           groupId: "group-09:00",
           name: "Welcome",
+          subtitle: "Earthlings",
           joinUrl: "https://zoom.us/s/1?pwd=secret",
           links: [],
         },
@@ -130,6 +136,7 @@ describe("generateOffice", () => {
           meetingId: "1",
           groupId: "group-09:05",
           name: "Keynote",
+          subtitle: "",
           joinUrl: "https://zoom.us/s/1?pwd=secret",
           links: [],
         },
@@ -138,6 +145,7 @@ describe("generateOffice", () => {
           meetingId: "3",
           groupId: "group-10:05",
           name: "The Funnel",
+          subtitle: "",
           joinUrl: "https://zoom.us/s/3?pwd=secret",
           links: [],
         },
@@ -146,6 +154,7 @@ describe("generateOffice", () => {
           meetingId: "1",
           groupId: "group-10:15",
           name: "Break (1)",
+          subtitle: "Lunch",
           joinUrl: "https://zoom.us/s/1?pwd=secret",
           links: [],
         },
@@ -154,6 +163,7 @@ describe("generateOffice", () => {
           meetingId: "2",
           groupId: "group-10:15",
           name: "Break (2)",
+          subtitle: "Lunch",
           joinUrl: "https://zoom.us/s/2?pwd=secret",
           links: [],
         },
@@ -162,6 +172,7 @@ describe("generateOffice", () => {
           meetingId: "3",
           groupId: "group-10:15",
           name: "Break (3)",
+          subtitle: "Lunch",
           joinUrl: "https://zoom.us/s/3?pwd=secret",
           links: [],
         },
@@ -170,6 +181,7 @@ describe("generateOffice", () => {
           meetingId: "4",
           groupId: "group-10:15",
           name: "Break (4)",
+          subtitle: "Lunch",
           joinUrl: "https://zoom.us/s/4?pwd=secret",
           links: [],
         },
@@ -178,12 +190,13 @@ describe("generateOffice", () => {
           meetingId: "1",
           groupId: "group-10:30",
           name: "Topic A",
+          subtitle: "",
           joinUrl: "https://zoom.us/s/1?pwd=secret",
           links: [
             {
               text: "Confluence",
               href: "http://shouting.machine/topicA",
-              icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/confluence-icon.png",
+              icon: confluenceIcon,
             },
           ],
         },
@@ -192,12 +205,13 @@ describe("generateOffice", () => {
           meetingId: "2",
           groupId: "group-10:30",
           name: "Topic B 1",
+          subtitle: "Poggers",
           joinUrl: "https://zoom.us/s/2?pwd=secret",
           links: [
             {
               text: "Confluence",
               href: "http://shouting.machine/topicB",
-              icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/confluence-icon.png",
+              icon: confluenceIcon,
             },
           ],
         },
@@ -206,12 +220,13 @@ describe("generateOffice", () => {
           meetingId: "4",
           groupId: "group-10:30",
           name: "Topic B 2",
+          subtitle: "in the Chat",
           joinUrl: "https://zoom.us/s/4?pwd=secret",
           links: [
             {
               text: "Confluence",
               href: "http://shouting.machine/topicB",
-              icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/confluence-icon.png",
+              icon: confluenceIcon,
             },
           ],
         },
@@ -220,6 +235,7 @@ describe("generateOffice", () => {
           meetingId: "1",
           groupId: "group-12:00",
           name: "Break",
+          subtitle: "",
           joinUrl: "https://zoom.us/s/1?pwd=secret",
           links: [],
         },
@@ -230,8 +246,9 @@ describe("generateOffice", () => {
           name: "08:30",
           groupJoin: {
             minimumParticipantCount: 5,
-            description:
-              "You can randomly join one of our coffee rooms. Try it out and meet interesting new people! :)",
+            title: "Break",
+            subtitle: "",
+            description: groupJoinDescription,
           },
           disabledBefore: "2020-05-22T08:30:00.000+02:00",
           disabledAfter: "2020-05-22T09:00:00.000+02:00",
@@ -259,8 +276,9 @@ describe("generateOffice", () => {
           name: "10:15",
           groupJoin: {
             minimumParticipantCount: 5,
-            description:
-              "You can randomly join one of our coffee rooms. Try it out and meet interesting new people! :)",
+            title: "Break",
+            subtitle: "Lunch",
+            description: groupJoinDescription,
           },
           disabledBefore: "2020-05-22T10:15:00.000+02:00",
           disabledAfter: "2020-05-22T10:30:00.000+02:00",
@@ -276,8 +294,9 @@ describe("generateOffice", () => {
           name: "12:00",
           groupJoin: {
             minimumParticipantCount: 5,
-            description:
-              "You can randomly join one of our coffee rooms. Try it out and meet interesting new people! :)",
+            title: "Break",
+            subtitle: "",
+            description: groupJoinDescription,
           },
           disabledBefore: "2020-05-22T12:00:00.000+02:00",
           disabledAfter: "2020-05-22T23:59:59.000+02:00",
