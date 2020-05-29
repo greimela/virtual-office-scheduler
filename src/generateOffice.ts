@@ -31,8 +31,8 @@ export interface Group {
   id: string;
   name: string;
   groupJoin?: GroupJoinConfig;
-  startTime?: string;
-  endTime?: string;
+  disabledBefore?: string;
+  disabledAfter?: string;
 }
 
 export type GroupJoinConfig = {
@@ -63,28 +63,40 @@ function mapSpreadsheetGroup(start: string, end: string | undefined, rows: Sprea
   const groupJoinRow = rows.find((row) => row.RandomJoin);
   const group: Group = {
     id: groupId,
-    name: start,
+    name: DateTime.fromISO(start).toFormat("HH:mm"),
     groupJoin: groupJoinRow && {
       minimumParticipantCount: 5,
       description: "You can randomly join one of our coffee rooms. Try it out and meet interesting new people! :)",
     },
-    startTime: sanitizeDateTime(start),
-    endTime: sanitizeDateTime(end),
+    disabledBefore: sanitizeDateTime(start),
+    disabledAfter: sanitizeDateTime(end),
   };
 
+  const icon = "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/confluence-icon.png";
   const rooms: Room[] = rows.flatMap((row) =>
     row.MeetingIds.sort().map((meetingId, index) => {
       const roomId = `${groupId}:room-${meetingId}`;
       const roomNumber = row.MeetingIds.length > 1 ? ` (${index + 1})` : "";
-      const room: Room = {
+      const name = `${row.Title}${roomNumber}`;
+      const joinUrl = `https://zoom.us/s/${meetingId}?pwd=${password}`;
+      const links = row.Link
+        ? [
+            {
+              text: "Confluence",
+              href: row.Link,
+              icon,
+            },
+          ]
+        : [];
+
+      return {
         roomId,
         meetingId,
         groupId,
-        name: `${row.Title}${roomNumber}`,
-        joinUrl: `https://zoom.us/s/${meetingId}?pwd=${password}`,
+        name,
+        joinUrl,
+        links,
       };
-
-      return room;
     })
   );
 
