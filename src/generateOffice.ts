@@ -1,4 +1,4 @@
-import { groupBy } from "lodash";
+import { compact, groupBy } from "lodash";
 import { DateTime } from "luxon";
 
 import { Environment } from "./config";
@@ -14,29 +14,30 @@ export interface Room {
   roomId: string;
   meetingId: string;
   name: string;
-  joinUrl?: string;
-  temporary?: boolean;
-  links?: RoomLink[];
-  groupId?: string;
-  icon?: string;
+  subtitle: string;
+  joinUrl: string;
+  links: RoomLink[];
+  groupId: string;
 }
 
 export interface RoomLink {
   href: string;
   text: string;
-  icon?: string;
+  icon: string;
 }
 
 export interface Group {
   id: string;
   name: string;
+  disabledBefore: string;
+  disabledAfter: string;
   groupJoin?: GroupJoinConfig;
-  disabledBefore?: string;
-  disabledAfter?: string;
 }
 
 export type GroupJoinConfig = {
   minimumParticipantCount: number;
+  title: string;
+  subtitle: string;
   description: string;
 };
 
@@ -66,7 +67,9 @@ function mapSpreadsheetGroup(start: string, end: string | undefined, rows: Sprea
     name: DateTime.fromISO(start).toFormat("HH:mm"),
     groupJoin: groupJoinRow && {
       minimumParticipantCount: 5,
-      description: "You can randomly join one of our coffee rooms. Try it out and meet interesting new people! :)",
+      title: groupJoinRow.Title,
+      subtitle: groupJoinRow.Subtitle,
+      description: `Wenn ihr mögt, könnt ihr durch den untenstehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.`,
     },
     disabledBefore: sanitizeDateTime(start),
     disabledAfter: sanitizeDateTime(end),
@@ -77,24 +80,21 @@ function mapSpreadsheetGroup(start: string, end: string | undefined, rows: Sprea
     row.MeetingIds.sort().map((meetingId, index) => {
       const roomId = `${groupId}:room-${meetingId}`;
       const roomNumber = row.MeetingIds.length > 1 ? ` (${index + 1})` : "";
-      const name = `${row.Title}${roomNumber}`;
-      const joinUrl = `https://zoom.us/s/${meetingId}?pwd=${password}`;
-      const links = row.Link
-        ? [
-            {
-              text: "Confluence",
-              href: row.Link,
-              icon,
-            },
-          ]
-        : [];
+      const links = compact([
+        row.Link && {
+          text: "Confluence",
+          href: row.Link,
+          icon,
+        },
+      ]);
 
       return {
         roomId,
         meetingId,
         groupId,
-        name,
-        joinUrl,
+        name: `${row.Title}${roomNumber}`,
+        subtitle: row.Subtitle,
+        joinUrl: `https://zoom.us/s/${meetingId}?pwd=${password}`,
         links,
       };
     })
