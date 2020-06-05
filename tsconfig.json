@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "outDir": "build",
+        "module": "commonjs",
+        "lib": ["esnext"],
+        "target": "es5",
+        "types": ["jest","node"],
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "strict": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "allowSyntheticDefaultImports": true,
+        "isolatedModules": true,
+        "newLine": "lf",
+        "allowJs": false,
+        "skipLibCheck": false,
+        "forceConsistentCasingInFileNames": true,
+        "resolveJsonModule": true
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "build"]
+}

@@ -1,0 +1,36 @@
+{
+    "name": "virtual-office-schedule-updater",
+    "version": "1.0.0",
+    "description": "Update the sessions displayed in an virtual office instance from a predefined schedule",
+    "main": "./build/index.js",
+    "license": "Apache-2.0",
+    "scripts": {
+        "build": "tsc",
+        "start": "npx ts-node ./src/index.ts",
+        "dev": "ts-node-dev --inspect --respawn ./src",
+        "format": "prettier --ignore-path .gitignore --write '**/*.{ts,js}' && eslint --fix ."
+    },
+    "dependencies": {
+        "axios": "^0.19.2",
+        "chalk": "^4.0.0",
+        "dotenv": "^8.2.0",
+        "fp-ts": "^2.5.4",
+        "googleapis": "^52.1.0",
+        "io-ts": "^2.2.2",
+        "pino": "^6.2.1",
+        "pino-pretty": "^4.0.0",
+        "readline": "^1.3.0"
+    },
+    "devDependencies": {
+        "@types/axios": "^0.14.0",
+        "@types/dotenv": "^8.2.0",
+        "@types/lodash": "^4.14.152",
+        "@types/node": "^13.13.5",
+        "@types/node-fetch": "^2.5.7",
+        "@types/pino": "^6.0.1",
+        "prettier": "^2.0.4",
+        "ts-node": "^8.10.1",
+        "ts-node-dev": "^1.0.0-pre.44",
+        "typescript": "^3.8.3"
+    }
+}
