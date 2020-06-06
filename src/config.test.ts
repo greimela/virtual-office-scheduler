@@ -32,7 +32,14 @@ describe("'config' should", () => {
       VIRTUAL_OFFICE_BASE_URL: "http://example.com",
       VIRTUAL_OFFICE_USERNAME: "username",
       VIRTUAL_OFFICE_PASSWORD: "password",
+      ZOOM_JWT: "secret",
+      USER_EMAIL_FILE: "./emails.txt",
+      MEETING_TOPIC: "my meeting",
       MEETING_PASSWORD: "secret",
+      MEETING_START_TIME: "09:00",
+      MEETING_DURATION: "720",
+      GOOGLE_CLIENT_ID: "foo",
+      GOOGLE_CLIENT_SECRET: "secret",
     };
 
     mockConfig.mockImplementation(
