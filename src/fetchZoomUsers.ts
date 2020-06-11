@@ -11,12 +11,10 @@ export async function fetchZoomUsers(config: Environment): Promise<ZoomUser[]> {
   logger.info("Reading list of user emails from file", userEmailFile);
   const userEmailFileContent = readFileSync(userEmailFile).toString("utf-8");
   const userEmails = userEmailFileContent.split("\n");
-  logger.info('User emails', userEmails);
+  logger.info("User emails", userEmails);
 
   logger.info("Gettings all zoom users from account");
   const allZoomUsers = await getAllUsers(zoomJwt);
 
-  return allZoomUsers.filter((user) =>
-    userEmails.find((userEmail) => userEmail === user.email && user.type === 2)
-  );
+  return allZoomUsers.filter((user) => userEmails.find((userEmail) => userEmail === user.email && user.type === 2));
 }

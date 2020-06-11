@@ -7,7 +7,7 @@ export async function uploadToSpreadsheet(
   spreadsheetId: string,
   meetings: { user: ZoomUser; meeting: ZoomMeeting }[],
   config: Environment
-) {
+): Promise<unknown> {
   const auth = await authorize(config);
 
   const sheets = google.sheets({ version: "v4", auth });
@@ -20,15 +20,14 @@ export async function uploadToSpreadsheet(
         requestBody: {
           range: "Meetings",
           majorDimension: "ROWS",
-          values: [
-            ["email", "meetingId"],
-            ...meetings.map(({ user, meeting }) => [user.email, meeting.id]),
-          ],
+          values: [["email", "meetingId"], ...meetings.map(({ user, meeting }) => [user.email, meeting.id])],
         },
       },
       (err, res) => {
-        if (err) return reject("The API returned an error: " + err);
-        resolve(res)
+        if (err) {
+          return reject(new Error("The API returned an error: " + err));
+        }
+        resolve(res);
       }
     );
   });

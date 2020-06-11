@@ -21,7 +21,7 @@ async function main(): Promise<void> {
       meetings.map(({ user, meeting }) => `${user.email} - ${meeting.id}`)
     );
 
-    logger.info('Uploading meetings into spreadsheet');
+    logger.info("Uploading meetings into spreadsheet");
     await uploadToSpreadsheet(config.GOOGLE_SPREADSHEET_ID, meetings, config);
 
     logger.info("Successfully updated virtual office");

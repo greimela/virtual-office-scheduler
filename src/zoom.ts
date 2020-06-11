@@ -4,6 +4,9 @@ import * as t from "io-ts";
 import { isLeft } from "fp-ts/lib/Either";
 import { PathReporter } from "io-ts/lib/PathReporter";
 
+/* eslint-disable @typescript-eslint/camelcase */
+// Zoom API uses snake_case therefore ignore in this file
+
 const ZoomUserCodec = t.type({
   id: t.string,
   first_name: t.string,
@@ -24,7 +27,7 @@ const ZoomMeetingCodec = t.type({
   id: t.number,
   type: t.number,
   topic: t.string,
-  start_time: t.union([t.string, t.undefined]),
+  startTime: t.union([t.string, t.undefined]),
   join_url: t.string,
 });
 const ZoomMeetingsCodec = t.array(ZoomMeetingCodec);
@@ -34,49 +37,35 @@ export type ZoomUser = t.TypeOf<typeof ZoomUserCodec>;
 export type ZoomMeeting = t.TypeOf<typeof ZoomMeetingCodec>;
 
 export async function getAllUsers(zoomJwt: string): Promise<ZoomUser[]> {
-  let allPaginatedItems = await getAllPaginatedItems(
-    "https://api.zoom.us/v2/users",
-    { token: zoomJwt, key: "users" }
-  );
+  const allPaginatedItems = await getAllPaginatedItems("https://api.zoom.us/v2/users", {
+    token: zoomJwt,
+    key: "users",
+  });
 
   const decoded = ZoomUsersCodec.decode(allPaginatedItems);
   if (isLeft(decoded)) {
-    throw Error(
-      `Parsing GET /users response failed due to '${PathReporter.report(
-        decoded
-      )}'.`
-    );
+    throw Error(`Parsing GET /users response failed due to '${PathReporter.report(decoded)}'.`);
   }
 
   return decoded.right;
 }
 
-export async function getAllUpcomingMeetingsForUser(
-  userId: string,
-  zoomJwt: string
-): Promise<ZoomMeeting[]> {
-  let allPaginatedItems = await getAllPaginatedItems(
-    `https://api.zoom.us/v2/users/${userId}/meetings`,
-    { key: "meetings", token: zoomJwt, params: { type: "upcoming" } }
-  );
+export async function getAllUpcomingMeetingsForUser(userId: string, zoomJwt: string): Promise<ZoomMeeting[]> {
+  const allPaginatedItems = await getAllPaginatedItems(`https://api.zoom.us/v2/users/${userId}/meetings`, {
+    key: "meetings",
+    token: zoomJwt,
+    params: { type: "upcoming" },
+  });
 
   const decoded = ZoomMeetingsCodec.decode(allPaginatedItems);
   if (isLeft(decoded)) {
-    throw Error(
-      `Parsing GET /users response failed due to '${PathReporter.report(
-        decoded
-      )}'.`
-    );
+    throw Error(`Parsing GET /users response failed due to '${PathReporter.report(decoded)}'.`);
   }
 
   return decoded.right;
 }
 
-export async function createMeeting(
-  userId: string,
-  meeting: object,
-  token: string
-) {
+export async function createMeeting(userId: string, meeting: object, token: string): Promise<ZoomMeeting> {
   const response = await axios.post(`https://api.zoom.us/v2/users/${userId}/meetings`, meeting, {
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -99,7 +88,7 @@ async function getAllPaginatedItems(
     const decodedResponse = decodePaginatedItems(zoomGetUsersResponse);
     const { page_number, page_count, total_records } = decodedResponse;
 
-    let items = (decodedResponse as any)[key];
+    const items = (decodedResponse as any)[key];
     if (!items) {
       throw new Error(`Key ${key} is missing in response`);
     }
@@ -108,9 +97,7 @@ async function getAllPaginatedItems(
     pageNumber = page_number;
 
     allItems.push(...items);
-    logger.info(
-      `Received page ${pageNumber} of ${pageCount}: ${allItems.length} / ${total_records} items`
-    );
+    logger.info(`Received page ${pageNumber} of ${pageCount}: ${allItems.length} / ${total_records} items`);
   } while (pageCount > pageNumber);
 
   return allItems;
@@ -119,9 +106,7 @@ async function getAllPaginatedItems(
 function decodePaginatedItems(data: unknown): PaginatedGet {
   const decoded = PaginatedGetCodec.decode(data);
   if (isLeft(decoded)) {
-    throw Error(
-      `Parsing paginated items failed due to '${PathReporter.report(decoded)}'.`
-    );
+    throw Error(`Parsing paginated items failed due to '${PathReporter.report(decoded)}'.`);
   }
 
   return decoded.right;

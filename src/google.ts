@@ -18,7 +18,7 @@ export function authorize(config: Environment): Promise<any> {
   const oAuth2Client = new google.auth.OAuth2(
     config.GOOGLE_CLIENT_ID,
     config.GOOGLE_CLIENT_SECRET,
-    'urn:ietf:wg:oauth:2.0:oob'
+    "urn:ietf:wg:oauth:2.0:oob"
   );
   return new Promise((resolve) => {
     fs.readFile(TOKEN_PATH, (err, token) => {
@@ -29,8 +29,9 @@ export function authorize(config: Environment): Promise<any> {
   });
 }
 
-function getNewToken(oAuth2Client: any, callback: any) {
+function getNewToken(oAuth2Client: any, callback: any): void {
   const authUrl = oAuth2Client.generateAuthUrl({
+    // eslint-disable-next-line @typescript-eslint/camelcase
     access_type: "offline",
     scope: SCOPES,
   });
@@ -42,11 +43,7 @@ function getNewToken(oAuth2Client: any, callback: any) {
   rl.question("Enter the code from that page here: ", (code) => {
     rl.close();
     oAuth2Client.getToken(code, (err: any, token: any) => {
-      if (err)
-        return console.error(
-          "Error while trying to retrieve access token",
-          err
-        );
+      if (err) return console.error("Error while trying to retrieve access token", err);
       oAuth2Client.setCredentials(token);
       // Store the token to disk for later program executions
       fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
