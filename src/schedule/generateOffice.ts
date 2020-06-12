@@ -1,9 +1,10 @@
-import { compact, groupBy } from "lodash";
+import { groupBy } from "lodash";
 import { DateTime } from "luxon";
 
 import { ScheduleSpreadsheet, ScheduleSpreadsheetRow } from "./fetchSpreadsheet";
 import { logger } from "../log";
 import { MeetingJoinUrls } from "./joinUrls";
+import { extractLinks } from "./extractLinks";
 
 export interface Office {
   rooms: Room[];
@@ -23,7 +24,7 @@ export interface Room {
 export interface RoomLink {
   href: string;
   text: string;
-  icon: string;
+  icon?: string;
 }
 
 export interface Group {
@@ -79,18 +80,11 @@ function mapSpreadsheetGroup(
     disabledAfter: sanitizeDateTime(end),
   };
 
-  const icon = "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/confluence-icon.png";
   const rooms: Room[] = rows.flatMap((row) =>
     row.MeetingIds.sort().map((meetingId, index) => {
       const roomId = `${groupId}:room-${meetingId}`;
       const roomNumber = row.MeetingIds.length > 1 ? ` (${index + 1})` : "";
-      const links = compact([
-        row.Link && {
-          text: "Confluence",
-          href: row.Link,
-          icon,
-        },
-      ]);
+      const links = extractLinks(row.Link);
 
       const joinUrl = joinUrls[meetingId];
 

@@ -71,7 +71,7 @@ describe("generateOffice", () => {
         Start: "10:30",
         Title: "Topic A",
         Subtitle: "",
-        Link: "http://shouting.machine/topicA",
+        Link: "[Topic A](http://shouting.machine/topicA)",
         MeetingIds: ["1"],
         ReservedIds: [],
         RandomJoin: false,
@@ -80,7 +80,7 @@ describe("generateOffice", () => {
         Start: "10:30",
         Title: "Topic B 1",
         Subtitle: "Poggers",
-        Link: "http://shouting.machine/topicB",
+        Link: "[Topic B](http://shouting.machine/topicB)",
         MeetingIds: ["2"],
         ReservedIds: ["2", "3"],
         RandomJoin: false,
@@ -89,7 +89,7 @@ describe("generateOffice", () => {
         Start: "10:30",
         Title: "Topic B 2",
         Subtitle: "in the Chat",
-        Link: "http://shouting.machine/topicB",
+        Link: "[Topic B](http://shouting.machine/topicB)",
         MeetingIds: ["4"],
         ReservedIds: ["4", "5"],
         RandomJoin: false,
@@ -110,7 +110,6 @@ describe("generateOffice", () => {
     const office = generateOffice(spreadsheet, joinUrls);
     const groupJoinDescription =
       'Wenn ihr mögt, könnt ihr durch den untenstehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.';
-    const confluenceIcon = "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/confluence-icon.png";
     expect(office).toEqual({
       rooms: [
         {
@@ -203,9 +202,8 @@ describe("generateOffice", () => {
           joinUrl: joinUrls["1"],
           links: [
             {
-              text: "Confluence",
+              text: "Topic A",
               href: "http://shouting.machine/topicA",
-              icon: confluenceIcon,
             },
           ],
         },
@@ -218,9 +216,8 @@ describe("generateOffice", () => {
           joinUrl: joinUrls["2"],
           links: [
             {
-              text: "Confluence",
+              text: "Topic B",
               href: "http://shouting.machine/topicB",
-              icon: confluenceIcon,
             },
           ],
         },
@@ -233,9 +230,8 @@ describe("generateOffice", () => {
           joinUrl: joinUrls["4"],
           links: [
             {
-              text: "Confluence",
+              text: "Topic B",
               href: "http://shouting.machine/topicB",
-              icon: confluenceIcon,
             },
           ],
         },
