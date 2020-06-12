@@ -1,7 +1,6 @@
 import fs from "fs";
 import readline from "readline";
 import { google } from "googleapis";
-import { CreateMeetingsEnvironment } from "../config";
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [
@@ -14,7 +13,12 @@ const SCOPES = [
 // time.
 const TOKEN_PATH = "token.json";
 
-export function authorize(config: CreateMeetingsEnvironment): Promise<any> {
+interface AuthenticationConfig {
+  GOOGLE_CLIENT_ID: string;
+  GOOGLE_CLIENT_SECRET: string;
+}
+
+export function authorize(config: AuthenticationConfig): Promise<any> {
   const oAuth2Client = new google.auth.OAuth2(
     config.GOOGLE_CLIENT_ID,
     config.GOOGLE_CLIENT_SECRET,

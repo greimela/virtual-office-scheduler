@@ -1,5 +1,5 @@
 import { ZoomMeeting, ZoomUser } from "./zoom";
-import { authorize } from "./google";
+import { authorize } from "../google";
 import { CreateMeetingsEnvironment } from "../config";
 import { google } from "googleapis";
 import { logger } from "../log";
@@ -17,7 +17,7 @@ export async function uploadToSpreadsheet(
     sheets.spreadsheets.values.update(
       {
         spreadsheetId,
-        range: "Meetings",
+        range: config.MEETINGS_SHEET_NAME,
         valueInputOption: "RAW",
         requestBody: {
           range: config.MEETINGS_SHEET_NAME,

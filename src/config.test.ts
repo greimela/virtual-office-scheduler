@@ -35,6 +35,8 @@ describe("'config' should", () => {
       VIRTUAL_OFFICE_BASE_URL: "http://example.com",
       VIRTUAL_OFFICE_USERNAME: "username",
       VIRTUAL_OFFICE_PASSWORD: "password",
+      GOOGLE_SERVICE_ACCOUNT_MAIL: "a@b.com",
+      GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: "",
     };
 
     mockConfig.mockImplementation(

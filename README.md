@@ -22,6 +22,8 @@ Required env variables:
 * VIRTUAL_OFFICE_BASE_URL
 * VIRTUAL_OFFICE_USERNAME
 * VIRTUAL_OFFICE_PASSWORD
+* GOOGLE_SERVICE_ACCOUNT_MAIL
+* GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY
 
 ## Meeting scheduler
 Meeting scheduler for https://github.com/TNG/virtual-office

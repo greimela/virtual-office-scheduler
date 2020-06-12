@@ -1,14 +1,16 @@
-import { fetchMeetingsSpreadsheet, fetchScheduleSpreadsheet } from "./fetchSpreadsheet";
+import { fetchSpreadsheet } from "./fetchSpreadsheet";
 import { ScheduleEnvironment } from "../config";
+import { config } from "dotenv";
 
 describe("fetchSpreadsheet", () => {
   it("schedule parsing works with example document", async () => {
-    const spreadsheet = await fetchScheduleSpreadsheet({
+    const spreadsheet = await fetchSpreadsheet({
+      ...config().parsed,
       GOOGLE_SPREADSHEET_ID: "16U7bjY7d-Ba7iq9c7V4M1D9QVXWZilOo1XukeT6WpOE",
       SCHEDULE_SHEET_NAME: "IntegrationTest",
     } as ScheduleEnvironment);
 
-    expect(spreadsheet).toEqual([
+    expect(spreadsheet.schedule).toEqual([
       {
         Start: "08:30:00",
         Title: "Break",
@@ -94,12 +96,14 @@ describe("fetchSpreadsheet", () => {
   });
 
   it("meetings parsing works with example document", async () => {
-    const spreadsheet = await fetchMeetingsSpreadsheet({
+    const spreadsheet = await fetchSpreadsheet({
+      ...config().parsed,
       GOOGLE_SPREADSHEET_ID: "16U7bjY7d-Ba7iq9c7V4M1D9QVXWZilOo1XukeT6WpOE",
       MEETINGS_SHEET_NAME: "Meetings",
+      SCHEDULE_SHEET_NAME: "IntegrationTest",
     } as ScheduleEnvironment);
 
-    expect(spreadsheet).toEqual([
+    expect(spreadsheet.meetings).toEqual([
       {
         email: "retreat+zoom1@tngtech.com",
         joinUrl: "https://zoom.us/j/95508545228?pwd=abc",
