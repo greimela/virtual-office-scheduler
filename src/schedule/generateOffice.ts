@@ -1,9 +1,9 @@
 import { compact, groupBy } from "lodash";
 import { DateTime } from "luxon";
 
-import { Environment } from "../config";
-import { Spreadsheet, SpreadsheetRow } from "./fetchSpreadsheet";
+import { ScheduleSpreadsheet, ScheduleSpreadsheetRow } from "./fetchSpreadsheet";
 import { logger } from "../log";
+import { MeetingJoinUrls } from "./joinUrls";
 
 export interface Office {
   rooms: Room[];
@@ -41,16 +41,15 @@ export type GroupJoinConfig = {
   description: string;
 };
 
-export function generateOffice(config: Environment, spreadsheet: Spreadsheet): Office {
-  logger.info("Generating office based on spreadsheet", { spreadsheet });
-  const password = config.MEETING_PASSWORD;
+export function generateOffice(schedule: ScheduleSpreadsheet, joinUrls: MeetingJoinUrls): Office {
+  logger.info("Generating office based on spreadsheet", { spreadsheet: schedule });
 
-  const groups = groupBy(spreadsheet, (row) => row.Start);
+  const groups = groupBy(schedule, (row) => row.Start);
   const groupStarts = Object.keys(groups).sort();
 
   const groupConfigs = groupStarts.map((groupStart, index) => {
     const groupEnd = groupStarts[index + 1];
-    return mapSpreadsheetGroup(groupStart, groupEnd, groups[groupStart], password);
+    return mapSpreadsheetGroup(groupStart, groupEnd, groups[groupStart], joinUrls);
   });
 
   return {
@@ -59,7 +58,12 @@ export function generateOffice(config: Environment, spreadsheet: Spreadsheet): O
   };
 }
 
-function mapSpreadsheetGroup(start: string, end: string | undefined, rows: SpreadsheetRow[], password: string): Office {
+function mapSpreadsheetGroup(
+  start: string,
+  end: string | undefined,
+  rows: ScheduleSpreadsheetRow[],
+  joinUrls: MeetingJoinUrls
+): Office {
   const groupId = `group-${start}`;
   const groupJoinRow = rows.find((row) => row.RandomJoin);
   const group: Group = {
@@ -88,13 +92,15 @@ function mapSpreadsheetGroup(start: string, end: string | undefined, rows: Sprea
         },
       ]);
 
+      const joinUrl = joinUrls[meetingId];
+
       return {
         roomId,
         meetingId,
         groupId,
         name: `${row.Title}${roomNumber}`,
         subtitle: row.Subtitle,
-        joinUrl: `https://zoom.us/s/${meetingId}?pwd=${password}`,
+        joinUrl,
         links,
       };
     })

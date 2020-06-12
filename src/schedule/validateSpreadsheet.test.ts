@@ -1,19 +1,31 @@
 import { validateSpreadsheet } from "./validateSpreadsheet";
-import { Spreadsheet } from "./fetchSpreadsheet";
+import { ScheduleSpreadsheet } from "./fetchSpreadsheet";
 import { Violation } from "./ValidationError";
+import { MeetingJoinUrls } from "./joinUrls";
+
+function joinUrlsFor(meetingIds: string[]): MeetingJoinUrls {
+  return meetingIds.reduce((agg, meetingId) => {
+    agg[meetingId] = `http://zoom.us/joinMe/${meetingId}`;
+    return agg;
+  }, {} as MeetingJoinUrls);
+}
 
 describe("validateSpreadsheet", () => {
-  function expectNoViolations(spreadsheet: Spreadsheet): void {
+  function expectNoViolations(spreadsheet: ScheduleSpreadsheet, joinUrls: MeetingJoinUrls): void {
     try {
-      validateSpreadsheet(spreadsheet);
+      validateSpreadsheet(spreadsheet, joinUrls);
     } catch (error) {
       fail(`expected no error, but got: ${error.message}`);
     }
   }
 
-  function expectViolations(spreadsheet: Spreadsheet, violations: Violation[]): void {
+  function expectViolations(
+    spreadsheet: ScheduleSpreadsheet,
+    joinUrls: MeetingJoinUrls,
+    violations: Violation[]
+  ): void {
     try {
-      validateSpreadsheet(spreadsheet);
+      validateSpreadsheet(spreadsheet, joinUrls);
       fail("expected validation error");
     } catch (error) {
       expect(error.violations).toEqual(violations);
@@ -105,14 +117,17 @@ describe("validateSpreadsheet", () => {
       },
     ];
 
-    expectNoViolations(spreadsheet);
+    const joinUrls = joinUrlsFor(["1", "2", "3", "4", "5"]);
+
+    expectNoViolations(spreadsheet, joinUrls);
   });
 
   it("rejects empty sheet", () => {
-    expectViolations(
-      [],
-      [{ group: "-", rule: "You are not allowed to upload a spreadsheet without any rows", locations: [] }]
-    );
+    const joinUrls = joinUrlsFor([]);
+
+    expectViolations([], joinUrls, [
+      { group: "-", rule: "You are not allowed to upload a spreadsheet without any rows", locations: [] },
+    ]);
   });
 
   it("allows rows with overlapping MeetingIds but different Start", () => {
@@ -146,7 +161,9 @@ describe("validateSpreadsheet", () => {
       },
     ];
 
-    expectNoViolations(spreadsheet);
+    const joinUrls = joinUrlsFor(["1", "2", "3"]);
+
+    expectNoViolations(spreadsheet, joinUrls);
   });
 
   it("rejects rows with overlapping MeetingIds and same Start", () => {
@@ -179,8 +196,9 @@ describe("validateSpreadsheet", () => {
         RandomJoin: false,
       },
     ];
+    const joinUrls = joinUrlsFor(["1", "2", "3"]);
 
-    expectViolations(spreadsheet, [
+    expectViolations(spreadsheet, joinUrls, [
       {
         group: "08:00:00",
         rule: "You cannot use overlapping MeetingIds during the same Start time",
@@ -229,8 +247,9 @@ describe("validateSpreadsheet", () => {
         RandomJoin: false,
       },
     ];
+    const joinUrls = joinUrlsFor(["1", "2", "3"]);
 
-    expectNoViolations(spreadsheet);
+    expectNoViolations(spreadsheet, joinUrls);
   });
 
   it("rejects rows with overlapping ReservedIds and same Start", () => {
@@ -263,8 +282,9 @@ describe("validateSpreadsheet", () => {
         RandomJoin: false,
       },
     ];
+    const joinUrls = joinUrlsFor(["1", "2", "3"]);
 
-    expectViolations(spreadsheet, [
+    expectViolations(spreadsheet, joinUrls, [
       {
         group: "08:00:00",
         rule: "You cannot use overlapping ReservedIds during the same Start time",
@@ -313,8 +333,9 @@ describe("validateSpreadsheet", () => {
         RandomJoin: true,
       },
     ];
+    const joinUrls = joinUrlsFor(["1", "2", "3"]);
 
-    expectNoViolations(spreadsheet);
+    expectNoViolations(spreadsheet, joinUrls);
   });
 
   it("rejects rows with RandomJoin when another row has the same Start", () => {
@@ -347,12 +368,58 @@ describe("validateSpreadsheet", () => {
         RandomJoin: true,
       },
     ];
+    const joinUrls = joinUrlsFor(["1", "2", "3"]);
 
-    expectViolations(spreadsheet, [
+    expectViolations(spreadsheet, joinUrls, [
       {
         group: "08:00:00",
         rule: "You can only set RandomJoin to TRUE when no other row has the same Start time",
         locations: ["One", "Two"],
+      },
+    ]);
+  });
+
+  it("rejects unknown meeting ids", () => {
+    const spreadsheet = [
+      {
+        Start: "08:00:00",
+        Title: "One",
+        Subtitle: "",
+        Link: "",
+        MeetingIds: ["1"],
+        ReservedIds: [],
+        RandomJoin: true,
+      },
+    ];
+    const joinUrls = joinUrlsFor(["2"]);
+
+    expectViolations(spreadsheet, joinUrls, [
+      {
+        group: "08:00:00",
+        rule: "There's no join URL for meeting with id 1 configured.",
+        locations: ["One"],
+      },
+    ]);
+  });
+  it("rejects unknown reserve meeting ids", () => {
+    const spreadsheet = [
+      {
+        Start: "08:00:00",
+        Title: "One",
+        Subtitle: "",
+        Link: "",
+        MeetingIds: ["2"],
+        ReservedIds: ["1"],
+        RandomJoin: true,
+      },
+    ];
+    const joinUrls = joinUrlsFor(["2"]);
+
+    expectViolations(spreadsheet, joinUrls, [
+      {
+        group: "08:00:00",
+        rule: "There's no join URL for reserve meeting with id 1 configured.",
+        locations: ["One"],
       },
     ]);
   });

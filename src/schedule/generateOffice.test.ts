@@ -1,6 +1,13 @@
-import { Environment } from "../config";
 import { generateOffice } from "./generateOffice";
 import fakeTimers, { InstalledClock } from "@sinonjs/fake-timers";
+import { MeetingJoinUrls } from "./joinUrls";
+
+function joinUrlsFor(meetingIds: string[]): MeetingJoinUrls {
+  return meetingIds.reduce((agg, meetingId) => {
+    agg[meetingId] = `http://zoom.us/joinMe/${meetingId}`;
+    return agg;
+  }, {} as MeetingJoinUrls);
+}
 
 describe("generateOffice", () => {
   let clock: InstalledClock;
@@ -98,7 +105,9 @@ describe("generateOffice", () => {
       },
     ];
 
-    const office = generateOffice({ MEETING_PASSWORD: "secret" } as Environment, spreadsheet);
+    const joinUrls = joinUrlsFor(["1", "2", "3", "4", "5"]);
+
+    const office = generateOffice(spreadsheet, joinUrls);
     const groupJoinDescription =
       'Wenn ihr mögt, könnt ihr durch den untenstehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.';
     const confluenceIcon = "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/confluence-icon.png";
@@ -110,7 +119,7 @@ describe("generateOffice", () => {
           groupId: "group-08:30",
           name: "Break (1)",
           subtitle: "",
-          joinUrl: "https://zoom.us/s/2?pwd=secret",
+          joinUrl: joinUrls["2"],
           links: [],
         },
         {
@@ -119,7 +128,7 @@ describe("generateOffice", () => {
           groupId: "group-08:30",
           name: "Break (2)",
           subtitle: "",
-          joinUrl: "https://zoom.us/s/3?pwd=secret",
+          joinUrl: joinUrls["3"],
           links: [],
         },
         {
@@ -128,7 +137,7 @@ describe("generateOffice", () => {
           groupId: "group-09:00",
           name: "Welcome",
           subtitle: "Earthlings",
-          joinUrl: "https://zoom.us/s/1?pwd=secret",
+          joinUrl: joinUrls["1"],
           links: [],
         },
         {
@@ -137,7 +146,7 @@ describe("generateOffice", () => {
           groupId: "group-09:05",
           name: "Keynote",
           subtitle: "",
-          joinUrl: "https://zoom.us/s/1?pwd=secret",
+          joinUrl: joinUrls["1"],
           links: [],
         },
         {
@@ -146,7 +155,7 @@ describe("generateOffice", () => {
           groupId: "group-10:05",
           name: "The Funnel",
           subtitle: "",
-          joinUrl: "https://zoom.us/s/3?pwd=secret",
+          joinUrl: joinUrls["3"],
           links: [],
         },
         {
@@ -155,7 +164,7 @@ describe("generateOffice", () => {
           groupId: "group-10:15",
           name: "Break (1)",
           subtitle: "Lunch",
-          joinUrl: "https://zoom.us/s/1?pwd=secret",
+          joinUrl: joinUrls["1"],
           links: [],
         },
         {
@@ -164,7 +173,7 @@ describe("generateOffice", () => {
           groupId: "group-10:15",
           name: "Break (2)",
           subtitle: "Lunch",
-          joinUrl: "https://zoom.us/s/2?pwd=secret",
+          joinUrl: joinUrls["2"],
           links: [],
         },
         {
@@ -173,7 +182,7 @@ describe("generateOffice", () => {
           groupId: "group-10:15",
           name: "Break (3)",
           subtitle: "Lunch",
-          joinUrl: "https://zoom.us/s/3?pwd=secret",
+          joinUrl: joinUrls["3"],
           links: [],
         },
         {
@@ -182,7 +191,7 @@ describe("generateOffice", () => {
           groupId: "group-10:15",
           name: "Break (4)",
           subtitle: "Lunch",
-          joinUrl: "https://zoom.us/s/4?pwd=secret",
+          joinUrl: joinUrls["4"],
           links: [],
         },
         {
@@ -191,7 +200,7 @@ describe("generateOffice", () => {
           groupId: "group-10:30",
           name: "Topic A",
           subtitle: "",
-          joinUrl: "https://zoom.us/s/1?pwd=secret",
+          joinUrl: joinUrls["1"],
           links: [
             {
               text: "Confluence",
@@ -206,7 +215,7 @@ describe("generateOffice", () => {
           groupId: "group-10:30",
           name: "Topic B 1",
           subtitle: "Poggers",
-          joinUrl: "https://zoom.us/s/2?pwd=secret",
+          joinUrl: joinUrls["2"],
           links: [
             {
               text: "Confluence",
@@ -221,7 +230,7 @@ describe("generateOffice", () => {
           groupId: "group-10:30",
           name: "Topic B 2",
           subtitle: "in the Chat",
-          joinUrl: "https://zoom.us/s/4?pwd=secret",
+          joinUrl: joinUrls["4"],
           links: [
             {
               text: "Confluence",
@@ -236,7 +245,7 @@ describe("generateOffice", () => {
           groupId: "group-12:00",
           name: "Break",
           subtitle: "",
-          joinUrl: "https://zoom.us/s/1?pwd=secret",
+          joinUrl: joinUrls["1"],
           links: [],
         },
       ],

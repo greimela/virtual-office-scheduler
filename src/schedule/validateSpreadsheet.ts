@@ -1,10 +1,11 @@
 import { groupBy, intersection, isEmpty } from "lodash";
 
-import { Spreadsheet } from "./fetchSpreadsheet";
+import { ScheduleSpreadsheet } from "./fetchSpreadsheet";
 import { ValidationError, Violation } from "./ValidationError";
 import { logger } from "../log";
+import { MeetingJoinUrls } from "./joinUrls";
 
-export function validateSpreadsheet(spreadsheet: Spreadsheet): void {
+export function validateSpreadsheet(spreadsheet: ScheduleSpreadsheet, joinUrls: MeetingJoinUrls): void {
   logger.info("Validating parsed spreadsheet");
 
   const violations: Violation[] = [];
@@ -23,6 +24,17 @@ export function validateSpreadsheet(spreadsheet: Spreadsheet): void {
     }
 
     rows.forEach((row) => {
+      row.MeetingIds.forEach((meetingId) => {
+        if (!joinUrls[meetingId]) {
+          violation(time, `There's no join URL for meeting with id ${meetingId} configured.`, [row]);
+        }
+      });
+      row.ReservedIds.forEach((meetingId) => {
+        if (!joinUrls[meetingId]) {
+          violation(time, `There's no join URL for reserve meeting with id ${meetingId} configured.`, [row]);
+        }
+      });
+
       const otherRows = rows.filter((otherRow) => otherRow !== row);
 
       const meetingIdConflicts = otherRows.filter(
