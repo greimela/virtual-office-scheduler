@@ -1,17 +1,23 @@
 import { config } from "dotenv";
 import * as t from "io-ts";
 import { PathReporter } from "io-ts/lib/PathReporter";
-import { isLeft } from "fp-ts/lib/Either";
+import { Either, isLeft } from "fp-ts/lib/Either";
 
 import { logger } from "./log";
+import { Errors } from "io-ts";
 
-const EnvironmentCodec = t.type({
+const ScheduleEnvironmentCodec = t.type({
   GOOGLE_SPREADSHEET_ID: t.string,
   SCHEDULE_SHEET_NAME: t.string,
   MEETINGS_SHEET_NAME: t.string,
   VIRTUAL_OFFICE_BASE_URL: t.string,
   VIRTUAL_OFFICE_USERNAME: t.string,
   VIRTUAL_OFFICE_PASSWORD: t.string,
+});
+
+const CreateMeetingsEnvironmentCodec = t.type({
+  GOOGLE_SPREADSHEET_ID: t.string,
+  MEETINGS_SHEET_NAME: t.string,
   ZOOM_JWT: t.string,
   USER_EMAIL_FILE: t.string,
   MEETING_TOPIC: t.string,
@@ -22,19 +28,17 @@ const EnvironmentCodec = t.type({
   GOOGLE_CLIENT_SECRET: t.string,
 });
 
-export type Environment = t.TypeOf<typeof EnvironmentCodec>;
+export type ScheduleEnvironment = t.TypeOf<typeof ScheduleEnvironmentCodec>;
+export type CreateMeetingsEnvironment = t.TypeOf<typeof CreateMeetingsEnvironmentCodec>;
 
-/**
- * @throws {Error} if env could not be processed or env does not have the correct structure
- */
-export function parseConfig(): Environment {
+function parseConfig<T>(decode: (env: any) => Either<Errors, T>): T {
   logger.info("Loading dotenv config from context");
   const result = config();
   if (result.error) {
     throw result.error;
   }
 
-  const configuration = EnvironmentCodec.decode(result.parsed);
+  const configuration = decode(result.parsed);
   if (isLeft(configuration)) {
     throw Error(`Parsing dotenv config failed: ${PathReporter.report(configuration)}`);
   }
@@ -42,4 +46,12 @@ export function parseConfig(): Environment {
   const env = configuration.right;
   logger.info("Successfully parsed dotenv config", env);
   return env;
+}
+
+export function parseScheduleConfig(): ScheduleEnvironment {
+  return parseConfig((parsed) => ScheduleEnvironmentCodec.decode(parsed));
+}
+
+export function parseCreateMeetingsConfig(): CreateMeetingsEnvironment {
+  return parseConfig((parsed) => CreateMeetingsEnvironmentCodec.decode(parsed));
 }

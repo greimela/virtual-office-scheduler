@@ -1,13 +1,13 @@
 import { ZoomMeeting, ZoomUser } from "./zoom";
 import { authorize } from "./google";
-import { Environment } from "../config";
+import { CreateMeetingsEnvironment } from "../config";
 import { google } from "googleapis";
 import { logger } from "../log";
 
 export async function uploadToSpreadsheet(
   spreadsheetId: string,
   meetings: { user: ZoomUser; meeting: ZoomMeeting }[],
-  config: Environment
+  config: CreateMeetingsEnvironment
 ): Promise<unknown> {
   logger.info("Uploading spreadsheet");
   const auth = await authorize(config);

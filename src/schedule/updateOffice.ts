@@ -1,10 +1,10 @@
 import axios from "axios";
 
-import { Environment } from "../config";
+import { ScheduleEnvironment } from "../config";
 import { Office } from "./generateOffice";
 import { logger } from "../log";
 
-export async function updateOffice(config: Environment, office: Office): Promise<void> {
+export async function updateOffice(config: ScheduleEnvironment, office: Office): Promise<void> {
   const url = `${config.VIRTUAL_OFFICE_BASE_URL}/api/admin/replaceOffice`;
   logger.info("Replacing virtual office", { url, office });
 

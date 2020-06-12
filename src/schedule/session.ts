@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { parseConfig } from "../config";
+import { parseScheduleConfig } from "../config";
 import { fetchMeetingsSpreadsheet, fetchScheduleSpreadsheet } from "./fetchSpreadsheet";
 import { generateOffice } from "./generateOffice";
 import { updateOffice } from "./updateOffice";
@@ -11,7 +11,7 @@ import { joinUrlsFrom } from "./joinUrls";
 async function main(): Promise<void> {
   try {
     logger.info("Updating virtual office from spreadsheet");
-    const config = parseConfig();
+    const config = parseScheduleConfig();
 
     const meetingsSpreadsheet = await fetchMeetingsSpreadsheet(config);
     const joinUrls = joinUrlsFrom(meetingsSpreadsheet);
