@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import { parseCreateMeetingsConfig } from "../config";
-import { fetchZoomUsers } from "./fetchZoomUsers";
 import { logger } from "../log";
-import { createZoomMeetings } from "./createZoomMeetings";
 import { uploadToSpreadsheet } from "./uploadToSpreadsheet";
+import { createZoomMeetings } from "./createZoomMeetings";
+import { fetchZoomUsers } from "./fetchZoomUsers";
 
 async function main(): Promise<void> {
   try {
@@ -24,9 +24,9 @@ async function main(): Promise<void> {
     logger.info("Uploading meetings into spreadsheet");
     await uploadToSpreadsheet(config.GOOGLE_SPREADSHEET_ID, meetings, config);
 
-    logger.info("Successfully updated virtual office");
+    logger.info("Successfully updated spreadsheet");
   } catch (error) {
-    logger.error("Failed to update virtual office", error);
+    logger.error("Failed to update spreadsheet", error);
     // ugly workaround to get logs printed on the console and still being able to set an exit code
     setTimeout(() => process.exit(1), 10);
   }
