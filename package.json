@@ -18,10 +18,8 @@
     "dependencies": {
         "axios": "^0.19.2",
         "chalk": "^4.0.0",
-        "csv-parse": "^4.9.0",
         "dotenv": "^8.2.0",
         "fp-ts": "^2.5.4",
-        "googleapis": "^52.1.0",
         "io-ts": "^2.2.2",
         "lodash": "^4.17.15",
         "luxon": "^1.24.1",
@@ -52,6 +50,7 @@
         "eslint-plugin-prettier": "^3.1.1",
         "eslint-plugin-promise": "^4.2.1",
         "eslint-plugin-standard": "^4.0.1",
+        "google-spreadsheet": "github:the-vampiire/node-google-spreadsheet#v4-typings",
         "husky": "^4.2.5",
         "jest": "^25.5.1",
         "nodemon": "^2.0.3",

@@ -1,39 +1,23 @@
 import { ZoomMeeting, ZoomUser } from "./zoom";
-import { authorize } from "./google";
 import { CreateMeetingsEnvironment } from "../config";
-import { google } from "googleapis";
 import { logger } from "../log";
+import { findSheet, getSpreadsheet } from "../googleSpreadsheet";
 
 export async function uploadToSpreadsheet(
-  spreadsheetId: string,
   meetings: { user: ZoomUser; meeting: ZoomMeeting }[],
   config: CreateMeetingsEnvironment
-): Promise<unknown> {
+): Promise<void> {
   logger.info("Uploading spreadsheet");
-  const auth = await authorize(config);
+  const doc = await getSpreadsheet(config);
+  const sheet = findSheet(doc, config.MEETINGS_SHEET_NAME);
+  if (!sheet) {
+    throw new Error(`cannot find meetings sheet (${config.MEETINGS_SHEET_NAME})`);
+  }
+  await sheet.clear();
+  sheet.headerValues = ["email", "meetingId", "joinUrl"];
+  await sheet.addRow({ email: "email", meetingId: "meetingId", joinUrl: "joinUrl" });
 
-  const sheets = google.sheets({ version: "v4", auth });
-  return new Promise((resolve, reject) => {
-    sheets.spreadsheets.values.update(
-      {
-        spreadsheetId,
-        range: "Meetings",
-        valueInputOption: "RAW",
-        requestBody: {
-          range: config.MEETINGS_SHEET_NAME,
-          majorDimension: "ROWS",
-          values: [
-            ["email", "meetingId", "joinUrl"],
-            ...meetings.map(({ user, meeting }) => [user.email, meeting.id, meeting.join_url]),
-          ],
-        },
-      },
-      (err, res) => {
-        if (err) {
-          return reject(new Error("The API returned an error: " + err));
-        }
-        resolve(res);
-      }
-    );
-  });
+  for (const { user, meeting } of meetings) {
+    await sheet.addRow({ email: user.email, meetingId: meeting.id, joinUrl: meeting.join_url });
+  }
 }

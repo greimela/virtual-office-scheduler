@@ -11,6 +11,7 @@
         "esModuleInterop": true,
         "strict": true,
         "noImplicitReturns": true,
+        "noImplicitAny": false,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "allowSyntheticDefaultImports": true,
