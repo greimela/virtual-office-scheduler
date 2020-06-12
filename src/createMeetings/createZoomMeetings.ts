@@ -23,7 +23,7 @@ async function createOrGetMeeting(user: ZoomUser, config: CreateMeetingsEnvironm
       duration: config.MEETING_DURATION,
       password: config.MEETING_PASSWORD,
       tracking_fields: [{ field: "origin", value: "virtual-office-meeting-scheduler" }],
-      settings: { join_before_host: true },
+      settings: { join_before_host: true, participant_video: true, mute_upon_entry: true },
     },
     config.ZOOM_JWT
   );
