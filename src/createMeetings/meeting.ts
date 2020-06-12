@@ -22,7 +22,7 @@ async function main(): Promise<void> {
     );
 
     logger.info("Uploading meetings into spreadsheet");
-    await uploadToSpreadsheet(config.GOOGLE_SPREADSHEET_ID, meetings, config);
+    await uploadToSpreadsheet(meetings, config);
 
     logger.info("Successfully updated spreadsheet");
   } catch (error) {

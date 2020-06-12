@@ -58,8 +58,8 @@ describe("'config' should", () => {
       MEETING_PASSWORD: "secret",
       MEETING_START_TIME: "09:00",
       MEETING_DURATION: "720",
-      GOOGLE_CLIENT_ID: "foo",
-      GOOGLE_CLIENT_SECRET: "secret",
+      GOOGLE_SERVICE_ACCOUNT_MAIL: "a@b.com",
+      GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: "",
     };
 
     mockConfig.mockImplementation(

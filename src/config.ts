@@ -26,8 +26,8 @@ const CreateMeetingsEnvironmentCodec = t.type({
   MEETING_PASSWORD: t.string,
   MEETING_START_TIME: t.string,
   MEETING_DURATION: t.string,
-  GOOGLE_CLIENT_ID: t.string,
-  GOOGLE_CLIENT_SECRET: t.string,
+  GOOGLE_SERVICE_ACCOUNT_MAIL: t.string,
+  GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: t.string,
 });
 
 export type ScheduleEnvironment = t.TypeOf<typeof ScheduleEnvironmentCodec>;

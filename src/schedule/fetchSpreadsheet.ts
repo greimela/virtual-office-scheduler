@@ -1,5 +1,5 @@
 import { ScheduleEnvironment } from "../config";
-import { fetchScheduleSpreadsheet, RawMeetingsSpreadsheetRow, RawScheduleSpreadsheetRow } from "./googleSpreadsheet";
+import { fetchScheduleSpreadsheet, RawMeetingsSpreadsheetRow, RawScheduleSpreadsheetRow } from "./getGoogleSpreadsheet";
 
 export type MeetingSpreadsheet = MeetingsSpreadsheetRow[];
 export type ScheduleSpreadsheet = ScheduleSpreadsheetRow[];
@@ -26,13 +26,17 @@ export interface SpreadsheetData {
 }
 
 function adaptScheduleRow(raw: RawScheduleSpreadsheetRow): ScheduleSpreadsheetRow {
+  function splitByComma(value: string): string[] {
+    return !value || value.length === 0 ? [] : value.split(",");
+  }
+
   return {
     Link: raw.Link,
     Start: raw.Start,
     Subtitle: raw.Subtitle,
     Title: raw.Title,
-    MeetingIds: raw.MeetingIds.length === 0 ? [] : raw.MeetingIds.split(","),
-    ReservedIds: raw.ReservedIds.length === 0 ? [] : raw.ReservedIds.split(","),
+    MeetingIds: splitByComma(raw.MeetingIds),
+    ReservedIds: splitByComma(raw.ReservedIds),
     RandomJoin: raw.RandomJoin === "TRUE",
   };
 }
