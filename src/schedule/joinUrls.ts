@@ -6,7 +6,7 @@ export interface MeetingJoinUrls {
 
 export function joinUrlsFrom(meetings: MeetingSpreadsheet): MeetingJoinUrls {
   return meetings.reduce((prev, cur) => {
-    prev[cur.meetingId] = prev.joinUrl;
+    prev[cur.meetingId] = cur.joinUrl;
     return prev;
   }, {} as MeetingJoinUrls);
 }
