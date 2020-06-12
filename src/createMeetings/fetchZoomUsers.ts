@@ -1,11 +1,11 @@
 import { readFileSync } from "fs";
 
-import { Environment } from "../config";
+import { CreateMeetingsEnvironment } from "../config";
 import { logger } from "../log";
 import { getAllUsers, ZoomUser } from "./zoom";
 import path from "path";
 
-export async function fetchZoomUsers(config: Environment): Promise<ZoomUser[]> {
+export async function fetchZoomUsers(config: CreateMeetingsEnvironment): Promise<ZoomUser[]> {
   const zoomJwt = config.ZOOM_JWT;
   const userEmailFile = config.USER_EMAIL_FILE;
 

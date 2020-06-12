@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { parseConfig } from "../config";
+import { parseCreateMeetingsConfig } from "../config";
 import { fetchZoomUsers } from "./fetchZoomUsers";
 import { logger } from "../log";
 import { createZoomMeetings } from "./createZoomMeetings";
@@ -9,7 +9,7 @@ import { uploadToSpreadsheet } from "./uploadToSpreadsheet";
 async function main(): Promise<void> {
   try {
     logger.info("Parsing config");
-    const config = parseConfig();
+    const config = parseCreateMeetingsConfig();
 
     logger.info("Fetching zoom users for all given user emails");
     const zoomUsers = await fetchZoomUsers(config);

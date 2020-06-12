@@ -5,7 +5,7 @@ import { isLeft } from "fp-ts/lib/Either";
 import { PathReporter } from "io-ts/lib/PathReporter";
 import { CastingContext } from "csv-parse";
 
-import { Environment } from "../config";
+import { ScheduleEnvironment } from "../config";
 import { logger } from "../log";
 
 const csvParseOptions = {
@@ -48,14 +48,14 @@ export async function downloadSpreadsheet(spreadsheetId: string, sheetName: stri
   return response.data;
 }
 
-export async function fetchScheduleSpreadsheet(config: Environment): Promise<ScheduleSpreadsheet> {
+export async function fetchScheduleSpreadsheet(config: ScheduleEnvironment): Promise<ScheduleSpreadsheet> {
   const csv = await downloadSpreadsheet(config.GOOGLE_SPREADSHEET_ID, config.SCHEDULE_SHEET_NAME);
 
   logger.info("Parsing received CSV document", { csv });
   return parseScheduleCsv(csv);
 }
 
-export async function fetchMeetingsSpreadsheet(config: Environment): Promise<MeetingSpreadsheet> {
+export async function fetchMeetingsSpreadsheet(config: ScheduleEnvironment): Promise<MeetingSpreadsheet> {
   const csv = await downloadSpreadsheet(config.GOOGLE_SPREADSHEET_ID, config.MEETINGS_SHEET_NAME);
 
   logger.info("Parsing received CSV document", { csv });

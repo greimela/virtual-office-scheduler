@@ -1,11 +1,11 @@
-import { Environment } from "../config";
+import { CreateMeetingsEnvironment } from "../config";
 import { logger } from "../log";
 import { createMeeting, getAllUpcomingMeetingsForUser, ZoomMeeting, ZoomUser } from "./zoom";
 
 /* eslint-disable @typescript-eslint/camelcase */
 // Zoom API uses snake_case therefore ignore in this file
 
-async function createOrGetMeeting(user: ZoomUser, config: Environment): Promise<ZoomMeeting> {
+async function createOrGetMeeting(user: ZoomUser, config: CreateMeetingsEnvironment): Promise<ZoomMeeting> {
   const meetings = await getAllUpcomingMeetingsForUser(user.id, config.ZOOM_JWT);
   const existingMeeting = meetings.find((meeting) => meeting.topic === config.MEETING_TOPIC);
   if (existingMeeting) {
@@ -38,7 +38,7 @@ export async function createZoomMeetings({
   config,
   zoomUsers,
 }: {
-  config: Environment;
+  config: CreateMeetingsEnvironment;
   zoomUsers: ZoomUser[];
 }): Promise<Meeting[]> {
   const meetings: Meeting[] = [];

@@ -1,4 +1,4 @@
-import { parseConfig } from "./config";
+import { parseCreateMeetingsConfig, parseScheduleConfig } from "./config";
 import { config, DotenvConfigOutput } from "dotenv";
 
 jest.mock("dotenv");
@@ -12,7 +12,7 @@ describe("'config' should", () => {
       }
     );
 
-    expect(() => parseConfig()).toThrowError("foo");
+    expect(() => parseScheduleConfig()).toThrowError("foo");
   });
 
   it("throw Error if processed env does not contain correct structure", () => {
@@ -22,10 +22,12 @@ describe("'config' should", () => {
       }
     );
 
-    expect(() => parseConfig()).toThrowError(/Parsing dotenv config failed: Invalid value undefined supplied to .*/);
+    expect(() => parseScheduleConfig()).toThrowError(
+      /Parsing dotenv config failed: Invalid value undefined supplied to .*/
+    );
   });
 
-  it("return correctly parsed configuration", () => {
+  it("return correctly parsed schedule configuration", () => {
     const env = {
       GOOGLE_SPREADSHEET_ID: "1",
       SCHEDULE_SHEET_NAME: "Day 1",
@@ -33,6 +35,21 @@ describe("'config' should", () => {
       VIRTUAL_OFFICE_BASE_URL: "http://example.com",
       VIRTUAL_OFFICE_USERNAME: "username",
       VIRTUAL_OFFICE_PASSWORD: "password",
+    };
+
+    mockConfig.mockImplementation(
+      (): DotenvConfigOutput => {
+        return { parsed: env };
+      }
+    );
+
+    expect(parseScheduleConfig()).toStrictEqual(env);
+  });
+
+  it("return correctly parsed create meeting configuration", () => {
+    const env = {
+      GOOGLE_SPREADSHEET_ID: "1",
+      MEETINGS_SHEET_NAME: "Meetings",
       ZOOM_JWT: "secret",
       USER_EMAIL_FILE: "./emails.txt",
       MEETING_TOPIC: "my meeting",
@@ -49,6 +66,6 @@ describe("'config' should", () => {
       }
     );
 
-    expect(parseConfig()).toStrictEqual(env);
+    expect(parseCreateMeetingsConfig()).toStrictEqual(env);
   });
 });
