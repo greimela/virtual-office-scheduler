@@ -11,7 +11,14 @@ const EnvironmentCodec = t.type({
   VIRTUAL_OFFICE_BASE_URL: t.string,
   VIRTUAL_OFFICE_USERNAME: t.string,
   VIRTUAL_OFFICE_PASSWORD: t.string,
+  ZOOM_JWT: t.string,
+  USER_EMAIL_FILE: t.string,
+  MEETING_TOPIC: t.string,
   MEETING_PASSWORD: t.string,
+  MEETING_START_TIME: t.string,
+  MEETING_DURATION: t.string,
+  GOOGLE_CLIENT_ID: t.string,
+  GOOGLE_CLIENT_SECRET: t.string,
 });
 
 export type Environment = t.TypeOf<typeof EnvironmentCodec>;

@@ -1,5 +1,5 @@
 import { fetchSpreadsheet } from "./fetchSpreadsheet";
-import { Environment } from "./config";
+import { Environment } from "../config";
 
 describe("fetchSpreadsheet", () => {
   it("works with example document", async () => {

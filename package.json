@@ -2,12 +2,12 @@
     "name": "virtual-office-schedule-updater",
     "version": "1.0.0",
     "description": "Update the sessions displayed in an virtual office instance from a predefined schedule",
-    "main": "./build/index.js",
     "license": "Apache-2.0",
     "scripts": {
         "build": "tsc",
         "clean": "shx rm -rf ./build",
-        "start": "npx ts-node ./src/index.ts",
+        "start:scheduleSessions": "npx ts-node src/schedule/session.ts",
+        "start:createMeetings": "npx ts-node src/createMeetings/meeting.ts",
         "dev": "ts-node-dev --inspect --respawn ./src",
         "format": "prettier --ignore-path .gitignore --write '**/*.{ts,js}' && eslint --fix .",
         "test": "run-s test:unit test:lint",
@@ -21,11 +21,13 @@
         "csv-parse": "^4.9.0",
         "dotenv": "^8.2.0",
         "fp-ts": "^2.5.4",
+        "googleapis": "^52.1.0",
         "io-ts": "^2.2.2",
         "lodash": "^4.17.15",
         "luxon": "^1.24.1",
         "pino": "^6.2.1",
-        "pino-pretty": "^4.0.0"
+        "pino-pretty": "^4.0.0",
+        "readline": "^1.3.0"
     },
     "devDependencies": {
         "@sinonjs/fake-timers": "^6.0.1",
