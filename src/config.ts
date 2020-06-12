@@ -7,7 +7,8 @@ import { logger } from "./log";
 
 const EnvironmentCodec = t.type({
   GOOGLE_SPREADSHEET_ID: t.string,
-  GOOGLE_SHEET_NAME: t.string,
+  SCHEDULE_SHEET_NAME: t.string,
+  MEETINGS_SHEET_NAME: t.string,
   VIRTUAL_OFFICE_BASE_URL: t.string,
   VIRTUAL_OFFICE_USERNAME: t.string,
   VIRTUAL_OFFICE_PASSWORD: t.string,

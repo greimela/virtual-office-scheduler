@@ -17,7 +17,8 @@ npm run start:scheduleSessions
 
 Required env variables:
 * GOOGLE_SPREADSHEET_ID
-* GOOGLE_SHEET_NAME
+* MEETINGS_SHEET_NAME
+* SCHEDULE_SHEET_NAME
 * VIRTUAL_OFFICE_BASE_URL
 * VIRTUAL_OFFICE_USERNAME
 * VIRTUAL_OFFICE_PASSWORD
@@ -33,6 +34,7 @@ npm run start:start:createMeetings
 ```
 
 Required env variables:
+* MEETINGS_SHEET_NAME
 * ZOOM_JWT
 * USER_EMAIL_FILE
 * MEETING_TOPIC

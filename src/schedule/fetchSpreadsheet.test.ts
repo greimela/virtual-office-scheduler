@@ -1,11 +1,11 @@
-import { fetchSpreadsheet } from "./fetchSpreadsheet";
+import { fetchMeetingsSpreadsheet, fetchScheduleSpreadsheet } from "./fetchSpreadsheet";
 import { Environment } from "../config";
 
 describe("fetchSpreadsheet", () => {
-  it("works with example document", async () => {
-    const spreadsheet = await fetchSpreadsheet({
+  it("schedule parsing works with example document", async () => {
+    const spreadsheet = await fetchScheduleSpreadsheet({
       GOOGLE_SPREADSHEET_ID: "16U7bjY7d-Ba7iq9c7V4M1D9QVXWZilOo1XukeT6WpOE",
-      GOOGLE_SHEET_NAME: "IntegrationTest",
+      SCHEDULE_SHEET_NAME: "IntegrationTest",
     } as Environment);
 
     expect(spreadsheet).toEqual([
@@ -89,6 +89,41 @@ describe("fetchSpreadsheet", () => {
         MeetingIds: ["1"],
         ReservedIds: ["1", "2"],
         RandomJoin: true,
+      },
+    ]);
+  });
+
+  it("meetings parsing works with example document", async () => {
+    const spreadsheet = await fetchMeetingsSpreadsheet({
+      GOOGLE_SPREADSHEET_ID: "16U7bjY7d-Ba7iq9c7V4M1D9QVXWZilOo1XukeT6WpOE",
+      MEETINGS_SHEET_NAME: "Meetings",
+    } as Environment);
+
+    expect(spreadsheet).toEqual([
+      {
+        email: "retreat+zoom1@tngtech.com",
+        joinUrl: "https://zoom.us/j/95508545228?pwd=abc",
+        meetingId: "1",
+      },
+      {
+        email: "retreat+zoom2@tngtech.com",
+        joinUrl: "https://zoom.us/j/97331051569?pwd=def",
+        meetingId: "2",
+      },
+      {
+        email: "retreat+zoom1@tngtech.com",
+        joinUrl: "https://zoom.us/j/95508545228?pwd=abc",
+        meetingId: "3",
+      },
+      {
+        email: "retreat+zoom2@tngtech.com",
+        joinUrl: "https://zoom.us/j/97331051569?pwd=def",
+        meetingId: "4",
+      },
+      {
+        email: "retreat+zoom1@tngtech.com",
+        joinUrl: "https://zoom.us/j/95508545228?pwd=abc",
+        meetingId: "5",
       },
     ]);
   });

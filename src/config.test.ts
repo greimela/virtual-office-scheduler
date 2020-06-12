@@ -28,7 +28,8 @@ describe("'config' should", () => {
   it("return correctly parsed configuration", () => {
     const env = {
       GOOGLE_SPREADSHEET_ID: "1",
-      GOOGLE_SHEET_NAME: "Day 1",
+      SCHEDULE_SHEET_NAME: "Day 1",
+      MEETINGS_SHEET_NAME: "Meetings",
       VIRTUAL_OFFICE_BASE_URL: "http://example.com",
       VIRTUAL_OFFICE_USERNAME: "username",
       VIRTUAL_OFFICE_PASSWORD: "password",

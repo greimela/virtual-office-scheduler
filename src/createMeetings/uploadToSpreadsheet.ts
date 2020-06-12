@@ -20,7 +20,7 @@ export async function uploadToSpreadsheet(
         range: "Meetings",
         valueInputOption: "RAW",
         requestBody: {
-          range: "Meetings",
+          range: config.MEETINGS_SHEET_NAME,
           majorDimension: "ROWS",
           values: [
             ["email", "meetingId", "joinUrl"],
