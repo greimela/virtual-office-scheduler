@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { parseConfig } from "./config";
+import { parseConfig } from "../config";
 import { fetchSpreadsheet } from "./fetchSpreadsheet";
 import { generateOffice } from "./generateOffice";
 import { updateOffice } from "./updateOffice";
 import { validateSpreadsheet } from "./validateSpreadsheet";
-import { logger } from "./log";
+import { logger } from "../log";
 
 async function main(): Promise<void> {
   try {

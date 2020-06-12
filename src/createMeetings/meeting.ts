@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import { parseConfig } from "./config";
+import { parseConfig } from "../config";
 import { fetchZoomUsers } from "./fetchZoomUsers";
-import { logger } from "./log";
+import { logger } from "../log";
 import { createZoomMeetings } from "./createZoomMeetings";
 import { uploadToSpreadsheet } from "./uploadToSpreadsheet";
 

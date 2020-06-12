@@ -1,5 +1,5 @@
 import axios from "axios";
-import { logger } from "./log";
+import { logger } from "../log";
 import * as t from "io-ts";
 import { isLeft } from "fp-ts/lib/Either";
 import { PathReporter } from "io-ts/lib/PathReporter";

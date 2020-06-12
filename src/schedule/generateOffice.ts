@@ -1,9 +1,9 @@
 import { compact, groupBy } from "lodash";
 import { DateTime } from "luxon";
 
-import { Environment } from "./config";
+import { Environment } from "../config";
 import { Spreadsheet, SpreadsheetRow } from "./fetchSpreadsheet";
-import { logger } from "./log";
+import { logger } from "../log";
 
 export interface Office {
   rooms: Room[];

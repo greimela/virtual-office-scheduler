@@ -1,7 +1,7 @@
 import fs from "fs";
 import readline from "readline";
 import { google } from "googleapis";
-import { Environment } from "./config";
+import { Environment } from "../config";
 
 // If modifying these scopes, delete token.json.
 const SCOPES = [

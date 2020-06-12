@@ -2,7 +2,7 @@ import { groupBy, intersection, isEmpty } from "lodash";
 
 import { Spreadsheet } from "./fetchSpreadsheet";
 import { ValidationError, Violation } from "./ValidationError";
-import { logger } from "./log";
+import { logger } from "../log";
 
 export function validateSpreadsheet(spreadsheet: Spreadsheet): void {
   logger.info("Validating parsed spreadsheet");

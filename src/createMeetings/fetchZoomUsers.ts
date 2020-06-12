@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 
-import { Environment } from "./config";
-import { logger } from "./log";
+import { Environment } from "../config";
+import { logger } from "../log";
 import { getAllUsers, ZoomUser } from "./zoom";
 
 export async function fetchZoomUsers(config: Environment): Promise<ZoomUser[]> {

@@ -1,5 +1,5 @@
-import { Environment } from "./config";
-import { logger } from "./log";
+import { Environment } from "../config";
+import { logger } from "../log";
 import { createMeeting, getAllUpcomingMeetingsForUser, ZoomMeeting, ZoomUser } from "./zoom";
 
 /* eslint-disable @typescript-eslint/camelcase */

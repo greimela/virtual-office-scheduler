@@ -6,8 +6,8 @@
     "scripts": {
         "build": "tsc",
         "clean": "shx rm -rf ./build",
-        "start:session": "npx ts-node ./src/session.ts",
-        "start:meeting": "npx ts-node ./src/meeting.ts",
+        "start:scheduleSessions": "npx ts-node src/schedule/session.ts",
+        "start:createMeetings": "npx ts-node src/createMeetings/meeting.ts",
         "dev": "ts-node-dev --inspect --respawn ./src",
         "format": "prettier --ignore-path .gitignore --write '**/*.{ts,js}' && eslint --fix .",
         "test": "run-s test:unit test:lint",

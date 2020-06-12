@@ -1,6 +1,6 @@
 import { ZoomMeeting, ZoomUser } from "./zoom";
 import { authorize } from "./google";
-import { Environment } from "./config";
+import { Environment } from "../config";
 import { google } from "googleapis";
 
 export async function uploadToSpreadsheet(

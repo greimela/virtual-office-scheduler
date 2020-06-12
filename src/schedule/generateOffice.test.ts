@@ -1,4 +1,4 @@
-import { Environment } from "./config";
+import { Environment } from "../config";
 import { generateOffice } from "./generateOffice";
 import fakeTimers, { InstalledClock } from "@sinonjs/fake-timers";
 

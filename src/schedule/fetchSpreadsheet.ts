@@ -5,8 +5,8 @@ import { isLeft } from "fp-ts/lib/Either";
 import { PathReporter } from "io-ts/lib/PathReporter";
 import { CastingContext } from "csv-parse";
 
-import { Environment } from "./config";
-import { logger } from "./log";
+import { Environment } from "../config";
+import { logger } from "../log";
 
 const SpreadsheetRowCodec = t.type({
   Start: t.string,
