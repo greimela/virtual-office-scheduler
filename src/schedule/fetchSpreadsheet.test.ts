@@ -7,6 +7,7 @@ describe("fetchSpreadsheet", () => {
     const spreadsheet = await fetchSpreadsheet({
       ...config().parsed,
       GOOGLE_SPREADSHEET_ID: "16U7bjY7d-Ba7iq9c7V4M1D9QVXWZilOo1XukeT6WpOE",
+      MEETINGS_SHEET_NAME: "Meetings",
       SCHEDULE_SHEET_NAME: "IntegrationTest",
     } as ScheduleEnvironment);
 
