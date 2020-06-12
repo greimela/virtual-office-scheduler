@@ -15,6 +15,13 @@ Start via
 npm run start:scheduleSessions
 ```
 
+Required env variables:
+* GOOGLE_SPREADSHEET_ID
+* GOOGLE_SHEET_NAME
+* VIRTUAL_OFFICE_BASE_URL
+* VIRTUAL_OFFICE_USERNAME
+* VIRTUAL_OFFICE_PASSWORD
+
 ## Meeting scheduler
 Meeting scheduler for https://github.com/TNG/virtual-office
 
@@ -24,3 +31,13 @@ Start via
 ```
 npm run start:start:createMeetings
 ```
+
+Required env variables:
+* ZOOM_JWT
+* USER_EMAIL_FILE
+* MEETING_TOPIC
+* MEETING_PASSWORD
+* MEETING_START_TIME
+* MEETING_DURATION
+* GOOGLE_CLIENT_ID
+* GOOGLE_CLIENT_SECRET
