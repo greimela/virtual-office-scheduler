@@ -15,12 +15,12 @@ jobs:
     - name: npm install
       run: npm install
     - name: Write .env
-    run: |
-      set -e
-      cat > .env <<EOF
-      GOOGLE_SERVICE_ACCOUNT_MAIL=${{ secrets.GOOGLE_SERVICE_ACCOUNT_MAIL }}
-      GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY=${{ secrets.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY }}
-      EOF
+      run: |
+        set -e
+        cat > .env <<EOF
+        GOOGLE_SERVICE_ACCOUNT_MAIL=${{ secrets.GOOGLE_SERVICE_ACCOUNT_MAIL }}
+        GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY=${{ secrets.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY }}
+        EOF
 
     - name: test
       run: npm run test
