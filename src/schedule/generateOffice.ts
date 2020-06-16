@@ -77,7 +77,7 @@ function mapSpreadsheetGroup(
 ): Office {
   const groupId = `group-${start}`;
   const groupJoinRow = rows.find((row) => row.RandomJoin);
-  const startAsIso = DateTime.fromISO(start);
+  const startAsIso = DateTime.fromISO(start, { zone: "Europe/Berlin" });
   const joinableAfter = startAsIso.minus(
     Duration.fromObject({ minutes: parseInt(config.ENABLE_ROOM_JOIN_MINUTES_BEFORE_START, 10) })
   );
