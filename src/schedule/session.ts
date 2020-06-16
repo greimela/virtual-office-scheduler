@@ -18,7 +18,7 @@ async function main(): Promise<void> {
 
     validateSpreadsheet(schedule, joinUrls);
 
-    const office = generateOffice(schedule, joinUrls);
+    const office = generateOffice(schedule, joinUrls, config);
     await updateOffice(config, office);
 
     logger.info("Successfully updated virtual office");

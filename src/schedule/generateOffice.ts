@@ -1,5 +1,5 @@
 import { groupBy } from "lodash";
-import { DateTime } from "luxon";
+import { DateTime, Duration } from "luxon";
 
 import { ScheduleSpreadsheet, ScheduleSpreadsheetRow } from "./fetchSpreadsheet";
 import { logger } from "../log";
@@ -32,6 +32,7 @@ export interface Group {
   name: string;
   disabledBefore: string;
   disabledAfter: string;
+  joinableAfter: string;
   groupJoin?: GroupJoinConfig;
 }
 
@@ -42,7 +43,15 @@ export type GroupJoinConfig = {
   description: string;
 };
 
-export function generateOffice(schedule: ScheduleSpreadsheet, joinUrls: MeetingJoinUrls): Office {
+export interface GenerateOfficeConfig {
+  ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: string;
+}
+
+export function generateOffice(
+  schedule: ScheduleSpreadsheet,
+  joinUrls: MeetingJoinUrls,
+  config: GenerateOfficeConfig
+): Office {
   logger.info("Generating office based on spreadsheet", { spreadsheet: schedule });
 
   const groups = groupBy(schedule, (row) => row.Start);
@@ -50,7 +59,7 @@ export function generateOffice(schedule: ScheduleSpreadsheet, joinUrls: MeetingJ
 
   const groupConfigs = groupStarts.map((groupStart, index) => {
     const groupEnd = groupStarts[index + 1];
-    return mapSpreadsheetGroup(groupStart, groupEnd, groups[groupStart], joinUrls);
+    return mapSpreadsheetGroup(groupStart, groupEnd, groups[groupStart], joinUrls, config);
   });
 
   return {
@@ -63,10 +72,16 @@ function mapSpreadsheetGroup(
   start: string,
   end: string | undefined,
   rows: ScheduleSpreadsheetRow[],
-  joinUrls: MeetingJoinUrls
+  joinUrls: MeetingJoinUrls,
+  config: GenerateOfficeConfig
 ): Office {
   const groupId = `group-${start}`;
   const groupJoinRow = rows.find((row) => row.RandomJoin);
+  const startAsIso = DateTime.fromISO(start);
+  const joinableAfter = startAsIso.minus(
+    Duration.fromObject({ minutes: parseInt(config.ENABLE_ROOM_JOIN_MINUTES_BEFORE_START, 10) })
+  );
+
   const group: Group = {
     id: groupId,
     name: DateTime.fromISO(start).toFormat("HH:mm"),
@@ -76,6 +91,7 @@ function mapSpreadsheetGroup(
       subtitle: groupJoinRow.Subtitle,
       description: `Wenn ihr mögt, könnt ihr durch den untenstehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.`,
     },
+    joinableAfter: sanitizeDateTime(joinableAfter.toISO()),
     disabledBefore: sanitizeDateTime(start),
     disabledAfter: sanitizeDateTime(end),
   };

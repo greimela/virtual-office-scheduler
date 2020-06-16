@@ -15,6 +15,7 @@ const ScheduleEnvironmentCodec = t.type({
   VIRTUAL_OFFICE_PASSWORD: t.string,
   GOOGLE_SERVICE_ACCOUNT_MAIL: t.string,
   GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: t.string,
+  ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: t.string,
 });
 
 const CreateMeetingsEnvironmentCodec = t.type({

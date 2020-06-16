@@ -37,6 +37,7 @@ describe("'config' should", () => {
       VIRTUAL_OFFICE_PASSWORD: "password",
       GOOGLE_SERVICE_ACCOUNT_MAIL: "a@b.com",
       GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: "",
+      ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: "5",
     };
 
     mockConfig.mockImplementation(
@@ -60,6 +61,7 @@ describe("'config' should", () => {
       MEETING_DURATION: "720",
       GOOGLE_SERVICE_ACCOUNT_MAIL: "a@b.com",
       GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: "",
+      ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: "",
     };
 
     mockConfig.mockImplementation(

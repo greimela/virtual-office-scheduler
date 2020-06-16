@@ -1,4 +1,4 @@
-import { generateOffice } from "./generateOffice";
+import { generateOffice, GenerateOfficeConfig } from "./generateOffice";
 import fakeTimers, { InstalledClock } from "@sinonjs/fake-timers";
 import { MeetingJoinUrls } from "./joinUrls";
 
@@ -11,6 +11,7 @@ function joinUrlsFor(meetingIds: string[]): MeetingJoinUrls {
 
 describe("generateOffice", () => {
   let clock: InstalledClock;
+  const config: GenerateOfficeConfig = { ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: "5" };
 
   afterEach(() => {
     clock.uninstall();
@@ -107,7 +108,7 @@ describe("generateOffice", () => {
 
     const joinUrls = joinUrlsFor(["1", "2", "3", "4", "5"]);
 
-    const office = generateOffice(spreadsheet, joinUrls);
+    const office = generateOffice(spreadsheet, joinUrls, config);
     const groupJoinDescription =
       'Wenn ihr mögt, könnt ihr durch den untenstehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.';
     expect(office).toEqual({
@@ -257,24 +258,28 @@ describe("generateOffice", () => {
           },
           disabledBefore: "2020-05-22T08:30:00.000+02:00",
           disabledAfter: "2020-05-22T09:00:00.000+02:00",
+          joinableAfter: "2020-05-22T08:25:00.000+02:00",
         },
         {
           id: "group-09:00",
           name: "09:00",
           disabledBefore: "2020-05-22T09:00:00.000+02:00",
           disabledAfter: "2020-05-22T09:05:00.000+02:00",
+          joinableAfter: "2020-05-22T08:55:00.000+02:00",
         },
         {
           id: "group-09:05",
           name: "09:05",
           disabledBefore: "2020-05-22T09:05:00.000+02:00",
           disabledAfter: "2020-05-22T10:05:00.000+02:00",
+          joinableAfter: "2020-05-22T09:00:00.000+02:00",
         },
         {
           id: "group-10:05",
           name: "10:05",
           disabledBefore: "2020-05-22T10:05:00.000+02:00",
           disabledAfter: "2020-05-22T10:15:00.000+02:00",
+          joinableAfter: "2020-05-22T10:00:00.000+02:00",
         },
         {
           id: "group-10:15",
@@ -287,12 +292,14 @@ describe("generateOffice", () => {
           },
           disabledBefore: "2020-05-22T10:15:00.000+02:00",
           disabledAfter: "2020-05-22T10:30:00.000+02:00",
+          joinableAfter: "2020-05-22T10:10:00.000+02:00",
         },
         {
           id: "group-10:30",
           name: "10:30",
           disabledBefore: "2020-05-22T10:30:00.000+02:00",
           disabledAfter: "2020-05-22T12:00:00.000+02:00",
+          joinableAfter: "2020-05-22T10:25:00.000+02:00",
         },
         {
           id: "group-12:00",
@@ -305,6 +312,7 @@ describe("generateOffice", () => {
           },
           disabledBefore: "2020-05-22T12:00:00.000+02:00",
           disabledAfter: "2020-05-22T23:59:59.000+02:00",
+          joinableAfter: "2020-05-22T11:55:00.000+02:00",
         },
       ],
     });
