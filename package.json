@@ -16,6 +16,7 @@
         "test:watch": "jest --watch"
     },
     "dependencies": {
+        "@slack/web-api": "^5.10.0",
         "axios": "^0.19.2",
         "chalk": "^4.0.0",
         "dotenv": "^8.2.0",

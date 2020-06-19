@@ -6,6 +6,7 @@ export type ScheduleSpreadsheet = ScheduleSpreadsheetRow[];
 
 export interface ScheduleSpreadsheetRow {
   Start: string;
+  Slot?: string;
   Title: string;
   Subtitle: string;
   Link: string;
@@ -33,6 +34,7 @@ function adaptScheduleRow(raw: RawScheduleSpreadsheetRow): ScheduleSpreadsheetRo
   return {
     Link: raw.Link,
     Start: raw.Start,
+    Slot: raw.Slot,
     Subtitle: raw.Subtitle,
     Title: raw.Title,
     MeetingIds: splitByComma(raw.MeetingIds),

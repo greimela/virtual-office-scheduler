@@ -19,6 +19,7 @@ export interface Room {
   joinUrl: string;
   links: RoomLink[];
   groupId: string;
+  hasSlackChannel: boolean;
 }
 
 export interface RoomLink {
@@ -99,7 +100,8 @@ function mapSpreadsheetGroup(
   const rooms: Room[] = rows.flatMap((row) =>
     row.MeetingIds.sort().map((meetingId, index) => {
       const roomId = `${groupId}:room-${meetingId}`;
-      const roomNumber = row.MeetingIds.length > 1 ? ` (${index + 1})` : "";
+      const slot = row.Slot ? `${row.Slot} ` : "";
+      const roomNumber = row.MeetingIds.length > 1 ? `(${index + 1}) ` : "";
       const links = extractLinks(row.Link);
 
       const joinUrl = joinUrls[meetingId];
@@ -108,10 +110,11 @@ function mapSpreadsheetGroup(
         roomId,
         meetingId,
         groupId,
-        name: `${row.Title}${roomNumber}`,
+        name: `${slot}${roomNumber}${row.Title}`,
         subtitle: row.Subtitle,
         joinUrl,
         links,
+        hasSlackChannel: !!row.Slot,
       };
     })
   );

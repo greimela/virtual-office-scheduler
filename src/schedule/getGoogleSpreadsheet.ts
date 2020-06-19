@@ -4,6 +4,7 @@ import { findSheet, getSpreadsheet } from "../googleSpreadsheet";
 
 export interface RawScheduleSpreadsheetRow {
   Start: string;
+  Slot: string;
   Title: string;
   Subtitle: string;
   Link: string;

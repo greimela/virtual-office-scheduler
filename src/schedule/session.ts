@@ -7,6 +7,7 @@ import { updateOffice } from "./updateOffice";
 import { validateSpreadsheet } from "./validateSpreadsheet";
 import { logger } from "../log";
 import { joinUrlsFrom } from "./joinUrls";
+import { createSlackChannelsAndInsertLinks } from "./createSlackChannels";
 
 async function main(): Promise<void> {
   try {
@@ -18,7 +19,8 @@ async function main(): Promise<void> {
 
     validateSpreadsheet(schedule, joinUrls);
 
-    const office = generateOffice(schedule, joinUrls, config);
+    let office = generateOffice(schedule, joinUrls, config);
+    office = await createSlackChannelsAndInsertLinks(office, config);
     await updateOffice(config, office);
 
     logger.info("Successfully updated virtual office");
