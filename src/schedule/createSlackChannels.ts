@@ -1,8 +1,7 @@
 import { Office, Room, RoomLink } from "./generateOffice";
-import { ScheduleEnvironment } from "../config";
 import { logger } from "../log";
 import { iconUrlFor } from "./extractLinks";
-import { SlackClient } from "./SlackClient";
+import { SlackClient, SlackConfig } from "./SlackClient";
 
 function getChannelLink(baseUrl, channelName: string): RoomLink {
   const href = `${baseUrl}/app_redirect?channel=${channelName}`;
@@ -17,7 +16,7 @@ function getSlackChannelName(room: Room): string {
   return `vsr20-${channelNameTitle}`.substring(0, 80);
 }
 
-export async function createSlackChannelsAndInsertLinks(office: Office, config: ScheduleEnvironment): Promise<Office> {
+export async function createSlackChannelsAndInsertLinks(office: Office, config: SlackConfig): Promise<Office> {
   const slackClient = new SlackClient(config);
 
   for (const room of office.rooms) {

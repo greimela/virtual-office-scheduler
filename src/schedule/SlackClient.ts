@@ -1,6 +1,12 @@
 import { WebClient } from "@slack/web-api";
 import { logger } from "../log";
 
+export interface SlackConfig {
+  SLACK_TOKEN: string;
+  SLACK_BASE_URL: string;
+  SLACK_ENABLE_RATE_LIMITING: "true" | "false" | undefined;
+}
+
 interface Channel {
   id: string;
   name: string;
@@ -11,7 +17,7 @@ export class SlackClient {
   private enableRateLimiting: boolean;
   private lastRequestTimestamps: { [method: string]: number } = {};
 
-  constructor(config: { SLACK_ENABLE_RATE_LIMITING?: "true" | "false"; SLACK_TOKEN: string }) {
+  constructor(config: SlackConfig) {
     this.client = new WebClient(config.SLACK_TOKEN);
     this.enableRateLimiting = config.SLACK_ENABLE_RATE_LIMITING === "true";
   }

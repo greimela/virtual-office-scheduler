@@ -16,8 +16,8 @@ const ScheduleEnvironmentCodec = t.type({
   GOOGLE_SERVICE_ACCOUNT_MAIL: t.string,
   GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: t.string,
   ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: t.string,
-  SLACK_BASE_URL: t.string,
-  SLACK_TOKEN: t.string,
+  SLACK_BASE_URL: t.union([t.string, t.undefined]),
+  SLACK_TOKEN: t.union([t.string, t.undefined]),
   SLACK_ENABLE_RATE_LIMITING: t.union([t.literal("true"), t.literal("false"), t.undefined]),
 });
 
