@@ -32,7 +32,6 @@ class SlackClient {
         exclude_archived: true,
         cursor,
       });
-      console.log(result);
       if (result.ok) {
         cursor = result.response_metadata?.next_cursor;
         channels.push(...(result.channels as Channel[]));
@@ -45,14 +44,7 @@ class SlackClient {
   }
 
   async createChannelIfNotExists(options: { name: string }): Promise<boolean> {
-    if (this.enableRateLimiting && this.lastRequestTimestamps["conversations.create"]) {
-      const millisBetweenRequests = 1000 * 3;
-      const millisSinceLastRequest = Date.now() - this.lastRequestTimestamps["conversations.create"];
-      if (millisBetweenRequests - millisSinceLastRequest > 0) {
-        await new Promise((resolve) => setTimeout(resolve, millisBetweenRequests - millisSinceLastRequest));
-      }
-    }
-    this.lastRequestTimestamps["conversations.create"] = Date.now();
+    await this.limitRate("conversations.create", 1000 * 3);
     try {
       const result = await this.client.conversations.create(options);
       return result.ok;
@@ -63,6 +55,16 @@ class SlackClient {
       }
       throw e;
     }
+  }
+
+  private async limitRate(functionName: string, millisBetweenRequests: number): Promise<void> {
+    if (this.enableRateLimiting && this.lastRequestTimestamps[functionName]) {
+      const millisSinceLastRequest = Date.now() - this.lastRequestTimestamps[functionName];
+      if (millisBetweenRequests - millisSinceLastRequest > 0) {
+        await new Promise((resolve) => setTimeout(resolve, millisBetweenRequests - millisSinceLastRequest));
+      }
+    }
+    this.lastRequestTimestamps[functionName] = Date.now();
   }
 }
 
