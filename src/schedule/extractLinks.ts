@@ -1,6 +1,6 @@
 import { RoomLink } from "./generateOffice";
 
-function iconUrlFor(url: string): string | undefined {
+export function iconUrlFor(url: string): string | undefined {
   const icon = iconFor(url);
   if (!icon) {
     return undefined;

@@ -38,6 +38,9 @@ describe("'config' should", () => {
       GOOGLE_SERVICE_ACCOUNT_MAIL: "a@b.com",
       GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: "",
       ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: "5",
+      SLACK_BASE_URL: "https://<your-domain>.slack.com",
+      SLACK_TOKEN: "xoxb-token",
+      SLACK_ENABLE_RATE_LIMITING: "false",
     };
 
     mockConfig.mockImplementation(
