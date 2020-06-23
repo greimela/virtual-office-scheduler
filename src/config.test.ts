@@ -42,6 +42,12 @@ describe("'config' should", () => {
       SLACK_TOKEN: "xoxb-token",
       SLACK_ENABLE_RATE_LIMITING: "false",
       SCHEDULE_DATE: "2020-07-03",
+      CONFLUENCE_BASE_URL: "https://confluence.tngtech.com",
+      CONFLUENCE_USER: "foo",
+      CONFLUENCE_PASSWORD: "bar",
+      CONFLUENCE_SPACE_KEY: "SPACE",
+      CONFLUENCE_PARENT_PAGE_ID: "123456",
+      CONFLUENCE_TEMPLATE_PAGE_ID: "654321",
     };
 
     mockConfig.mockImplementation(
@@ -66,6 +72,15 @@ describe("'config' should", () => {
       GOOGLE_SERVICE_ACCOUNT_MAIL: "a@b.com",
       GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY: "",
       ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: "",
+      SLACK_BASE_URL: "https://<your-domain>.slack.com",
+      SLACK_TOKEN: "xoxb-token",
+      SLACK_ENABLE_RATE_LIMITING: "false",
+      CONFLUENCE_BASE_URL: "https://confluence.tngtech.com",
+      CONFLUENCE_USER: "foo",
+      CONFLUENCE_PASSWORD: "bar",
+      CONFLUENCE_SPACE_KEY: "SPACE",
+      CONFLUENCE_PARENT_PAGE_ID: "123456",
+      CONFLUENCE_TEMPLATE_PAGE_ID: "654321",
     };
 
     mockConfig.mockImplementation(
