@@ -113,7 +113,7 @@ describe("generateOffice", () => {
 
     const office = generateOffice(spreadsheet, joinUrls, config);
     const groupJoinDescription =
-      'Wenn ihr mögt, könnt ihr durch den untenstehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.';
+      'Wenn ihr mögt, könnt ihr durch den rechts stehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.';
     expect(office).toEqual({
       rooms: [
         {

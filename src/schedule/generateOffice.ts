@@ -90,7 +90,7 @@ function mapSpreadsheetGroup(
       minimumParticipantCount: 5,
       title: groupJoinRow.Title,
       subtitle: groupJoinRow.Subtitle,
-      description: `Wenn ihr mögt, könnt ihr durch den untenstehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.`,
+      description: `Wenn ihr mögt, könnt ihr durch den rechts stehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.`,
     },
     joinableAfter: sanitizeDateTime(joinableAfter.toISO()),
     disabledBefore: sanitizeDateTime(start),
