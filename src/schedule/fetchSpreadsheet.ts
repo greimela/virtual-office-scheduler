@@ -1,7 +1,7 @@
 import { ScheduleEnvironment } from "../config";
 import { fetchScheduleSpreadsheet, RawMeetingsSpreadsheetRow, RawScheduleSpreadsheetRow } from "./getGoogleSpreadsheet";
 
-export type MeetingSpreadsheet = MeetingsSpreadsheetRow[];
+export type MeetingDictionary = { [meetingId: string]: MeetingsSpreadsheetRow };
 export type ScheduleSpreadsheet = ScheduleSpreadsheetRow[];
 
 export interface ScheduleSpreadsheetRow {
@@ -19,11 +19,12 @@ export interface MeetingsSpreadsheetRow {
   email: string;
   meetingId: string;
   joinUrl: string;
+  hostKey: string;
 }
 
 export interface SpreadsheetData {
-  schedule: ScheduleSpreadsheetRow[];
-  meetings: MeetingsSpreadsheetRow[];
+  schedule: ScheduleSpreadsheet;
+  meetings: MeetingDictionary;
 }
 
 function adaptScheduleRow(raw: RawScheduleSpreadsheetRow): ScheduleSpreadsheetRow {
@@ -47,6 +48,7 @@ function adaptMeetingsRow(raw: RawMeetingsSpreadsheetRow): MeetingsSpreadsheetRo
     email: raw.email,
     joinUrl: raw.joinUrl,
     meetingId: raw.meetingId,
+    hostKey: raw.hostKey,
   };
 }
 
@@ -54,7 +56,7 @@ export async function fetchSpreadsheet(config: ScheduleEnvironment): Promise<Spr
   const { meetings, schedule } = await fetchScheduleSpreadsheet(config);
 
   return {
-    meetings: meetings.map(adaptMeetingsRow),
+    meetings: meetings.map(adaptMeetingsRow).reduce((acc, meeting) => ({ ...acc, [meeting.meetingId]: meeting }), {}),
     schedule: schedule.map(adaptScheduleRow),
   };
 }

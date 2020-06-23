@@ -20,7 +20,7 @@ async function main(): Promise<void> {
 
     validateSpreadsheet(schedule, joinUrls);
 
-    let office = generateOffice(schedule, joinUrls, config);
+    let office = generateOffice(schedule, meetings, config);
     if (config.SLACK_TOKEN && config.SLACK_BASE_URL) {
       office = await createSlackChannelsAndInsertLinks(office, config as SlackConfig);
     }

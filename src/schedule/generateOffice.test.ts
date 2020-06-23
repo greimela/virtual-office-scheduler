@@ -1,12 +1,17 @@
 import { generateOffice, GenerateOfficeConfig } from "./generateOffice";
 import fakeTimers, { InstalledClock } from "@sinonjs/fake-timers";
-import { MeetingJoinUrls } from "./joinUrls";
+import { MeetingDictionary } from "./fetchSpreadsheet";
 
-function joinUrlsFor(meetingIds: string[]): MeetingJoinUrls {
+function meetingsFor(meetingIds: string[]): MeetingDictionary {
   return meetingIds.reduce((agg, meetingId) => {
-    agg[meetingId] = `http://zoom.us/joinMe/${meetingId}`;
+    agg[meetingId] = {
+      hostKey: meetingId,
+      meetingId,
+      email: `email${meetingId}`,
+      joinUrl: `http://zoom.us/joinMe/${meetingId}`,
+    };
     return agg;
-  }, {} as MeetingJoinUrls);
+  }, {} as MeetingDictionary);
 }
 
 describe("generateOffice", () => {
@@ -109,9 +114,9 @@ describe("generateOffice", () => {
       },
     ];
 
-    const joinUrls = joinUrlsFor(["1", "2", "3", "4", "5"]);
+    const meetings = meetingsFor(["1", "2", "3", "4", "5"]);
 
-    const office = generateOffice(spreadsheet, joinUrls, config);
+    const office = generateOffice(spreadsheet, meetings, config);
     const groupJoinDescription =
       'Wenn ihr mögt, könnt ihr durch den rechts stehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.';
     expect(office).toEqual({
@@ -122,7 +127,7 @@ describe("generateOffice", () => {
           groupId: "group-08:30",
           name: "(1) Break",
           subtitle: "",
-          joinUrl: joinUrls["2"],
+          joinUrl: meetings["2"].joinUrl,
           links: [],
           hasSlackChannel: false,
         },
@@ -132,7 +137,7 @@ describe("generateOffice", () => {
           groupId: "group-08:30",
           name: "(2) Break",
           subtitle: "",
-          joinUrl: joinUrls["3"],
+          joinUrl: meetings["3"].joinUrl,
           links: [],
           hasSlackChannel: false,
         },
@@ -142,7 +147,7 @@ describe("generateOffice", () => {
           groupId: "group-09:00",
           name: "Welcome",
           subtitle: "Earthlings",
-          joinUrl: joinUrls["1"],
+          joinUrl: meetings["1"].joinUrl,
           links: [],
           hasSlackChannel: false,
         },
@@ -152,7 +157,7 @@ describe("generateOffice", () => {
           groupId: "group-09:05",
           name: "Keynote",
           subtitle: "",
-          joinUrl: joinUrls["1"],
+          joinUrl: meetings["1"].joinUrl,
           links: [],
           hasSlackChannel: false,
         },
@@ -162,7 +167,7 @@ describe("generateOffice", () => {
           groupId: "group-10:05",
           name: "The Funnel",
           subtitle: "",
-          joinUrl: joinUrls["3"],
+          joinUrl: meetings["3"].joinUrl,
           links: [],
           hasSlackChannel: false,
         },
@@ -172,7 +177,7 @@ describe("generateOffice", () => {
           groupId: "group-10:15",
           name: "(1) Break",
           subtitle: "Lunch",
-          joinUrl: joinUrls["1"],
+          joinUrl: meetings["1"].joinUrl,
           links: [],
           hasSlackChannel: false,
         },
@@ -182,7 +187,7 @@ describe("generateOffice", () => {
           groupId: "group-10:15",
           name: "(2) Break",
           subtitle: "Lunch",
-          joinUrl: joinUrls["2"],
+          joinUrl: meetings["2"].joinUrl,
           links: [],
           hasSlackChannel: false,
         },
@@ -192,7 +197,7 @@ describe("generateOffice", () => {
           groupId: "group-10:15",
           name: "(3) Break",
           subtitle: "Lunch",
-          joinUrl: joinUrls["3"],
+          joinUrl: meetings["3"].joinUrl,
           links: [],
           hasSlackChannel: false,
         },
@@ -202,7 +207,7 @@ describe("generateOffice", () => {
           groupId: "group-10:15",
           name: "(4) Break",
           subtitle: "Lunch",
-          joinUrl: joinUrls["4"],
+          joinUrl: meetings["4"].joinUrl,
           links: [],
           hasSlackChannel: false,
         },
@@ -212,8 +217,13 @@ describe("generateOffice", () => {
           groupId: "group-10:30",
           name: "A1 Topic A",
           subtitle: "",
-          joinUrl: joinUrls["1"],
+          joinUrl: meetings["1"].joinUrl,
           links: [
+            {
+              href: meetings["1"].joinUrl,
+              icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
+              text: "Host-Key: 1",
+            },
             {
               text: "Topic A",
               href: "http://shouting.machine/topicA",
@@ -227,8 +237,13 @@ describe("generateOffice", () => {
           groupId: "group-10:30",
           name: "A2 Topic B 1",
           subtitle: "Poggers",
-          joinUrl: joinUrls["2"],
+          joinUrl: meetings["2"].joinUrl,
           links: [
+            {
+              href: meetings["2"].joinUrl,
+              icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
+              text: "Host-Key: 2",
+            },
             {
               text: "Topic B",
               href: "http://shouting.machine/topicB",
@@ -242,8 +257,13 @@ describe("generateOffice", () => {
           groupId: "group-10:30",
           name: "A3 Topic B 2",
           subtitle: "in the Chat",
-          joinUrl: joinUrls["4"],
+          joinUrl: meetings["4"].joinUrl,
           links: [
+            {
+              href: meetings["4"].joinUrl,
+              icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
+              text: "Host-Key: 4",
+            },
             {
               text: "Topic B",
               href: "http://shouting.machine/topicB",
@@ -257,7 +277,7 @@ describe("generateOffice", () => {
           groupId: "group-12:00",
           name: "Break",
           subtitle: "",
-          joinUrl: joinUrls["1"],
+          joinUrl: meetings["1"].joinUrl,
           links: [],
           hasSlackChannel: false,
         },

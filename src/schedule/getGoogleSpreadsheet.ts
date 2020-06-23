@@ -17,6 +17,7 @@ export interface RawMeetingsSpreadsheetRow {
   email: string;
   meetingId: string;
   joinUrl: string;
+  hostKey: string;
 }
 
 export interface RawSpreadsheetData {
