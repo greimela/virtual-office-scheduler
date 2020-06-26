@@ -42,6 +42,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["2", "3"],
         ReservedIds: ["2", "3", "4", "5"],
         RandomJoin: true,
+        OpenEnd: false,
       },
       {
         Start: "09:00:00",
@@ -51,6 +52,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "09:05:00",
@@ -60,6 +62,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "10:05:00",
@@ -69,6 +72,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["3"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "10:15:00",
@@ -78,6 +82,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1", "2", "3", "4"],
         ReservedIds: [],
         RandomJoin: true,
+        OpenEnd: false,
       },
       {
         Start: "10:30:00",
@@ -87,6 +92,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "10:30:00",
@@ -96,6 +102,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["2"],
         ReservedIds: ["2", "3"],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "10:30:00",
@@ -105,6 +112,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["4"],
         ReservedIds: ["4", "5"],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "12:00:00",
@@ -114,6 +122,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1"],
         ReservedIds: ["1", "2"],
         RandomJoin: true,
+        OpenEnd: false,
       },
     ];
 
@@ -140,6 +149,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1", "3"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "09:00:00",
@@ -149,6 +159,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1", "2"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "09:00:00",
@@ -158,6 +169,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["3"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
     ];
 
@@ -176,6 +188,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1", "3"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "08:00:00",
@@ -185,6 +198,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1", "2"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "08:00:00",
@@ -194,6 +208,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["3"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
     ];
     const joinUrls = joinUrlsFor(["1", "2", "3"]);
@@ -227,6 +242,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1"],
         ReservedIds: ["1", "3"],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "09:00:00",
@@ -236,6 +252,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["2"],
         ReservedIds: ["1", "2"],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "09:00:00",
@@ -245,6 +262,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["3"],
         ReservedIds: ["3"],
         RandomJoin: false,
+        OpenEnd: false,
       },
     ];
     const joinUrls = joinUrlsFor(["1", "2", "3"]);
@@ -262,6 +280,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1"],
         ReservedIds: ["1", "3"],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "08:00:00",
@@ -271,6 +290,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["2"],
         ReservedIds: ["1", "2"],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "08:00:00",
@@ -280,6 +300,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["3"],
         ReservedIds: ["3"],
         RandomJoin: false,
+        OpenEnd: false,
       },
     ];
     const joinUrls = joinUrlsFor(["1", "2", "3"]);
@@ -313,6 +334,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1"],
         ReservedIds: [],
         RandomJoin: true,
+        OpenEnd: false,
       },
       {
         Start: "09:00:00",
@@ -322,6 +344,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["2"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "10:00:00",
@@ -331,6 +354,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["3"],
         ReservedIds: [],
         RandomJoin: true,
+        OpenEnd: false,
       },
     ];
     const joinUrls = joinUrlsFor(["1", "2", "3"]);
@@ -348,6 +372,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1"],
         ReservedIds: [],
         RandomJoin: true,
+        OpenEnd: false,
       },
       {
         Start: "08:00:00",
@@ -357,6 +382,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["2"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "10:00:00",
@@ -366,6 +392,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["3"],
         ReservedIds: [],
         RandomJoin: true,
+        OpenEnd: false,
       },
     ];
     const joinUrls = joinUrlsFor(["1", "2", "3"]);
@@ -389,6 +416,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["1"],
         ReservedIds: [],
         RandomJoin: true,
+        OpenEnd: false,
       },
     ];
     const joinUrls = joinUrlsFor(["2"]);
@@ -411,6 +439,7 @@ describe("validateSpreadsheet", () => {
         MeetingIds: ["2"],
         ReservedIds: ["1"],
         RandomJoin: true,
+        OpenEnd: false,
       },
     ];
     const joinUrls = joinUrlsFor(["2"]);

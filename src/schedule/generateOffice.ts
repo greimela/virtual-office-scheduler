@@ -61,7 +61,8 @@ export function generateOffice(
 
   const groupConfigs = groupStarts.map((groupStart, index) => {
     const groupEnd = groupStarts[index + 1];
-    return mapSpreadsheetGroup(groupStart, groupEnd, groups[groupStart], meetings, config);
+    const rows = groups[groupStart];
+    return mapSpreadsheetGroup(groupStart, rows[0]?.OpenEnd ? undefined : groupEnd, rows, meetings, config);
   });
 
   return {

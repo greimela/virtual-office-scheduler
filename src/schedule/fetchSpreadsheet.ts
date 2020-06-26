@@ -13,6 +13,7 @@ export interface ScheduleSpreadsheetRow {
   MeetingIds: string[];
   ReservedIds: string[];
   RandomJoin: boolean;
+  OpenEnd: boolean;
 }
 
 export interface MeetingsSpreadsheetRow {
@@ -41,6 +42,7 @@ function adaptScheduleRow(raw: RawScheduleSpreadsheetRow): ScheduleSpreadsheetRo
     MeetingIds: splitByComma(raw.MeetingIds),
     ReservedIds: splitByComma(raw.ReservedIds),
     RandomJoin: raw.RandomJoin === "TRUE",
+    OpenEnd: raw.OpenEnd === "TRUE",
   };
 }
 function adaptMeetingsRow(raw: RawMeetingsSpreadsheetRow): MeetingsSpreadsheetRow {

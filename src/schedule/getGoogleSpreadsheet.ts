@@ -11,6 +11,7 @@ export interface RawScheduleSpreadsheetRow {
   MeetingIds: string;
   ReservedIds: string;
   RandomJoin: string;
+  OpenEnd: string;
 }
 
 export interface RawMeetingsSpreadsheetRow {

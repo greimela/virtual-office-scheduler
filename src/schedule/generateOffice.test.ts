@@ -34,6 +34,7 @@ describe("generateOffice", () => {
         MeetingIds: ["2", "3"],
         ReservedIds: ["2", "3", "4", "5"],
         RandomJoin: true,
+        OpenEnd: true,
       },
       {
         Start: "09:00",
@@ -43,6 +44,7 @@ describe("generateOffice", () => {
         MeetingIds: ["1"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "09:05",
@@ -52,6 +54,7 @@ describe("generateOffice", () => {
         MeetingIds: ["1"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "10:05",
@@ -61,6 +64,7 @@ describe("generateOffice", () => {
         MeetingIds: ["3"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "10:15",
@@ -70,6 +74,7 @@ describe("generateOffice", () => {
         MeetingIds: ["1", "2", "3", "4"],
         ReservedIds: [],
         RandomJoin: true,
+        OpenEnd: false,
       },
       {
         Start: "10:30",
@@ -80,6 +85,7 @@ describe("generateOffice", () => {
         MeetingIds: ["1"],
         ReservedIds: [],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "10:30",
@@ -90,6 +96,7 @@ describe("generateOffice", () => {
         MeetingIds: ["2"],
         ReservedIds: ["2", "3"],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "10:30",
@@ -100,6 +107,7 @@ describe("generateOffice", () => {
         MeetingIds: ["4"],
         ReservedIds: ["4", "5"],
         RandomJoin: false,
+        OpenEnd: false,
       },
       {
         Start: "12:00",
@@ -109,6 +117,7 @@ describe("generateOffice", () => {
         MeetingIds: ["1"],
         ReservedIds: ["1", "2"],
         RandomJoin: true,
+        OpenEnd: false,
       },
     ];
 
@@ -292,7 +301,7 @@ describe("generateOffice", () => {
             description: groupJoinDescription,
           },
           disabledBefore: "2020-05-22T08:30:00.000+02:00",
-          disabledAfter: "2020-05-22T09:00:00.000+02:00",
+          disabledAfter: "2020-05-22T23:59:59.000+02:00",
           joinableAfter: "2020-05-22T08:25:00.000+02:00",
         },
         {
@@ -363,6 +372,7 @@ describe("generateOffice", () => {
         MeetingIds: ["2", "3"],
         ReservedIds: ["2", "3", "4", "5"],
         RandomJoin: true,
+        OpenEnd: false,
       },
     ];
 
