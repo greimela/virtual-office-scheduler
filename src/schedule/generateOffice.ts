@@ -113,7 +113,7 @@ function mapSpreadsheetGroup(
         if (row.Slot) {
           links.unshift({
             text: `Host-Key: ${meetings[meetingId].hostKey}`,
-            icon: iconUrlFor(joinUrl),
+            icon: iconUrlFor("zoom"),
             href: "https://confluence.tngtech.com/x/vJXSF",
           });
         }
