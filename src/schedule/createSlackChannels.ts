@@ -25,11 +25,9 @@ export async function createSlackChannelsAndInsertLinks(office: Office, config: 
       continue;
     }
     const name = getSlackChannelName(room);
-    if (allChannels.some((channel) => channel.name === name)) {
-      logger.info(`Channel ${name} already exists`);
-      continue;
-    }
-    if (await slackClient.createChannelIfNotExists({ name })) {
+    const channelExists = allChannels.some((channel) => channel.name === name);
+
+    if (!channelExists && (await slackClient.createChannelIfNotExists({ name }))) {
       logger.info(`Created slack channel ${name}`);
     } else {
       logger.info(`Channel ${name} already exists`);
