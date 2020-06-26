@@ -99,31 +99,33 @@ function mapSpreadsheetGroup(
     disabledAfter: dateTimeAtScheduleDay(end),
   };
 
-  const rooms: Room[] = rows.flatMap((row) =>
-    row.MeetingIds.sort().map((meetingId, index) => {
-      const roomId = `${groupId}:room-${meetingId}`;
-      const slot = row.Slot ? `${row.Slot} ` : "";
-      const roomNumber = row.MeetingIds.length > 1 ? `(${index + 1}) ` : "";
-      const links = extractLinks(row.Link);
+  const rooms: Room[] = rows
+    .filter((row) => row.Title)
+    .flatMap((row) =>
+      row.MeetingIds.sort().map((meetingId, index) => {
+        const roomId = `${groupId}:room-${meetingId}`;
+        const slot = row.Slot ? `${row.Slot} ` : "";
+        const roomNumber = row.MeetingIds.length > 1 ? `(${index + 1}) ` : "";
+        const links = extractLinks(row.Link);
 
-      const joinUrl = joinUrlsFrom(meetings)[meetingId];
+        const joinUrl = joinUrlsFrom(meetings)[meetingId];
 
-      if (row.Slot) {
-        links.unshift({ text: `Host-Key: ${meetings[meetingId].hostKey}`, icon: iconUrlFor(joinUrl), href: joinUrl });
-      }
+        if (row.Slot) {
+          links.unshift({ text: `Host-Key: ${meetings[meetingId].hostKey}`, icon: iconUrlFor(joinUrl), href: joinUrl });
+        }
 
-      return {
-        roomId,
-        meetingId,
-        groupId,
-        name: `${slot}${roomNumber}${row.Title}`,
-        subtitle: row.Subtitle,
-        joinUrl,
-        links,
-        hasSlackChannel: !!row.Slot,
-      };
-    })
-  );
+        return {
+          roomId,
+          meetingId,
+          groupId,
+          name: `${slot}${roomNumber}${row.Title}`,
+          subtitle: row.Subtitle,
+          joinUrl,
+          links,
+          hasSlackChannel: !!row.Slot,
+        };
+      })
+    );
 
   return {
     rooms: rooms,
