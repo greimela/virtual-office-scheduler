@@ -22,6 +22,10 @@ export class SlackClient {
     this.enableRateLimiting = config.SLACK_ENABLE_RATE_LIMITING === "true";
   }
 
+  async archiveChannel(channel: string): Promise<void> {
+    await this.client.conversations.archive({ channel });
+  }
+
   async getAllChannels(): Promise<Channel[]> {
     const channels: Channel[] = [];
 
