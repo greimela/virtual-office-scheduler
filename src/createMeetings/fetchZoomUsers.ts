@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 
 import { CreateMeetingsEnvironment } from "../config";
 import { logger } from "../log";
-import { getAllUsers, ZoomUser } from "./zoom";
+import { getAllUsers, getUser, ZoomUser } from "./zoom";
 import path from "path";
 
 export async function fetchZoomUsers(config: CreateMeetingsEnvironment): Promise<ZoomUser[]> {
@@ -16,6 +16,15 @@ export async function fetchZoomUsers(config: CreateMeetingsEnvironment): Promise
 
   logger.info("Gettings all zoom users from account");
   const allZoomUsers = await getAllUsers(zoomJwt);
+  const filteredZoomUsers = allZoomUsers.filter((user) =>
+    userEmails.find((userEmail) => userEmail === user.email && user.type === 2)
+  );
 
-  return allZoomUsers.filter((user) => userEmails.find((userEmail) => userEmail === user.email && user.type === 2));
+  logger.info("Getting user details for all users to extract hostKey");
+  const detailedZoomUsers: ZoomUser[] = [];
+  for (const user of filteredZoomUsers) {
+    detailedZoomUsers.push(await getUser(user.id, zoomJwt));
+  }
+
+  return detailedZoomUsers;
 }

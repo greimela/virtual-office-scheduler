@@ -1,10 +1,10 @@
 import { groupBy } from "lodash";
 import { DateTime, Duration } from "luxon";
 
-import { ScheduleSpreadsheet, ScheduleSpreadsheetRow } from "./fetchSpreadsheet";
+import { MeetingDictionary, ScheduleSpreadsheet, ScheduleSpreadsheetRow } from "./fetchSpreadsheet";
 import { logger } from "../log";
-import { MeetingJoinUrls } from "./joinUrls";
-import { extractLinks } from "./extractLinks";
+import { joinUrlsFrom } from "./joinUrls";
+import { extractLinks, iconUrlFor } from "./extractLinks";
 
 export interface Office {
   rooms: Room[];
@@ -50,7 +50,7 @@ export interface GenerateOfficeConfig {
 
 export function generateOffice(
   schedule: ScheduleSpreadsheet,
-  joinUrls: MeetingJoinUrls,
+  meetings: MeetingDictionary,
   config: GenerateOfficeConfig
 ): Office {
   logger.info("Generating office based on spreadsheet", { spreadsheet: schedule });
@@ -60,7 +60,7 @@ export function generateOffice(
 
   const groupConfigs = groupStarts.map((groupStart, index) => {
     const groupEnd = groupStarts[index + 1];
-    return mapSpreadsheetGroup(groupStart, groupEnd, groups[groupStart], joinUrls, config);
+    return mapSpreadsheetGroup(groupStart, groupEnd, groups[groupStart], meetings, config);
   });
 
   return {
@@ -73,7 +73,7 @@ function mapSpreadsheetGroup(
   start: string,
   end: string | undefined,
   rows: ScheduleSpreadsheetRow[],
-  joinUrls: MeetingJoinUrls,
+  meetings: MeetingDictionary,
   config: GenerateOfficeConfig
 ): Office {
   const groupId = `group-${start}`;
@@ -104,7 +104,11 @@ function mapSpreadsheetGroup(
       const roomNumber = row.MeetingIds.length > 1 ? `(${index + 1}) ` : "";
       const links = extractLinks(row.Link);
 
-      const joinUrl = joinUrls[meetingId];
+      const joinUrl = joinUrlsFrom(meetings)[meetingId];
+
+      if (row.Slot) {
+        links.unshift({ text: `Host-Key: ${meetings[meetingId].hostKey}`, icon: iconUrlFor(joinUrl), href: joinUrl });
+      }
 
       return {
         roomId,

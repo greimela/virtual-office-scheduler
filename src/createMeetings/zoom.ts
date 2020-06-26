@@ -7,20 +7,30 @@ import { PathReporter } from "io-ts/lib/PathReporter";
 /* eslint-disable @typescript-eslint/camelcase */
 // Zoom API uses snake_case therefore ignore in this file
 
-const ZoomUserCodec = t.type({
+const ZoomListUserCodec = t.type({
   id: t.string,
   first_name: t.string,
   last_name: t.string,
   email: t.string,
   type: t.number,
 });
+
+const ZoomUserCodec = t.type({
+  id: t.string,
+  first_name: t.string,
+  last_name: t.string,
+  email: t.string,
+  type: t.number,
+  host_key: t.string,
+});
+
 const PaginatedGetCodec = t.type({
   page_count: t.number,
   page_number: t.number,
   page_size: t.number,
   total_records: t.number,
 });
-const ZoomUsersCodec = t.array(ZoomUserCodec);
+const ZoomUsersCodec = t.array(ZoomListUserCodec);
 
 const ZoomMeetingCodec = t.type({
   uuid: t.string,
@@ -34,9 +44,10 @@ const ZoomMeetingsCodec = t.array(ZoomMeetingCodec);
 
 export type PaginatedGet = t.TypeOf<typeof PaginatedGetCodec>;
 export type ZoomUser = t.TypeOf<typeof ZoomUserCodec>;
+export type ZoomListUser = t.TypeOf<typeof ZoomListUserCodec>;
 export type ZoomMeeting = t.TypeOf<typeof ZoomMeetingCodec>;
 
-export async function getAllUsers(zoomJwt: string): Promise<ZoomUser[]> {
+export async function getAllUsers(zoomJwt: string): Promise<ZoomListUser[]> {
   const allPaginatedItems = await getAllPaginatedItems("https://api.zoom.us/v2/users", {
     token: zoomJwt,
     key: "users",
@@ -45,6 +56,21 @@ export async function getAllUsers(zoomJwt: string): Promise<ZoomUser[]> {
   const decoded = ZoomUsersCodec.decode(allPaginatedItems);
   if (isLeft(decoded)) {
     throw Error(`Parsing GET /users response failed due to '${PathReporter.report(decoded)}'.`);
+  }
+
+  return decoded.right;
+}
+
+export async function getUser(userId: string, token: string): Promise<ZoomUser> {
+  logger.info(`Getting details for user ${userId}`);
+  const response = await axios.get(`https://api.zoom.us/v2/users/${userId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const zoomGetUsersResponse = await response.data;
+
+  const decoded = ZoomUserCodec.decode(zoomGetUsersResponse);
+  if (isLeft(decoded)) {
+    throw Error(`Parsing GET /users/${userId} response failed due to '${PathReporter.report(decoded)}'.`);
   }
 
   return decoded.right;
@@ -59,7 +85,7 @@ export async function getAllUpcomingMeetingsForUser(userId: string, zoomJwt: str
 
   const decoded = ZoomMeetingsCodec.decode(allPaginatedItems);
   if (isLeft(decoded)) {
-    throw Error(`Parsing GET /users response failed due to '${PathReporter.report(decoded)}'.`);
+    throw Error(`Parsing GET /users/${userId}/meetings response failed due to '${PathReporter.report(decoded)}'.`);
   }
 
   return decoded.right;

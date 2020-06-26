@@ -104,32 +104,32 @@ describe("fetchSpreadsheet", () => {
       SCHEDULE_SHEET_NAME: "IntegrationTest",
     } as ScheduleEnvironment);
 
-    expect(spreadsheet.meetings).toEqual([
-      {
+    expect(spreadsheet.meetings).toEqual({
+      "1": {
         email: "retreat+zoom1@tngtech.com",
         joinUrl: "https://zoom.us/j/95508545228?pwd=abc",
         meetingId: "1",
       },
-      {
+      "2": {
         email: "retreat+zoom2@tngtech.com",
         joinUrl: "https://zoom.us/j/97331051569?pwd=def",
         meetingId: "2",
       },
-      {
+      "3": {
         email: "retreat+zoom1@tngtech.com",
         joinUrl: "https://zoom.us/j/95508545228?pwd=abc",
         meetingId: "3",
       },
-      {
+      "4": {
         email: "retreat+zoom2@tngtech.com",
         joinUrl: "https://zoom.us/j/97331051569?pwd=def",
         meetingId: "4",
       },
-      {
+      "5": {
         email: "retreat+zoom1@tngtech.com",
         joinUrl: "https://zoom.us/j/95508545228?pwd=abc",
         meetingId: "5",
       },
-    ]);
+    });
   });
 });
