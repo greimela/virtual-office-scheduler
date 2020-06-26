@@ -18,12 +18,16 @@ function getSlackChannelName(room: Room): string {
 
 export async function createSlackChannelsAndInsertLinks(office: Office, config: SlackConfig): Promise<Office> {
   const slackClient = new SlackClient(config);
+  const allChannels = await slackClient.getAllChannels();
 
   for (const room of office.rooms) {
     if (!room.hasSlackChannel) {
       continue;
     }
     const name = getSlackChannelName(room);
+    if (allChannels.some((channel) => channel.name === name)) {
+      logger.info(`Channel ${name} already exists`);
+    }
     if (await slackClient.createChannelIfNotExists({ name })) {
       logger.info(`Created slack channel ${name}`);
     } else {
