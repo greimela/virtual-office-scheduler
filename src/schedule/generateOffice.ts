@@ -111,7 +111,11 @@ function mapSpreadsheetGroup(
         const joinUrl = joinUrlsFrom(meetings)[meetingId];
 
         if (row.Slot) {
-          links.unshift({ text: `Host-Key: ${meetings[meetingId].hostKey}`, icon: iconUrlFor(joinUrl), href: joinUrl });
+          links.unshift({
+            text: `Host-Key: ${meetings[meetingId].hostKey}`,
+            icon: iconUrlFor(joinUrl),
+            href: "https://confluence.tngtech.com/x/vJXSF",
+          });
         }
 
         return {

@@ -219,7 +219,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["1"].joinUrl,
           links: [
             {
-              href: meetings["1"].joinUrl,
+              href: "https://confluence.tngtech.com/x/vJXSF",
               icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
               text: "Host-Key: 1",
             },
@@ -239,7 +239,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["2"].joinUrl,
           links: [
             {
-              href: meetings["2"].joinUrl,
+              href: "https://confluence.tngtech.com/x/vJXSF",
               icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
               text: "Host-Key: 2",
             },
@@ -259,7 +259,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["4"].joinUrl,
           links: [
             {
-              href: meetings["4"].joinUrl,
+              href: "https://confluence.tngtech.com/x/vJXSF",
               icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
               text: "Host-Key: 4",
             },

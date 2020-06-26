@@ -3,6 +3,7 @@ import { ScheduleEnvironment } from "../config";
 import { config } from "dotenv";
 
 describe("fetchSpreadsheet", () => {
+  jest.setTimeout(20000);
   it("schedule parsing works with example document", async () => {
     const spreadsheet = await fetchSpreadsheet({
       ...config().parsed,
