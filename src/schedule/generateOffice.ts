@@ -46,6 +46,7 @@ export type GroupJoinConfig = {
 
 export interface GenerateOfficeConfig {
   ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: string;
+  SCHEDULE_DATE?: string;
 }
 
 export function generateOffice(
@@ -76,9 +77,10 @@ function mapSpreadsheetGroup(
   meetings: MeetingDictionary,
   config: GenerateOfficeConfig
 ): Office {
+  const dateTimeAtScheduleDay = (time?: string): string => sanitizeDateTime({ date: config.SCHEDULE_DATE, time });
   const groupId = `group-${start}`;
   const groupJoinRow = rows.find((row) => row.RandomJoin);
-  const startAsIso = DateTime.fromISO(start, { zone: "Europe/Berlin" });
+  const startAsIso = toDateTime({ date: config.SCHEDULE_DATE, time: start });
   const joinableAfter = startAsIso.minus(
     Duration.fromObject({ minutes: parseInt(config.ENABLE_ROOM_JOIN_MINUTES_BEFORE_START, 10) })
   );
@@ -92,9 +94,9 @@ function mapSpreadsheetGroup(
       subtitle: groupJoinRow.Subtitle,
       description: `Wenn ihr mögt, könnt ihr durch den rechts stehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.`,
     },
-    joinableAfter: sanitizeDateTime(joinableAfter.toISO()),
-    disabledBefore: sanitizeDateTime(start),
-    disabledAfter: sanitizeDateTime(end),
+    joinableAfter: joinableAfter.toISO(),
+    disabledBefore: dateTimeAtScheduleDay(start),
+    disabledAfter: dateTimeAtScheduleDay(end),
   };
 
   const rooms: Room[] = rows.flatMap((row) =>
@@ -129,6 +131,11 @@ function mapSpreadsheetGroup(
   };
 }
 
-function sanitizeDateTime(dateString: string | undefined): string {
-  return DateTime.fromISO(dateString || "23:59:59", { zone: "Europe/Berlin" }).toISO();
+function sanitizeDateTime({ date, time }: { date: string | undefined; time: string | undefined }): string {
+  return toDateTime({ date, time: time || "23:59:59" }).toISO();
+}
+
+function toDateTime({ date, time }: { date: string | undefined; time: string }): DateTime {
+  const toParse = date ? `${date}T${time}` : time;
+  return DateTime.fromISO(toParse, { zone: "Europe/Berlin" });
 }

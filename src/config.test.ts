@@ -41,6 +41,7 @@ describe("'config' should", () => {
       SLACK_BASE_URL: "https://<your-domain>.slack.com",
       SLACK_TOKEN: "xoxb-token",
       SLACK_ENABLE_RATE_LIMITING: "false",
+      SCHEDULE_DATE: "2020-07-03",
     };
 
     mockConfig.mockImplementation(

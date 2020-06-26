@@ -1,4 +1,4 @@
-import { generateOffice, GenerateOfficeConfig } from "./generateOffice";
+import { generateOffice } from "./generateOffice";
 import fakeTimers, { InstalledClock } from "@sinonjs/fake-timers";
 import { MeetingDictionary } from "./fetchSpreadsheet";
 
@@ -16,8 +16,6 @@ function meetingsFor(meetingIds: string[]): MeetingDictionary {
 
 describe("generateOffice", () => {
   let clock: InstalledClock;
-  const config: GenerateOfficeConfig = { ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: "5" };
-
   afterEach(() => {
     clock.uninstall();
   });
@@ -115,6 +113,7 @@ describe("generateOffice", () => {
     ];
 
     const meetings = meetingsFor(["1", "2", "3", "4", "5"]);
+    const config = { ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: "5" };
 
     const office = generateOffice(spreadsheet, meetings, config);
     const groupJoinDescription =
@@ -349,6 +348,67 @@ describe("generateOffice", () => {
           disabledBefore: "2020-05-22T12:00:00.000+02:00",
           disabledAfter: "2020-05-22T23:59:59.000+02:00",
           joinableAfter: "2020-05-22T11:55:00.000+02:00",
+        },
+      ],
+    });
+  });
+
+  it("can handle a given schedule date", () => {
+    const spreadsheet = [
+      {
+        Start: "08:30",
+        Title: "Break",
+        Subtitle: "",
+        Link: "",
+        MeetingIds: ["2", "3"],
+        ReservedIds: ["2", "3", "4", "5"],
+        RandomJoin: true,
+      },
+    ];
+
+    const meetings = meetingsFor(["2", "3"]);
+    const config = { ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: "10", SCHEDULE_DATE: "2020-07-04" };
+
+    const office = generateOffice(spreadsheet, meetings, config);
+
+    const groupJoinDescription =
+      'Wenn ihr mögt, könnt ihr durch den rechts stehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.';
+    expect(office).toEqual({
+      rooms: [
+        {
+          roomId: "group-08:30:room-2",
+          meetingId: "2",
+          groupId: "group-08:30",
+          name: "(1) Break",
+          subtitle: "",
+          joinUrl: meetings["2"].joinUrl,
+          links: [],
+          hasSlackChannel: false,
+        },
+        {
+          roomId: "group-08:30:room-3",
+          meetingId: "3",
+          groupId: "group-08:30",
+          name: "(2) Break",
+          subtitle: "",
+          joinUrl: meetings["3"].joinUrl,
+          links: [],
+          hasSlackChannel: false,
+        },
+      ],
+      groups: [
+        {
+          id: "group-08:30",
+          name: "08:30",
+          groupJoin: {
+            minimumParticipantCount: 5,
+            title: "Break",
+            subtitle: "",
+            description: groupJoinDescription,
+          },
+          disabledBefore: "2020-07-04T08:30:00.000+02:00",
+          disabledAfter: "2020-07-04T23:59:59.000+02:00",
+          joinableAfter: "2020-07-04T08:20:00.000+02:00",
         },
       ],
     });

@@ -19,6 +19,7 @@ const ScheduleEnvironmentCodec = t.type({
   SLACK_BASE_URL: t.union([t.string, t.undefined]),
   SLACK_TOKEN: t.union([t.string, t.undefined]),
   SLACK_ENABLE_RATE_LIMITING: t.union([t.literal("true"), t.literal("false"), t.undefined]),
+  SCHEDULE_DATE: t.union([t.string, t.undefined]),
 });
 
 const CreateMeetingsEnvironmentCodec = t.type({
