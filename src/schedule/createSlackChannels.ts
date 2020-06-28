@@ -18,21 +18,29 @@ function getSlackChannelName(room: Room): string {
 
 export async function createSlackChannelsAndInsertLinks(office: Office, config: SlackConfig): Promise<Office> {
   const slackClient = new SlackClient(config);
-  const allChannels = await slackClient.getAllChannels();
+  const allChannels = (await slackClient.getAllChannels()).filter((channel) => channel.name.startsWith("vsr20"));
 
-  for (const room of office.rooms) {
-    if (!room.hasSlackChannel) {
-      continue;
-    }
-    const name = getSlackChannelName(room);
-    const channelExists = allChannels.some((channel) => channel.name === name);
+  const roomsToCreate = office.rooms
+    .filter((room) => room.hasSlackChannel)
+    .map((room) => ({ room, channelName: getSlackChannelName(room) }));
+  for (const { room, channelName } of roomsToCreate) {
+    const channelExists = allChannels.some((channel) => channel.name === channelName);
 
-    if (!channelExists && (await slackClient.createChannelIfNotExists({ name }))) {
-      logger.info(`Created slack channel ${name}`);
+    if (!channelExists && (await slackClient.createChannelIfNotExists({ name: channelName }))) {
+      logger.info(`Created slack channel ${channelName}`);
     } else {
-      logger.info(`Channel ${name} already exists`);
+      logger.info(`Channel ${channelName} already exists`);
     }
-    room.links.push(getChannelLink(config.SLACK_BASE_URL, name));
+    room.links.push(getChannelLink(config.SLACK_BASE_URL, channelName));
   }
+
+  const obsoleteChannels = allChannels.filter(
+    (channel) => !roomsToCreate.some((roomToCreate) => roomToCreate.channelName === channel.name)
+  );
+  for (const obsoleteChannel of obsoleteChannels) {
+    logger.info(`Channel ${obsoleteChannel.name} is obsolete => archiving`);
+    await slackClient.archiveChannel(obsoleteChannel.id);
+  }
+
   return office;
 }
