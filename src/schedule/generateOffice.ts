@@ -31,9 +31,9 @@ export interface RoomLink {
 export interface Group {
   id: string;
   name: string;
-  disabledBefore: string;
-  disabledAfter: string;
-  joinableAfter: string;
+  disabledBefore?: string;
+  disabledAfter?: string;
+  joinableAfter?: string;
   groupJoin?: GroupJoinConfig;
 }
 
@@ -78,7 +78,8 @@ function mapSpreadsheetGroup(
   meetings: MeetingDictionary,
   config: GenerateOfficeConfig
 ): Office {
-  const dateTimeAtScheduleDay = (time?: string): string => sanitizeDateTime({ date: config.SCHEDULE_DATE, time });
+  const dateTimeAtScheduleDay = (time?: string): string | undefined =>
+    sanitizeDateTime({ date: config.SCHEDULE_DATE, time });
   const groupId = `group-${start}`;
   const groupJoinRow = rows.find((row) => row.RandomJoin);
   const startAsIso = toDateTime({ date: config.SCHEDULE_DATE, time: start });
@@ -138,8 +139,8 @@ function mapSpreadsheetGroup(
   };
 }
 
-function sanitizeDateTime({ date, time }: { date: string | undefined; time: string | undefined }): string {
-  return toDateTime({ date, time: time || "23:59:59" }).toISO();
+function sanitizeDateTime({ date, time }: { date: string | undefined; time: string | undefined }): string | undefined {
+  return time && toDateTime({ date, time }).toISO();
 }
 
 function toDateTime({ date, time }: { date: string | undefined; time: string }): DateTime {

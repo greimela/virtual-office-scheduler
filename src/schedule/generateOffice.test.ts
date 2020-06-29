@@ -301,7 +301,6 @@ describe("generateOffice", () => {
             description: groupJoinDescription,
           },
           disabledBefore: "2020-05-22T08:30:00.000+02:00",
-          disabledAfter: "2020-05-22T23:59:59.000+02:00",
           joinableAfter: "2020-05-22T08:25:00.000+02:00",
         },
         {
@@ -355,7 +354,6 @@ describe("generateOffice", () => {
             description: groupJoinDescription,
           },
           disabledBefore: "2020-05-22T12:00:00.000+02:00",
-          disabledAfter: "2020-05-22T23:59:59.000+02:00",
           joinableAfter: "2020-05-22T11:55:00.000+02:00",
         },
       ],
@@ -417,7 +415,6 @@ describe("generateOffice", () => {
             description: groupJoinDescription,
           },
           disabledBefore: "2020-07-04T08:30:00.000+02:00",
-          disabledAfter: "2020-07-04T23:59:59.000+02:00",
           joinableAfter: "2020-07-04T08:20:00.000+02:00",
         },
       ],
