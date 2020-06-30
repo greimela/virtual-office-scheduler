@@ -51,11 +51,11 @@ async function getOrCreateConfluencePage(
 
   const linkList = room.links.map((link) => {
     if (link.text.startsWith(hostKey)) {
-      return `<li><a href="${room.joinUrl}">Zoom</a> (<a href="${link.href}">${link.text}</a>)</li>`;
+      return `<li><a href="${encode(room.joinUrl)}">Zoom</a> (<a href="${encode(link.href)}">${link.text}</a>)</li>`;
     }
-    return `<li><a href="${link.href}">${link.text}</a></li>`;
+    return `<li><a href="${encode(link.href)}">${link.text}</a></li>`;
   });
-  const content = templateStorageContent.replace("$LINKS", `<ul>${linkList}</ul>`);
+  const content = templateStorageContent.replace("$LINKS", `<ul>${linkList.join("")}</ul>`);
 
   const result = await client.createSessionPage(pageTitle, content);
   logger.info(`Created Confluence page '${pageTitle}'`);
@@ -75,4 +75,8 @@ async function removeObsoletePages(
     await client.removeSessionPage(obsoletePage.id);
     logger.info(`Deleted Confluence page ${obsoletePage.title}`);
   }
+}
+
+function encode(uri: string): string {
+  return encodeURI(uri).replace(/&/g, "&amp;");
 }
