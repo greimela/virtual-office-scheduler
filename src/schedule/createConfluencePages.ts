@@ -4,22 +4,35 @@ import { iconUrlFor } from "./extractLinks";
 import { ConfluenceClient, ConfluenceConfig } from "./ConfluenceClient";
 
 export async function createConfluencePagesAndInsertLinks(office: Office, config: ConfluenceConfig): Promise<Office> {
-  const client = new ConfluenceClient(config);
-  const templateStorageContent = await client.getPageBody(config.CONFLUENCE_TEMPLATE_PAGE_ID);
+  const confluenceClient = new ConfluenceClient(config);
+  const templateStorageContent = await confluenceClient.getPageBody(config.CONFLUENCE_TEMPLATE_PAGE_ID);
 
-  const confluencePages = office.rooms.filter((room) => room.hasConfluencePage);
-  for (const room of confluencePages) {
+  const allSessionPages = await confluenceClient.getPageChildren(config.CONFLUENCE_PARENT_PAGE_ID);
+
+  const pagesToCreate = office.rooms
+    .filter((room) => room.hasConfluencePage)
+    .map((room) => ({ room, title: `vSR20 - Session ${room.name}` }));
+  for (const { room, title } of pagesToCreate) {
     if (!room.hasConfluencePage) {
       continue;
     }
 
-    const pageLink = await getOrCreateConfluencePage(client, config.CONFLUENCE_SPACE_KEY, room, templateStorageContent);
+    const pageLink = await getOrCreateConfluencePage(
+      confluenceClient,
+      config.CONFLUENCE_SPACE_KEY,
+      room,
+      title,
+      templateStorageContent
+    );
     room.links.push({
       text: "Confluence",
       href: pageLink,
       icon: iconUrlFor(config.CONFLUENCE_BASE_URL),
     });
   }
+
+  await removeObsoletePages(confluenceClient, allSessionPages, pagesToCreate);
+
   return office;
 }
 
@@ -27,10 +40,9 @@ async function getOrCreateConfluencePage(
   client: ConfluenceClient,
   spaceKey: string,
   room: Room,
+  pageTitle: string,
   templateStorageContent: string
 ): Promise<string> {
-  const pageTitle = `vSR20 - Session ${room.name}`;
-
   const pageLink = await client.findLinkForPage(spaceKey, pageTitle);
   if (pageLink) {
     logger.info(`Confluence page '${pageTitle}' already exists`);
@@ -48,4 +60,19 @@ async function getOrCreateConfluencePage(
   const result = await client.createSessionPage(pageTitle, content);
   logger.info(`Created Confluence page '${pageTitle}'`);
   return result;
+}
+
+async function removeObsoletePages(
+  client: ConfluenceClient,
+  allSessionPages: { id: string; title: string }[],
+  pagesToCreate: { room: Room; title: string }[]
+): Promise<void> {
+  const obsoletePages = allSessionPages.filter(
+    (page) => !pagesToCreate.some((pageToCreate) => pageToCreate.title === page.title)
+  );
+  for (const obsoletePage of obsoletePages) {
+    logger.info(`Confluence page ${obsoletePage.title} is obsolete => deleting`);
+    await client.removeSessionPage(obsoletePage.id);
+    logger.info(`Deleted Confluence page ${obsoletePage.title}`);
+  }
 }

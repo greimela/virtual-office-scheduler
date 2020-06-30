@@ -31,6 +31,19 @@ export class ConfluenceClient {
     };
   }
 
+  async getPageChildren(parentPageId: string): Promise<{ id: string; title: string }[]> {
+    const response = await axios.get(`/rest/api/content/${parentPageId}/child/page`, {
+      ...this.defaultRequestConfig,
+    });
+    logger.info(response.statusText);
+    if (response.status !== 200) {
+      throw Error(
+        `${response.status} - Could not find childrens of Confluence page with id '${parentPageId}', response was '${response.data}'.`
+      );
+    }
+    return response.data.results;
+  }
+
   async findLinkForPage(spaceKey: string, title: string): Promise<string | undefined> {
     const response = await axios.get("/rest/api/content", {
       ...this.defaultRequestConfig,
@@ -80,5 +93,16 @@ export class ConfluenceClient {
       throw Error(`${response.status} - Cannot create Confluence page '{title}', response was '${response.data}'.`);
     }
     return response.data._links.self;
+  }
+
+  async removeSessionPage(pageId: string): Promise<void> {
+    const response = await axios.delete(`/rest/api/content/${pageId}`, {
+      ...this.defaultRequestConfig,
+    });
+    if (response.status !== 204) {
+      throw Error(
+        `${response.status} - Cannot delete Confluence page with id '${pageId}', response was '${response.data}'.`
+      );
+    }
   }
 }
