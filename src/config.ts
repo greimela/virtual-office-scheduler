@@ -20,12 +20,12 @@ const ScheduleEnvironmentCodec = t.type({
   SLACK_TOKEN: t.union([t.string, t.undefined]),
   SLACK_ENABLE_RATE_LIMITING: t.union([t.literal("true"), t.literal("false"), t.undefined]),
   SCHEDULE_DATE: t.union([t.string, t.undefined]),
-  CONFLUENCE_BASE_URL: t.string,
-  CONFLUENCE_USER: t.string,
-  CONFLUENCE_PASSWORD: t.string,
-  CONFLUENCE_SPACE_KEY: t.string,
-  CONFLUENCE_PARENT_PAGE_ID: t.string,
-  CONFLUENCE_TEMPLATE_PAGE_ID: t.string,
+  CONFLUENCE_BASE_URL: t.union([t.string, t.undefined]),
+  CONFLUENCE_USER: t.union([t.string, t.undefined]),
+  CONFLUENCE_PASSWORD: t.union([t.string, t.undefined]),
+  CONFLUENCE_SPACE_KEY: t.union([t.string, t.undefined]),
+  CONFLUENCE_PARENT_PAGE_ID: t.union([t.string, t.undefined]),
+  CONFLUENCE_TEMPLATE_PAGE_ID: t.union([t.string, t.undefined]),
 });
 
 const CreateMeetingsEnvironmentCodec = t.type({
