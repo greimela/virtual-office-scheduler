@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { logger } from "../log";
 
 export enum PageFormat {
   STORAGE = "storage",
@@ -18,7 +17,7 @@ export interface ConfluenceConfig {
 export class ConfluenceClient {
   private defaultRequestConfig: AxiosRequestConfig;
 
-  constructor(private config: ConfluenceConfig) {
+  constructor(private readonly config: ConfluenceConfig) {
     this.defaultRequestConfig = {
       auth: {
         username: this.config.CONFLUENCE_USER,
@@ -31,14 +30,14 @@ export class ConfluenceClient {
     };
   }
 
-  async getPageChildren(parentPageId: string): Promise<{ id: string; title: string }[]> {
-    const response = await axios.get(`/rest/api/content/${parentPageId}/child/page`, {
+  async getAllSessionPages(): Promise<{ id: string; title: string }[]> {
+    const response = await axios.get(`/rest/api/content/${this.config.CONFLUENCE_PARENT_PAGE_ID}/child/page`, {
       ...this.defaultRequestConfig,
+      params: { limit: 10000 },
     });
-    logger.info(response.statusText);
     if (response.status !== 200) {
       throw Error(
-        `${response.status} - Could not find childrens of Confluence page with id '${parentPageId}', response was '${response.data}'.`
+        `${response.status} - Could not find childrens of Confluence page with id '${this.config.CONFLUENCE_PARENT_PAGE_ID}}', response was '${response.data}'.`
       );
     }
     return response.data.results;
@@ -49,7 +48,6 @@ export class ConfluenceClient {
       ...this.defaultRequestConfig,
       params: { spaceKey: spaceKey, title: title },
     });
-    logger.info(response.statusText);
     if (response.status !== 200) {
       throw Error(
         `${response.status} - Could not find Confluence page with title '${title}', response was '${response.data}'.`

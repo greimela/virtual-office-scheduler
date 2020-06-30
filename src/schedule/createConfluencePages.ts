@@ -7,8 +7,6 @@ export async function createConfluencePagesAndInsertLinks(office: Office, config
   const confluenceClient = new ConfluenceClient(config);
   const templateStorageContent = await confluenceClient.getPageBody(config.CONFLUENCE_TEMPLATE_PAGE_ID);
 
-  const allSessionPages = await confluenceClient.getPageChildren(config.CONFLUENCE_PARENT_PAGE_ID);
-
   const pagesToCreate = office.rooms
     .filter((room) => room.hasConfluencePage)
     .map((room) => ({ room, title: `vSR20 - Session ${room.name}` }));
@@ -31,7 +29,7 @@ export async function createConfluencePagesAndInsertLinks(office: Office, config
     });
   }
 
-  await removeObsoletePages(confluenceClient, allSessionPages, pagesToCreate);
+  await removeObsoletePages(confluenceClient, pagesToCreate);
 
   return office;
 }
@@ -64,9 +62,10 @@ async function getOrCreateConfluencePage(
 
 async function removeObsoletePages(
   client: ConfluenceClient,
-  allSessionPages: { id: string; title: string }[],
   pagesToCreate: { room: Room; title: string }[]
 ): Promise<void> {
+  const allSessionPages = await client.getAllSessionPages();
+
   const obsoletePages = allSessionPages.filter(
     (page) => !pagesToCreate.some((pageToCreate) => pageToCreate.title === page.title)
   );
