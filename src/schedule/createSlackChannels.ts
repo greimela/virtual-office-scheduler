@@ -38,7 +38,7 @@ export async function createSlackChannelsAndInsertLinks(office: Office, config: 
     room.links.push(getChannelLink(config.SLACK_BASE_URL, channelName));
   }
   const obsoleteChannels = allChannels.filter(
-    (channel) => !roomsToCreate.some((roomToCreate) => roomToCreate.channelName === channel.name)
+    (channel) => !roomsToCreate.some((roomToCreate) => roomToCreate.channelName === channel.name || channel.archived)
   );
   for (const obsoleteChannel of obsoleteChannels) {
     logger.info(`Channel ${obsoleteChannel.name} is obsolete => archiving`);
