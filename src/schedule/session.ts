@@ -9,6 +9,8 @@ import { logger } from "../log";
 import { joinUrlsFrom } from "./joinUrls";
 import { createSlackChannelsAndInsertLinks } from "./createSlackChannels";
 import { SlackConfig } from "./SlackClient";
+import { ConfluenceConfig } from "./ConfluenceClient";
+import { createConfluencePagesAndInsertLinks } from "./createConfluencePages";
 
 async function main(): Promise<void> {
   try {
@@ -23,6 +25,16 @@ async function main(): Promise<void> {
     let office = generateOffice(schedule, meetings, config);
     if (config.SLACK_TOKEN && config.SLACK_BASE_URL) {
       office = await createSlackChannelsAndInsertLinks(office, config as SlackConfig);
+    }
+    if (
+      config.CONFLUENCE_BASE_URL &&
+      config.CONFLUENCE_USER &&
+      config.CONFLUENCE_PASSWORD &&
+      config.CONFLUENCE_SPACE_KEY &&
+      config.CONFLUENCE_PARENT_PAGE_ID &&
+      config.CONFLUENCE_TEMPLATE_PAGE_ID
+    ) {
+      office = await createConfluencePagesAndInsertLinks(office, config as ConfluenceConfig);
     }
     await updateOffice(config, office);
 

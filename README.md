@@ -49,6 +49,14 @@ Required env variables:
 
 Optional env variables:
 * SCHEDULE_DATE
-* SLACK_ENABLE_RATE_LIMITING
-* SLACK_BASE_URL
-* SLACK_TOKEN
+* For Slack channel creation:
+    * SLACK_ENABLE_RATE_LIMITING
+    * SLACK_BASE_URL
+    * SLACK_TOKEN
+* For Confluence page creation:
+    * CONFLUENCE_BASE_URL
+    * CONFLUENCE_USER
+    * CONFLUENCE_PASSWORD
+    * CONFLUENCE_SPACE_KEY
+    * CONFLUENCE_PARENT_PAGE_ID
+    * CONFLUENCE_TEMPLATE_PAGE_ID

@@ -6,6 +6,8 @@ import { logger } from "../log";
 import { joinUrlsFrom } from "./joinUrls";
 import { extractLinks, iconUrlFor } from "./extractLinks";
 
+export const hostKey = `Host-Key`;
+
 export interface Office {
   rooms: Room[];
   groups: Group[];
@@ -20,6 +22,7 @@ export interface Room {
   links: RoomLink[];
   groupId: string;
   hasSlackChannel: boolean;
+  hasConfluencePage: boolean;
 }
 
 export interface RoomLink {
@@ -114,7 +117,7 @@ function mapSpreadsheetGroup(
 
         if (row.Slot) {
           links.unshift({
-            text: `Host-Key: ${meetings[meetingId].hostKey}`,
+            text: `${hostKey}: ${meetings[meetingId].hostKey}`,
             icon: iconUrlFor("zoom"),
             href: "https://confluence.tngtech.com/x/vJXSF",
           });
@@ -129,6 +132,7 @@ function mapSpreadsheetGroup(
           joinUrl,
           links,
           hasSlackChannel: !!row.Slot,
+          hasConfluencePage: !!row.Slot,
         };
       })
     );
