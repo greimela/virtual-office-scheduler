@@ -10,6 +10,7 @@ export interface SlackConfig {
 interface Channel {
   id: string;
   name: string;
+  archived: boolean;
 }
 
 export class SlackClient {
@@ -26,6 +27,10 @@ export class SlackClient {
     await this.client.conversations.archive({ channel });
   }
 
+  async unarchiveChannel(channel: string): Promise<void> {
+    await this.client.conversations.unarchive({ channel });
+  }
+
   async getAllChannels(): Promise<Channel[]> {
     const channels: Channel[] = [];
 
@@ -35,13 +40,13 @@ export class SlackClient {
       const result = await this.client.conversations.list({
         limit: 1000,
         types: "public_channel",
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        exclude_archived: true,
         cursor,
       });
       if (result.ok) {
         cursor = result.response_metadata?.next_cursor;
-        channels.push(...(result.channels as Channel[]));
+        channels.push(
+          ...((result.channels as unknown) as any).map((c) => ({ archived: c.is_archived, ...c } as Channel))
+        );
       } else {
         throw new Error(result.error);
       }

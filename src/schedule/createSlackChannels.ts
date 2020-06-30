@@ -24,16 +24,19 @@ export async function createSlackChannelsAndInsertLinks(office: Office, config: 
     .filter((room) => room.hasSlackChannel)
     .map((room) => ({ room, channelName: getSlackChannelName(room) }));
   for (const { room, channelName } of roomsToCreate) {
-    const channelExists = allChannels.some((channel) => channel.name === channelName);
-
-    if (!channelExists && (await slackClient.createChannelIfNotExists({ name: channelName }))) {
-      logger.info(`Created slack channel ${channelName}`);
-    } else {
+    const channel = allChannels.find((channel) => channel.name === channelName);
+    if (channel?.archived) {
+      await slackClient.unarchiveChannel(channel.id);
+      logger.info(`Unarchived slack channel ${channelName}`);
+    } else if (channel) {
       logger.info(`Channel ${channelName} already exists`);
+    } else {
+      if (await slackClient.createChannelIfNotExists({ name: channelName })) {
+        logger.info(`Created slack channel ${channelName}`);
+      }
     }
     room.links.push(getChannelLink(config.SLACK_BASE_URL, channelName));
   }
-
   const obsoleteChannels = allChannels.filter(
     (channel) => !roomsToCreate.some((roomToCreate) => roomToCreate.channelName === channel.name)
   );
