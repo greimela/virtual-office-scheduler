@@ -20,6 +20,7 @@ export interface Room {
   links: RoomLink[];
   groupId: string;
   hasSlackChannel: boolean;
+  hasConfluencePage: boolean;
 }
 
 export interface RoomLink {
@@ -129,6 +130,7 @@ function mapSpreadsheetGroup(
           joinUrl,
           links,
           hasSlackChannel: !!row.Slot,
+          hasConfluencePage: !!row.Slot,
         };
       })
     );

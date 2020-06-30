@@ -138,6 +138,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["2"].joinUrl,
           links: [],
           hasSlackChannel: false,
+          hasConfluencePage: false,
         },
         {
           roomId: "group-08:30:room-3",
@@ -148,6 +149,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["3"].joinUrl,
           links: [],
           hasSlackChannel: false,
+          hasConfluencePage: false,
         },
         {
           roomId: "group-09:00:room-1",
@@ -158,6 +160,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["1"].joinUrl,
           links: [],
           hasSlackChannel: false,
+          hasConfluencePage: false,
         },
         {
           roomId: "group-09:05:room-1",
@@ -168,6 +171,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["1"].joinUrl,
           links: [],
           hasSlackChannel: false,
+          hasConfluencePage: false,
         },
         {
           roomId: "group-10:05:room-3",
@@ -178,6 +182,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["3"].joinUrl,
           links: [],
           hasSlackChannel: false,
+          hasConfluencePage: false,
         },
         {
           roomId: "group-10:15:room-1",
@@ -188,6 +193,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["1"].joinUrl,
           links: [],
           hasSlackChannel: false,
+          hasConfluencePage: false,
         },
         {
           roomId: "group-10:15:room-2",
@@ -198,6 +204,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["2"].joinUrl,
           links: [],
           hasSlackChannel: false,
+          hasConfluencePage: false,
         },
         {
           roomId: "group-10:15:room-3",
@@ -208,6 +215,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["3"].joinUrl,
           links: [],
           hasSlackChannel: false,
+          hasConfluencePage: false,
         },
         {
           roomId: "group-10:15:room-4",
@@ -218,6 +226,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["4"].joinUrl,
           links: [],
           hasSlackChannel: false,
+          hasConfluencePage: false,
         },
         {
           roomId: "group-10:30:room-1",
@@ -238,6 +247,7 @@ describe("generateOffice", () => {
             },
           ],
           hasSlackChannel: true,
+          hasConfluencePage: true,
         },
         {
           roomId: "group-10:30:room-2",
@@ -258,6 +268,7 @@ describe("generateOffice", () => {
             },
           ],
           hasSlackChannel: true,
+          hasConfluencePage: true,
         },
         {
           roomId: "group-10:30:room-4",
@@ -278,6 +289,7 @@ describe("generateOffice", () => {
             },
           ],
           hasSlackChannel: true,
+          hasConfluencePage: true,
         },
         {
           roomId: "group-12:00:room-1",
@@ -288,6 +300,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["1"].joinUrl,
           links: [],
           hasSlackChannel: false,
+          hasConfluencePage: false,
         },
       ],
       groups: [
@@ -392,6 +405,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["2"].joinUrl,
           links: [],
           hasSlackChannel: false,
+          hasConfluencePage: false,
         },
         {
           roomId: "group-08:30:room-3",
@@ -402,6 +416,7 @@ describe("generateOffice", () => {
           joinUrl: meetings["3"].joinUrl,
           links: [],
           hasSlackChannel: false,
+          hasConfluencePage: false,
         },
       ],
       groups: [
