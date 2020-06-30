@@ -54,7 +54,7 @@ export class ConfluenceClient {
       );
     }
     const results = response.data.results;
-    return results.length > 0 ? results[0]._links.self : undefined;
+    return results.length > 0 ? `${this.config.CONFLUENCE_BASE_URL}${results[0]._links.tinyui}` : undefined;
   }
 
   async getPageBody(pageId: string, format: PageFormat = PageFormat.STORAGE): Promise<string> {
@@ -90,7 +90,7 @@ export class ConfluenceClient {
     if (response.status !== 200) {
       throw Error(`${response.status} - Cannot create Confluence page '{title}', response was '${response.data}'.`);
     }
-    return response.data._links.self;
+    return `${this.config.CONFLUENCE_BASE_URL}${response.data._links.tinyui}`;
   }
 
   async removeSessionPage(pageId: string): Promise<void> {
