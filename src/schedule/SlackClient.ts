@@ -28,7 +28,19 @@ export class SlackClient {
   }
 
   async unarchiveChannel(channel: string): Promise<void> {
-    await this.client.conversations.unarchive({ channel });
+    try {
+      await this.client.conversations.unarchive({ channel });
+      await this.client.conversations.leave({ channel });
+    } catch (e) {
+      if (e.message.includes("not_in_channel")) {
+        // Not part of API doc, see https://api.slack.com/methods/conversations.unarchive, therefore explicitly handled
+        logger.error(
+          `Could not un-archive channel with id '${channel}. Please do it manually. This is most likely due to using a bot token rather than the required user token, however it is not documented yet.`
+        );
+      } else {
+        throw e;
+      }
+    }
   }
 
   async getAllChannels(): Promise<Channel[]> {
