@@ -8,7 +8,7 @@ export function iconUrlFor(url: string): string | undefined {
   return `https://virtual-office-icons.s3.eu-central-1.amazonaws.com/${icon}-icon.png`;
 }
 
-const icons = ["confluence", "jira", "mural", "slack", "miro", "zoom"];
+const icons = ["confluence", "jira", "mural", "slack", "miro", "zoom", "discord"];
 function iconFor(url: string): string | undefined {
   return icons.find((icon) => url.includes(icon));
 }
