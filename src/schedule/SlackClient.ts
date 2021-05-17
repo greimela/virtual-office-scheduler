@@ -57,7 +57,7 @@ export class SlackClient {
       if (result.ok) {
         cursor = result.response_metadata?.next_cursor;
         channels.push(
-          ...((result.channels as unknown) as any).map((c) => ({ archived: c.is_archived, ...c } as Channel))
+          ...(result.channels as unknown as any).map((c) => ({ archived: c.is_archived, ...c } as Channel))
         );
       } else {
         throw new Error(result.error);

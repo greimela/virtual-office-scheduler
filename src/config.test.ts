@@ -6,21 +6,17 @@ const mockConfig = config as jest.MockedFunction<typeof config>;
 
 describe("'config' should", () => {
   it("throw Error if env is not processable", () => {
-    mockConfig.mockImplementation(
-      (): DotenvConfigOutput => {
-        return { error: Error("foo") };
-      }
-    );
+    mockConfig.mockImplementation((): DotenvConfigOutput => {
+      return { error: Error("foo") };
+    });
 
     expect(() => parseScheduleConfig()).toThrowError("foo");
   });
 
   it("throw Error if processed env does not contain correct structure", () => {
-    mockConfig.mockImplementation(
-      (): DotenvConfigOutput => {
-        return { parsed: { UNKNOWN: "u" } };
-      }
-    );
+    mockConfig.mockImplementation((): DotenvConfigOutput => {
+      return { parsed: { UNKNOWN: "u" } };
+    });
 
     expect(() => parseScheduleConfig()).toThrowError(
       /Parsing dotenv config failed: Invalid value undefined supplied to .*/
@@ -50,11 +46,9 @@ describe("'config' should", () => {
       CONFLUENCE_TEMPLATE_PAGE_ID: "654321",
     };
 
-    mockConfig.mockImplementation(
-      (): DotenvConfigOutput => {
-        return { parsed: env };
-      }
-    );
+    mockConfig.mockImplementation((): DotenvConfigOutput => {
+      return { parsed: env };
+    });
 
     expect(parseScheduleConfig()).toStrictEqual(env);
   });
@@ -83,11 +77,9 @@ describe("'config' should", () => {
       CONFLUENCE_TEMPLATE_PAGE_ID: "654321",
     };
 
-    mockConfig.mockImplementation(
-      (): DotenvConfigOutput => {
-        return { parsed: env };
-      }
-    );
+    mockConfig.mockImplementation((): DotenvConfigOutput => {
+      return { parsed: env };
+    });
 
     expect(parseCreateMeetingsConfig()).toStrictEqual(env);
   });
