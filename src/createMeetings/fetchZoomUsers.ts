@@ -16,9 +16,7 @@ export async function fetchZoomUsers(config: CreateMeetingsEnvironment): Promise
 
   logger.info("Gettings all zoom users from account");
   const allZoomUsers = await getAllUsers(zoomJwt);
-  const filteredZoomUsers = allZoomUsers.filter((user) =>
-    userEmails.find((userEmail) => userEmail === user.email && user.type === 2)
-  );
+  const filteredZoomUsers = allZoomUsers.filter((user) => userEmails.find((userEmail) => userEmail === user.email));
 
   logger.info("Getting user details for all users to extract hostKey");
   const detailedZoomUsers: ZoomUser[] = [];
