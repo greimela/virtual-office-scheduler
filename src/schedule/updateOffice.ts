@@ -4,15 +4,15 @@ import { ScheduleEnvironment } from "../config";
 import { Office } from "./generateOffice";
 import { logger } from "../log";
 
-export async function updateOffice(config: ScheduleEnvironment, office: Office): Promise<void> {
-  const url = `${config.VIRTUAL_OFFICE_BASE_URL}/api/admin/replaceOffice`;
+export async function updateOfficeInstance(baseUrl: string, username: string, password: string, office: Office) {
+  const url = `${baseUrl}/api/admin/replaceOffice`;
   logger.info("Replacing virtual office", { url, office });
 
   try {
     await axios.post(url, office, {
       auth: {
-        username: config.VIRTUAL_OFFICE_USERNAME,
-        password: config.VIRTUAL_OFFICE_PASSWORD,
+        username,
+        password,
       },
     });
   } catch (error) {

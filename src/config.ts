@@ -11,6 +11,7 @@ const ScheduleEnvironmentCodec = t.type({
   SCHEDULE_SHEET_NAME: t.string,
   MEETINGS_SHEET_NAME: t.string,
   VIRTUAL_OFFICE_BASE_URL: t.string,
+  NEWBIE_VIRTUAL_OFFICE_BASE_URL: t.string,
   VIRTUAL_OFFICE_USERNAME: t.string,
   VIRTUAL_OFFICE_PASSWORD: t.string,
   GOOGLE_SERVICE_ACCOUNT_MAIL: t.string,

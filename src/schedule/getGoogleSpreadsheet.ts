@@ -4,14 +4,10 @@ import { findSheet, getSpreadsheet } from "../googleSpreadsheet";
 
 export interface RawScheduleSpreadsheetRow {
   Start: string;
-  Slot: string;
   Title: string;
-  Subtitle: string;
-  Link: string;
   MeetingIds: string;
-  ReservedIds: string;
-  RandomJoin: string;
-  OpenEnd: string;
+  JoinUrl: string;
+  AlwaysActive: string;
 }
 
 export interface RawMeetingsSpreadsheetRow {
@@ -21,9 +17,39 @@ export interface RawMeetingsSpreadsheetRow {
   hostKey: string;
 }
 
+export interface RawFreizeitSpreadsheetRow {
+  Title: string;
+  Day: string;
+  Start: string;
+  End: string;
+  Links: string;
+  Icon: string;
+  MeetingIds: string;
+  JoinUrl: string;
+  AlwaysActive: string;
+}
+
+export interface RawFullDayTopicRow {
+  Title: string;
+  Links: string;
+  MeetingIds: string;
+  OpenForNewbies: "TRUE" | "FALSE";
+}
+
+export interface RawHalfDayTopicRow {
+  Title: string;
+  Links: string;
+  MeetingIds: string;
+  Slot: string;
+  OpenForNewbies: "TRUE" | "FALSE";
+}
+
 export interface RawSpreadsheetData {
+  fullDayTopics: RawFullDayTopicRow[];
+  halfDayTopics: RawHalfDayTopicRow[];
   schedule: RawScheduleSpreadsheetRow[];
   meetings: RawMeetingsSpreadsheetRow[];
+  freizeit: RawFreizeitSpreadsheetRow[];
 }
 
 async function sheetRowsFor<T>(document: GoogleSpreadsheet, name: string): Promise<T[]> {
@@ -40,7 +66,10 @@ export async function fetchScheduleSpreadsheet(config: ScheduleEnvironment): Pro
   const doc = await getSpreadsheet(config);
 
   return {
-    meetings: await sheetRowsFor<RawMeetingsSpreadsheetRow>(doc, config.MEETINGS_SHEET_NAME),
     schedule: await sheetRowsFor<RawScheduleSpreadsheetRow>(doc, config.SCHEDULE_SHEET_NAME),
+    fullDayTopics: await sheetRowsFor<RawFullDayTopicRow>(doc, "Ganztagsthemen"),
+    halfDayTopics: await sheetRowsFor<RawHalfDayTopicRow>(doc, "Halbtagsthemen"),
+    freizeit: await sheetRowsFor<RawFreizeitSpreadsheetRow>(doc, "Freizeit"),
+    meetings: await sheetRowsFor<RawMeetingsSpreadsheetRow>(doc, config.MEETINGS_SHEET_NAME),
   };
 }

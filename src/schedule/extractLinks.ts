@@ -9,11 +9,16 @@ export function iconUrlFor(url: string): string | undefined {
 }
 
 const icons = ["confluence", "jira", "mural", "slack", "miro", "zoom", "discord", "surveymonkey"];
+
 function iconFor(url: string): string | undefined {
   return icons.find((icon) => url.includes(icon));
 }
 
-export function extractLinks(text: string): RoomLink[] {
+export function extractLinks(text: string | undefined): RoomLink[] {
+  if (text === undefined) {
+    return [];
+  }
+
   const matches = Array.from(text.matchAll(/\[([^]+?)]\(([^)]+?)\)/g));
 
   return matches.map((match) => {
