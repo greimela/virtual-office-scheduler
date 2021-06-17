@@ -27,6 +27,9 @@ async function main(): Promise<void> {
     logger.info("Successfully updated spreadsheet");
   } catch (error) {
     logger.error("Failed to update spreadsheet", error);
+    if (error?.response?.data?.errors) {
+      logger.error("Request failed", error?.response?.data);
+    }
     // ugly workaround to get logs printed on the console and still being able to set an exit code
     setTimeout(() => process.exit(1), 10);
   }
