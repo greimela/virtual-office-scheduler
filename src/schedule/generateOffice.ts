@@ -70,7 +70,7 @@ export function generateOffice(
   const groups: Group[] = [
     {
       id: "workshops-morning",
-      name: "(09:15 - 12:15) 1. Workshoprunde",
+      name: "Session 1",
     },
     {
       id: "workshops-morning-2",
@@ -78,7 +78,7 @@ export function generateOffice(
     },
     {
       id: "workshops-afternoon",
-      name: "(13:30 - 16:30) 2. Workshoprunde",
+      name: "Session 2",
     },
     {
       id: "workshops-afternoon-2",
@@ -94,7 +94,7 @@ export function generateOffice(
     // },
     {
       id: "lunch-break",
-      name: "(12:15 - 13:30) Mittagspause",
+      name: "Mittagspause",
       groupJoin: {
         minimumParticipantCount: 10,
         title: "Mittagstisch",

@@ -45,7 +45,6 @@ export interface RawHalfDayTopicRow {
 }
 
 export interface RawSpreadsheetData {
-  fullDayTopics: RawFullDayTopicRow[];
   halfDayTopics: RawHalfDayTopicRow[];
   schedule: RawScheduleSpreadsheetRow[];
   meetings: RawMeetingsSpreadsheetRow[];
@@ -67,8 +66,7 @@ export async function fetchScheduleSpreadsheet(config: ScheduleEnvironment): Pro
 
   return {
     schedule: await sheetRowsFor<RawScheduleSpreadsheetRow>(doc, config.SCHEDULE_SHEET_NAME),
-    fullDayTopics: await sheetRowsFor<RawFullDayTopicRow>(doc, "Ganztagsthemen"),
-    halfDayTopics: await sheetRowsFor<RawHalfDayTopicRow>(doc, "Halbtagsthemen"),
+    halfDayTopics: await sheetRowsFor<RawHalfDayTopicRow>(doc, "Sessions"),
     freizeit: await sheetRowsFor<RawFreizeitSpreadsheetRow>(doc, "Freizeit"),
     meetings: await sheetRowsFor<RawMeetingsSpreadsheetRow>(doc, config.MEETINGS_SHEET_NAME),
   };

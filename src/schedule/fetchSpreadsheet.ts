@@ -141,12 +141,12 @@ function adaptHalfDayTopicRow(raw: RawHalfDayTopicRow): HalfDayTopic {
 }
 
 export async function fetchSpreadsheet(config: ScheduleEnvironment): Promise<SpreadsheetData> {
-  const { schedule, meetings, fullDayTopics, halfDayTopics, freizeit } = await fetchScheduleSpreadsheet(config);
+  const { schedule, meetings, halfDayTopics, freizeit } = await fetchScheduleSpreadsheet(config);
 
   return {
     meetings: meetings.map(adaptMeetingsRow).reduce((acc, meeting) => ({ ...acc, [meeting.meetingId]: meeting }), {}),
     schedule: schedule.map(adaptScheduleRow),
     freizeit: freizeit.map(adaptFreizeitRow),
-    topics: [...fullDayTopics.map(adaptFullDayTopicRow), ...halfDayTopics.map(adaptHalfDayTopicRow)],
+    topics: [ ...halfDayTopics.map(adaptHalfDayTopicRow)],
   };
 }
