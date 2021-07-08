@@ -60,7 +60,7 @@ export type GroupJoinConfig = {
   minimumRoomsToShow?: number;
 };
 
-export function generateOffice(
+export function generateFridayOffice(
   schedule: ScheduleSpreadsheet,
   meetings: MeetingDictionary,
   topics: Topic[],
@@ -189,7 +189,7 @@ export function generateOffice(
                 links: [],
                 groupId: groupWithSessionName.id,
                 meetingId: "",
-                joinUrl: "https://gather.town/app/G2YZEASLrXkYLMYP/ufo",
+                joinUrl: "https://gather.town/app/pG5KDCM8CxCY4oZz/vsr21",
                 icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/logo-gather.png",
                 openForNewbies: true,
               };
@@ -286,6 +286,89 @@ export function generateOffice(
     },
   };
 }
+
+export function generateSaturdayOffice(
+  schedule: ScheduleSpreadsheet,
+  meetings: MeetingDictionary,
+  freizeit: FreizeitSpreadsheetRow[]
+): Office {
+  logger.info("Generating office based on spreadsheet", { spreadsheet: schedule });
+
+  const groups: Group[] = [
+    {
+      id: "abendprogramm",
+      name: "Abendprogramm",
+    },
+    {
+      id: "freizeitprogramm",
+      name: "Samstagsaktivitäten",
+    },
+  ];
+
+  const sessions: Session[] = [
+    { groupId: "abendprogramm", start: "00:00", end: "03:00" },
+    { groupId: "freizeitprogramm", start: "10:00", end: "23:59" },
+  ];
+
+  const rooms: Room[] = [];
+  for (const freizeitEntry of freizeit) {
+    if (freizeitEntry.Day === "Freitag") {
+      const meeting = freizeitEntry.MeetingIds[0] ? meetings[freizeitEntry.MeetingIds[0]] : undefined;
+      rooms.push({
+        groupId: "abendprogramm",
+        meetingId: freizeitEntry.MeetingIds[0],
+        joinUrl: meeting ? meeting.joinUrl : freizeitEntry.JoinUrl,
+        name: freizeitEntry.Title,
+        subtitle: `${freizeitEntry.Start} - ${freizeitEntry.End}`,
+        openForNewbies: true,
+        links: [
+          ...(meeting
+            ? [
+                {
+                  href: "#",
+                  icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
+                  text: `Host-Key: ${meeting.hostKey}`,
+                },
+              ]
+            : []),
+        ],
+      });
+    } else if (freizeitEntry.Day === "Samstag") {
+      const meeting = freizeitEntry.MeetingIds[0] ? meetings[freizeitEntry.MeetingIds[0]] : undefined;
+      rooms.push({
+        groupId: "freizeitprogramm",
+        meetingId: freizeitEntry.MeetingIds[0],
+        joinUrl: meeting ? meeting.joinUrl : freizeitEntry.JoinUrl,
+        name: freizeitEntry.Title,
+        subtitle: `${freizeitEntry.Start} - ${freizeitEntry.End}`,
+        openForNewbies: true,
+        links: [
+          ...(meeting
+            ? [
+                {
+                  href: "#",
+                  icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
+                  text: `Host-Key: ${meeting.hostKey}`,
+                },
+              ]
+            : []),
+        ],
+      });
+    }
+  }
+  return {
+    rooms,
+    groups,
+    schedule: {
+      sessions,
+      tracks: [
+        { id: "track-1", name: "" },
+        { id: "track-2", name: "" },
+      ],
+    },
+  };
+}
+
 const ThemenKaffeekuechen = [
   "gather.town",
   "Strech and Move your Body",

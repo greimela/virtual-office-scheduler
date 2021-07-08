@@ -3,7 +3,7 @@
 import { parseScheduleConfig } from "../config";
 import { fetchSpreadsheet } from "./fetchSpreadsheet";
 import { logger } from "../log";
-import { generateOffice } from "./generateOffice";
+import { generateFridayOffice, generateSaturdayOffice, Office } from "./generateOffice";
 import { updateOfficeInstance } from "./updateOffice";
 import { createConfluencePagesAndInsertLinks } from "./createConfluencePages";
 import { ConfluenceConfig } from "./ConfluenceClient";
@@ -14,10 +14,6 @@ async function main(): Promise<void> {
     const config = parseScheduleConfig();
 
     let { schedule, meetings, topics, freizeit } = await fetchSpreadsheet(config);
-    //
-    // if (config.SLACK_TOKEN && config.SLACK_BASE_URL) {
-    //   topics = await createSlackChannelsAndInsertLinks(topics, config as SlackConfig);
-    // }
 
     topics = topics.map((topic) => {
       const meeting = meetings[topic.meetingIds[0]];
@@ -34,18 +30,37 @@ async function main(): Promise<void> {
         ],
       };
     });
-    if (
-      config.CONFLUENCE_BASE_URL &&
-      config.CONFLUENCE_USER &&
-      config.CONFLUENCE_PASSWORD &&
-      config.CONFLUENCE_SPACE_KEY &&
-      config.CONFLUENCE_PARENT_PAGE_ID &&
-      config.CONFLUENCE_TEMPLATE_PAGE_ID
-    ) {
-      topics = await createConfluencePagesAndInsertLinks(topics, meetings, config as ConfluenceConfig);
-    }
 
-    const office = generateOffice(schedule, meetings, topics, freizeit);
+    const date = new Date().toISOString().split("T")[0];
+    const shouldDeployFriday = date === "2021-07-08" || date === "2021-07-09";
+    const shouldDeploySaturday = date === "2021-07-10";
+
+    let office: Office = {
+      rooms: [],
+      groups: [],
+      schedule: {
+        sessions: [],
+        tracks: [{ id: "dummy", name: "" }],
+      },
+    };
+
+    if (shouldDeployFriday) {
+      if (
+        config.CONFLUENCE_BASE_URL &&
+        config.CONFLUENCE_USER &&
+        config.CONFLUENCE_PASSWORD &&
+        config.CONFLUENCE_SPACE_KEY &&
+        config.CONFLUENCE_PARENT_PAGE_ID &&
+        config.CONFLUENCE_TEMPLATE_PAGE_ID
+      ) {
+        topics = await createConfluencePagesAndInsertLinks(topics, meetings, config as ConfluenceConfig);
+      }
+      office = generateFridayOffice(schedule, meetings, topics, freizeit);
+    } else {
+      if (shouldDeploySaturday) {
+        office = generateSaturdayOffice(schedule, meetings, freizeit);
+      }
+    }
 
     await updateOfficeInstance(
       config.VIRTUAL_OFFICE_BASE_URL,
@@ -54,16 +69,18 @@ async function main(): Promise<void> {
       office
     );
 
-    office.rooms = office.rooms.filter((room) => room.openForNewbies);
-    office.rooms.push({
-      roomId: "neu-bei-tng",
-      meetingId: "96951842676",
-      joinUrl: meetings["96951842676"].joinUrl,
-      name: "Neu bei TNG",
-      openForNewbies: true,
-      links: [],
-    });
-    office.schedule.sessions.push({ start: "08:30", end: "09:00", roomId: "neu-bei-tng" });
+    if (shouldDeployFriday) {
+      office.rooms = office.rooms.filter((room) => room.openForNewbies);
+      office.rooms.push({
+        roomId: "neu-bei-tng",
+        meetingId: "96951842676",
+        joinUrl: meetings["96951842676"].joinUrl,
+        name: "Neu bei TNG",
+        openForNewbies: true,
+        links: [],
+      });
+      office.schedule.sessions.push({ start: "08:30", end: "09:00", roomId: "neu-bei-tng" });
+    }
     await updateOfficeInstance(
       config.NEWBIE_VIRTUAL_OFFICE_BASE_URL,
       config.VIRTUAL_OFFICE_USERNAME,

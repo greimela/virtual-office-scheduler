@@ -1,4 +1,4 @@
-import { generateOffice } from "./generateOffice";
+import { generateFridayOffice } from "./generateOffice";
 import fakeTimers, { InstalledClock } from "@sinonjs/fake-timers";
 import { MeetingDictionary } from "./fetchSpreadsheet";
 
@@ -124,7 +124,7 @@ describe("generateOffice", () => {
     const meetings = meetingsFor(["1", "2", "3", "4", "5"]);
     const config = { ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: "5" };
 
-    const office = generateOffice(spreadsheet, meetings, config);
+    const office = generateFridayOffice(spreadsheet, meetings, config);
     const groupJoinDescription =
       'Wenn ihr mögt, könnt ihr durch den rechts stehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.';
     expect(office).toEqual({
@@ -390,7 +390,7 @@ describe("generateOffice", () => {
     const meetings = meetingsFor(["2", "3"]);
     const config = { ENABLE_ROOM_JOIN_MINUTES_BEFORE_START: "10", SCHEDULE_DATE: "2020-07-04" };
 
-    const office = generateOffice(spreadsheet, meetings, config);
+    const office = generateFridayOffice(spreadsheet, meetings, config);
 
     const groupJoinDescription =
       'Wenn ihr mögt, könnt ihr durch den rechts stehenden "Join"-Button einem zufällig ausgewählten Raum beitreten.';
