@@ -201,7 +201,7 @@ export function generateFridayOffice(
               joinUrl: meetings[meetingId].joinUrl,
               links: [],
               groupId: groupWithSessionName.id,
-              openForNewbies: groupWithSessionName.name !== "Ankunft",
+              openForNewbies: true,
             };
           })
         );

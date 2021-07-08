@@ -71,6 +71,7 @@ async function main(): Promise<void> {
 
     if (shouldDeployFriday) {
       office.rooms = office.rooms.filter((room) => room.openForNewbies);
+      office.schedule.sessions = office.schedule.sessions.filter((session) => session.groupId !== "check-in");
       office.rooms.push({
         roomId: "neu-bei-tng",
         meetingId: "96951842676",
