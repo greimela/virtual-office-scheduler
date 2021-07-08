@@ -5,8 +5,8 @@ import { fetchSpreadsheet } from "./fetchSpreadsheet";
 import { logger } from "../log";
 import { generateOffice } from "./generateOffice";
 import { updateOfficeInstance } from "./updateOffice";
-import { createSlackChannelsAndInsertLinks } from "./createSlackChannels";
-import { SlackConfig } from "./SlackClient";
+import { createConfluencePagesAndInsertLinks } from "./createConfluencePages";
+import { ConfluenceConfig } from "./ConfluenceClient";
 
 async function main(): Promise<void> {
   try {
@@ -14,9 +14,35 @@ async function main(): Promise<void> {
     const config = parseScheduleConfig();
 
     let { schedule, meetings, topics, freizeit } = await fetchSpreadsheet(config);
+    //
+    // if (config.SLACK_TOKEN && config.SLACK_BASE_URL) {
+    //   topics = await createSlackChannelsAndInsertLinks(topics, config as SlackConfig);
+    // }
 
-    if (config.SLACK_TOKEN && config.SLACK_BASE_URL) {
-      topics = await createSlackChannelsAndInsertLinks(topics, config as SlackConfig);
+    topics = topics.map((topic) => {
+      const meeting = meetings[topic.meetingIds[0]];
+
+      return {
+        ...topic,
+        links: [
+          ...topic.links,
+          {
+            href: "#",
+            icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
+            text: `Host-Key: ${meeting.hostKey}`,
+          },
+        ],
+      };
+    });
+    if (
+      config.CONFLUENCE_BASE_URL &&
+      config.CONFLUENCE_USER &&
+      config.CONFLUENCE_PASSWORD &&
+      config.CONFLUENCE_SPACE_KEY &&
+      config.CONFLUENCE_PARENT_PAGE_ID &&
+      config.CONFLUENCE_TEMPLATE_PAGE_ID
+    ) {
+      topics = await createConfluencePagesAndInsertLinks(topics, meetings, config as ConfluenceConfig);
     }
 
     const office = generateOffice(schedule, meetings, topics, freizeit);
@@ -31,8 +57,8 @@ async function main(): Promise<void> {
     office.rooms = office.rooms.filter((room) => room.openForNewbies);
     office.rooms.push({
       roomId: "neu-bei-tng",
-      meetingId: "94169778892",
-      joinUrl: meetings["94169778892"].joinUrl,
+      meetingId: "96951842676",
+      joinUrl: meetings["96951842676"].joinUrl,
       name: "Neu bei TNG",
       openForNewbies: true,
       links: [],

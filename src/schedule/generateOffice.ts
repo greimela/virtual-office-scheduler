@@ -57,6 +57,7 @@ export type GroupJoinConfig = {
   title: string;
   subtitle?: string;
   description: string;
+  minimumRoomsToShow?: number;
 };
 
 export function generateOffice(
@@ -70,20 +71,21 @@ export function generateOffice(
   const groups: Group[] = [
     {
       id: "workshops-morning",
-      name: "Session 1",
+      name: "(11:15 - 12:45) Session 1",
     },
-    {
-      id: "workshops-morning-2",
-      name: "(09:15 - 12:15) 1. Workshoprunde (cont.)",
-    },
+    // {
+    //   id: "workshops-morning-2",
+    //   name: "(09:15 - 12:15) 1. Workshoprunde (cont.)",
+    // },
     {
       id: "workshops-afternoon",
-      name: "Session 2",
+      name: "(14:15 - 15:45) Session 2",
     },
-    {
-      id: "workshops-afternoon-2",
-      name: "(13:30 - 16:30) 2. Workshoprunde (cont.)",
-    },
+    // {
+    //   id: "workshops-afternoon-2",
+    //   name: "(13:30 - 16:30) 2. Workshoprunde (cont.)",
+    //   name: "(13:30 - 16:30) 2. Workshoprunde (cont.)",
+    // },
     {
       id: "abendprogramm",
       name: "Abendprogramm",
@@ -94,56 +96,46 @@ export function generateOffice(
     // },
     {
       id: "lunch-break",
-      name: "Mittagspause",
+      name: "(12:45 - 14:15) Mittagspause",
       groupJoin: {
         minimumParticipantCount: 10,
         title: "Mittagstisch",
         description: "Einem zufälligen Raum beitreten.",
+        minimumRoomsToShow: ThemenKaffeekuechen.length + 2,
       },
     },
     {
-      id: "break-1015",
-      name: "(10:15 - 10:45) Pause",
+      id: "socializing",
+      name: "(10:30 - 11:15) Socializing",
+      groupJoin: {
+        minimumParticipantCount: 10,
+        title: "Socializing",
+        description: "Einem zufälligen Raum beitreten.",
+        minimumRoomsToShow: ThemenKaffeekuechen.length + 2,
+      },
+    },
+    {
+      id: "discussion",
+      name: "(15:45 - 16:45) Zeit für Diskussion - Ergebnisse sichten",
+    },
+    {
+      id: "ende-socializing",
+      name: "(17:00 - 18:30) Ende des offiziellen Programms, Socializing",
       groupJoin: {
         minimumParticipantCount: 10,
         title: "Kaffeeküche",
         description: "Einem zufälligen Raum beitreten.",
-      },
-    },
-    {
-      id: "break-1445",
-      name: "(14:45 - 15:15) Pause",
-      groupJoin: {
-        minimumParticipantCount: 10,
-        title: "Kaffeeküche",
-        description: "Einem zufälligen Raum beitreten.",
-      },
-    },
-    {
-      id: "break-1630",
-      name: "(16:30 - 16:45) Pause",
-      groupJoin: {
-        minimumParticipantCount: 10,
-        title: "Kaffeeküche",
-        description: "Einem zufälligen Raum beitreten.",
-      },
-    },
-    {
-      id: "break-1715",
-      name: "(17:15 - 18:30) Pause",
-      groupJoin: {
-        minimumParticipantCount: 10,
-        title: "Kaffeeküche",
-        description: "Einem zufälligen Raum beitreten.",
+        minimumRoomsToShow: ThemenKaffeekuechen.length + 2,
       },
     },
     {
       id: "check-in",
-      name: "Ankunft",
+      name: "(08:30 - 09:00) Ankommen",
       groupJoin: {
         minimumParticipantCount: 10,
-        title: "Ankunft",
+        title: "Ankommen",
         description: "Einem zufälligen Raum beitreten.",
+        minimumRoomsToShow: ThemenKaffeekuechen.length + 2,
       },
     },
   ];
@@ -155,17 +147,10 @@ export function generateOffice(
       const roomTemplate = {
         name: topic.title,
         meetingId: topic.meetingIds[0],
-        links: [
-          {
-            href: "#",
-            icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
-            text: `Host-Key: ${meeting.hostKey}`,
-          },
-          ...topic.links,
-        ],
+        links: topic.links,
         subtitle: "",
         joinUrl: meeting.joinUrl,
-        openForNewbies: topic.openForNewbies,
+        openForNewbies: true, //topic.openForNewbies,
       };
       if (topic.type === "FULL_DAY") {
         return [
@@ -195,16 +180,51 @@ export function generateOffice(
       const roomsForGroup = rooms.filter((room) => room.groupId === groupWithSessionName.id);
       if (scheduleEntry.MeetingIds.length > 1 && roomsForGroup.length === 0) {
         rooms.push(
-          ...scheduleEntry.MeetingIds.map((meetingId) => ({
-            roomId: `${groupWithSessionName.name}-${meetingId}`,
-            meetingId: meetingId,
-            name: groupWithSessionName.groupJoin?.title || "",
-            joinUrl: meetings[meetingId].joinUrl,
-            links: [],
-            groupId: groupWithSessionName.id,
-            openForNewbies: groupWithSessionName.name !== "Ankunft",
-          }))
+          ...scheduleEntry.MeetingIds.map((meetingId, index) => {
+            const name = ThemenKaffeekuechen?.[index] || groupWithSessionName.groupJoin?.title || "";
+            if (name === "gather.town") {
+              return {
+                roomId: `${groupWithSessionName.id}-${meetingId}`,
+                name: name,
+                links: [],
+                groupId: groupWithSessionName.id,
+                meetingId: "",
+                joinUrl: "https://gather.town/app/G2YZEASLrXkYLMYP/ufo",
+                icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/logo-gather.png",
+                openForNewbies: true,
+              };
+            }
+            return {
+              roomId: `${groupWithSessionName.id}-${meetingId}`,
+              meetingId: meetingId,
+              name: name,
+              joinUrl: meetings[meetingId].joinUrl,
+              links: [],
+              groupId: groupWithSessionName.id,
+              openForNewbies: groupWithSessionName.name !== "Ankunft",
+            };
+          })
         );
+      } else if (groupWithSessionName.id === "discussion") {
+        const discussionRooms = topics
+          .sort((a, b) => (a.title > b.title ? 1 : -1))
+          .filter((topic, index) => topics?.[index - 1]?.title !== topic.title)
+          .map(
+            (topic, index): Room => {
+              const meeting = meetings[topic.meetingIds[0]];
+              return {
+                roomId: topic.title + "-discussion",
+                groupId: "discussion",
+                name: topic.title,
+                meetingId: topic.meetingIds[0],
+                links: topic.links,
+                subtitle: "",
+                joinUrl: meeting.joinUrl,
+                openForNewbies: true, //topic.openForNewbies,
+              };
+            }
+          );
+        rooms.push(...discussionRooms);
       }
     } else {
       rooms.push({
@@ -222,13 +242,13 @@ export function generateOffice(
   groups.push({ id: "retreat-orga", name: "" });
   rooms.push({
     groupId: "retreat-orga",
-    meetingId: "94935499829",
-    joinUrl: meetings["94935499829"].joinUrl,
+    meetingId: "99045302162",
+    joinUrl: meetings["99045302162"].joinUrl,
     name: "Retreat-Orga",
     openForNewbies: true,
     links: [],
   });
-  // sessions.push({ start: "10:30", end: "23:00", groupId: "freizeitprogramm" });
+  sessions.push({ start: "08:00", end: "08:30", groupId: "retreat-orga", alwaysActive: true });
 
   for (const freizeitEntry of freizeit) {
     if (freizeitEntry.Day === "Freitag") {
@@ -266,3 +286,14 @@ export function generateOffice(
     },
   };
 }
+const ThemenKaffeekuechen = [
+  "gather.town",
+  "Strech and Move your Body",
+  "Freizeit",
+  "Fußball EM und Sport",
+  "Literaturcafé",
+  "Kochen und Essen",
+  "Nerds unter sich",
+  "Open Air",
+  "Let the music rock",
+];

@@ -147,6 +147,6 @@ export async function fetchSpreadsheet(config: ScheduleEnvironment): Promise<Spr
     meetings: meetings.map(adaptMeetingsRow).reduce((acc, meeting) => ({ ...acc, [meeting.meetingId]: meeting }), {}),
     schedule: schedule.map(adaptScheduleRow),
     freizeit: freizeit.map(adaptFreizeitRow),
-    topics: [ ...halfDayTopics.map(adaptHalfDayTopicRow)],
+    topics: [...halfDayTopics.map(adaptHalfDayTopicRow)],
   };
 }

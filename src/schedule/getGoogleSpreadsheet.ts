@@ -57,8 +57,9 @@ async function sheetRowsFor<T>(document: GoogleSpreadsheet, name: string): Promi
     throw new Error(`could not find sheet for name ${name}`);
   }
 
+  console.log(`getting rows for sheet ${name}`);
   const rows = await sheet.getRows();
-  return rows as unknown as T[];
+  return (rows as unknown) as T[];
 }
 
 export async function fetchScheduleSpreadsheet(config: ScheduleEnvironment): Promise<RawSpreadsheetData> {

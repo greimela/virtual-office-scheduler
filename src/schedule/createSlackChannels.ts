@@ -2,7 +2,7 @@ import { RoomLink } from "./generateOffice";
 import { logger } from "../log";
 import { iconUrlFor } from "./extractLinks";
 import { SlackClient, SlackConfig } from "./SlackClient";
-import { Topic } from "./fetchSpreadsheet";
+import { HalfDayTopic, Topic } from "./fetchSpreadsheet";
 
 function getChannelLink(baseUrl, channelName: string): RoomLink {
   const href = `${baseUrl}/app_redirect?channel=${channelName}`;

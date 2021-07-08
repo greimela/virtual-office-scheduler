@@ -6,7 +6,7 @@ import { logger } from "../log";
 
 export async function updateOfficeInstance(baseUrl: string, username: string, password: string, office: Office) {
   const url = `${baseUrl}/api/admin/replaceOffice`;
-  logger.info("Replacing virtual office", { url, office });
+  logger.info("Replacing virtual office", { url });
 
   try {
     await axios.post(url, office, {

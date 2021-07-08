@@ -1,28 +1,42 @@
-import { hostKey, Office, Room } from "./generateOffice";
+import { hostKey } from "./generateOffice";
 import { logger } from "../log";
 import { iconUrlFor } from "./extractLinks";
 import { ConfluenceClient, ConfluenceConfig } from "./ConfluenceClient";
+import { MeetingDictionary, Topic } from "./fetchSpreadsheet";
 
-export async function createConfluencePagesAndInsertLinks(office: Office, config: ConfluenceConfig): Promise<Office> {
+export async function createConfluencePagesAndInsertLinks(
+  topics: Topic[],
+  meetings: MeetingDictionary,
+  config: ConfluenceConfig
+): Promise<Topic[]> {
   const confluenceClient = new ConfluenceClient(config);
   const templateStorageContent = await confluenceClient.getPageBody(config.CONFLUENCE_TEMPLATE_PAGE_ID);
 
-  const pagesToCreate = office.rooms
-    .filter((room) => room.hasConfluencePage)
-    .map((room) => ({ room, title: `vSR20 - Session ${room.name}` }));
-  for (const { room, title } of pagesToCreate) {
-    if (!room.hasConfluencePage) {
+  const pagesToCreate = topics.map((topic) => {
+    if (topic.type === "HALF_DAY" && topic.slot === "AFTERNOON") {
+      const morningDuplicate = topics.find(
+        (otherTopic) =>
+          otherTopic.title === topic.title && otherTopic.type === "HALF_DAY" && otherTopic.slot === "MORNING"
+      );
+      if (morningDuplicate) {
+        return { topic, title: `vSR21 - Session "${topic.title}" - Nachmittag` };
+      }
+    }
+    return { topic, title: `vSR21 - Session "${topic.title}"` };
+  });
+  for (const { topic, title } of pagesToCreate) {
+    if (topic.title.startsWith("Spontane Session")) {
       continue;
     }
-
     const pageLink = await getOrCreateConfluencePage(
       confluenceClient,
       config.CONFLUENCE_SPACE_KEY,
-      room,
+      topic,
+      meetings,
       title,
       templateStorageContent
     );
-    room.links.push({
+    topic.links.push({
       text: "Confluence",
       href: pageLink,
       icon: iconUrlFor(config.CONFLUENCE_BASE_URL),
@@ -31,13 +45,14 @@ export async function createConfluencePagesAndInsertLinks(office: Office, config
 
   await removeObsoletePages(confluenceClient, pagesToCreate);
 
-  return office;
+  return topics;
 }
 
 async function getOrCreateConfluencePage(
   client: ConfluenceClient,
   spaceKey: string,
-  room: Room,
+  topic: Topic,
+  meetings: MeetingDictionary,
   pageTitle: string,
   templateStorageContent: string
 ): Promise<string> {
@@ -47,9 +62,11 @@ async function getOrCreateConfluencePage(
     return pageLink;
   }
 
-  const linkList = room.links.map((link) => {
+  const linkList = topic.links.map((link) => {
     if (link.text.startsWith(hostKey)) {
-      return `<li><a href="${encode(room.joinUrl)}">Zoom</a> (<a href="${encode(link.href)}">${link.text}</a>)</li>`;
+      return `<li><a href="${encode(meetings[topic.meetingIds[0]].joinUrl)}">Zoom</a> (<a href="${encode(link.href)}">${
+        link.text
+      }</a>)</li>`;
     }
     return `<li><a href="${encode(link.href)}">${link.text}</a></li>`;
   });
@@ -62,7 +79,7 @@ async function getOrCreateConfluencePage(
 
 async function removeObsoletePages(
   client: ConfluenceClient,
-  pagesToCreate: { room: Room; title: string }[]
+  pagesToCreate: { topic: Topic; title: string }[]
 ): Promise<void> {
   const allSessionPages = await client.getAllSessionPages();
 
@@ -71,8 +88,8 @@ async function removeObsoletePages(
   );
   for (const obsoletePage of obsoletePages) {
     logger.info(`Confluence page ${obsoletePage.title} is obsolete => deleting`);
-    await client.removeSessionPage(obsoletePage.id);
-    logger.info(`Deleted Confluence page ${obsoletePage.title}`);
+    // await client.removeSessionPage(obsoletePage.id);
+    // logger.info(`Deleted Confluence page ${obsoletePage.title}`);
   }
 }
 

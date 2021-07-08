@@ -19,13 +19,10 @@ export class ConfluenceClient {
 
   constructor(private readonly config: ConfluenceConfig) {
     this.defaultRequestConfig = {
-      auth: {
-        username: this.config.CONFLUENCE_USER,
-        password: this.config.CONFLUENCE_PASSWORD,
-      },
       baseURL: this.config.CONFLUENCE_BASE_URL,
       headers: {
         "Content-Type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${this.config.CONFLUENCE_PASSWORD}`,
       },
     };
   }
