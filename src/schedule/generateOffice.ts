@@ -248,6 +248,14 @@ export function generateFridayOffice(
     openForNewbies: true,
     links: [],
   });
+  rooms.push({
+    groupId: "retreat-orga",
+    meetingId: "98202418413",
+    joinUrl: meetings["98202418413"].joinUrl,
+    name: "Neu bei TNG",
+    openForNewbies: true,
+    links: [],
+  });
   sessions.push({ start: "08:00", end: "08:30", groupId: "retreat-orga", alwaysActive: true });
 
   for (const freizeitEntry of freizeit) {
