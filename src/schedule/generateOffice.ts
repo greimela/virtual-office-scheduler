@@ -250,9 +250,10 @@ export function generateFridayOffice(
   });
   rooms.push({
     groupId: "retreat-orga",
-    meetingId: "98202418413",
-    joinUrl: meetings["98202418413"].joinUrl,
-    name: "Neu bei TNG",
+    meetingId: "94153683051",
+    joinUrl: meetings["94153683051"].joinUrl,
+    name: "Henriks Rede - English Q&A",
+    subtitle: "Q&A with Henrik for all english speaking colleagues",
     openForNewbies: true,
     links: [],
   });
