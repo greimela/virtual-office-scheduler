@@ -101,7 +101,7 @@ export function generateFridayOffice(
         minimumParticipantCount: 10,
         title: "Mittagstisch",
         description: "Einem zufälligen Raum beitreten.",
-        minimumRoomsToShow: ThemenKaffeekuechen.length + 2,
+        minimumRoomsToShow: ThemenKaffeekuechen.length + 18,
       },
     },
     {
@@ -111,7 +111,7 @@ export function generateFridayOffice(
         minimumParticipantCount: 10,
         title: "Socializing",
         description: "Einem zufälligen Raum beitreten.",
-        minimumRoomsToShow: ThemenKaffeekuechen.length + 2,
+        minimumRoomsToShow: ThemenKaffeekuechen.length + 18,
       },
     },
     {
@@ -125,7 +125,7 @@ export function generateFridayOffice(
         minimumParticipantCount: 10,
         title: "Kaffeeküche",
         description: "Einem zufälligen Raum beitreten.",
-        minimumRoomsToShow: ThemenKaffeekuechen.length + 2,
+        minimumRoomsToShow: ThemenKaffeekuechen.length + 18,
       },
     },
     {
@@ -135,7 +135,7 @@ export function generateFridayOffice(
         minimumParticipantCount: 10,
         title: "Ankommen",
         description: "Einem zufälligen Raum beitreten.",
-        minimumRoomsToShow: ThemenKaffeekuechen.length + 2,
+        minimumRoomsToShow: ThemenKaffeekuechen.length + 18,
       },
     },
   ];
