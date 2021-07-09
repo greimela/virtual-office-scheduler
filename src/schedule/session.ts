@@ -74,8 +74,8 @@ async function main(): Promise<void> {
       office.schedule.sessions = office.schedule.sessions.filter((session) => session.groupId !== "check-in");
       office.rooms.push({
         roomId: "neu-bei-tng",
-        meetingId: "96951842676",
-        joinUrl: meetings["96951842676"].joinUrl,
+        meetingId: "98202418413",
+        joinUrl: meetings["98202418413"].joinUrl,
         name: "Neu bei TNG",
         openForNewbies: true,
         links: [],
