@@ -88,7 +88,7 @@ export function generateFridayOffice(
     // },
     {
       id: "abendprogramm",
-      name: "Abendprogramm",
+      name: "(18:00 - 03:00) Abendprogramm",
     },
     // {
     //   id: "freizeitprogramm",
@@ -101,7 +101,7 @@ export function generateFridayOffice(
         minimumParticipantCount: 10,
         title: "Mittagstisch",
         description: "Einem zufälligen Raum beitreten.",
-        minimumRoomsToShow: ThemenKaffeekuechen.length + 18,
+        minimumRoomsToShow: ThemenKaffeekuechen.length + 5,
       },
     },
     {
@@ -111,7 +111,7 @@ export function generateFridayOffice(
         minimumParticipantCount: 10,
         title: "Socializing",
         description: "Einem zufälligen Raum beitreten.",
-        minimumRoomsToShow: ThemenKaffeekuechen.length + 18,
+        minimumRoomsToShow: ThemenKaffeekuechen.length + 5,
       },
     },
     {
@@ -120,12 +120,12 @@ export function generateFridayOffice(
     },
     {
       id: "ende-socializing",
-      name: "(17:00 - 18:30) Ende des offiziellen Programms, Socializing",
+      name: "(17:00 - 18:00) Ende des offiziellen Programms, Socializing",
       groupJoin: {
         minimumParticipantCount: 10,
         title: "Kaffeeküche",
         description: "Einem zufälligen Raum beitreten.",
-        minimumRoomsToShow: ThemenKaffeekuechen.length + 18,
+        minimumRoomsToShow: ThemenKaffeekuechen.length + 5,
       },
     },
     {
@@ -135,7 +135,7 @@ export function generateFridayOffice(
         minimumParticipantCount: 10,
         title: "Ankommen",
         description: "Einem zufälligen Raum beitreten.",
-        minimumRoomsToShow: ThemenKaffeekuechen.length + 18,
+        minimumRoomsToShow: ThemenKaffeekuechen.length + 5,
       },
     },
   ];
@@ -248,39 +248,43 @@ export function generateFridayOffice(
     openForNewbies: true,
     links: [],
   });
-  rooms.push({
-    groupId: "retreat-orga",
-    meetingId: "94153683051",
-    joinUrl: meetings["94153683051"].joinUrl,
-    name: "Henriks Rede - English Q&A",
-    subtitle: "Q&A with Henrik for all english speaking colleagues",
-    openForNewbies: true,
-    links: [],
-  });
   sessions.push({ start: "08:00", end: "08:30", groupId: "retreat-orga", alwaysActive: true });
 
   for (const freizeitEntry of freizeit) {
     if (freizeitEntry.Day === "Freitag") {
       const meeting = freizeitEntry.MeetingIds[0] ? meetings[freizeitEntry.MeetingIds[0]] : undefined;
-      rooms.push({
-        groupId: "abendprogramm",
-        meetingId: freizeitEntry.MeetingIds[0],
-        joinUrl: meeting ? meeting.joinUrl : freizeitEntry.JoinUrl,
-        name: freizeitEntry.Title,
-        subtitle: `${freizeitEntry.Start} - ${freizeitEntry.End}`,
-        openForNewbies: true,
-        links: [
-          ...(meeting
-            ? [
-                {
-                  href: "#",
-                  icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
-                  text: `Host-Key: ${meeting.hostKey}`,
-                },
-              ]
-            : []),
-        ],
-      });
+      if (freizeitEntry.Title === "gather.town") {
+        rooms.push({
+          roomId: `gather-abend`,
+          name: freizeitEntry.Title,
+          links: [],
+          groupId: "abendprogramm",
+          meetingId: "",
+          joinUrl: "https://gather.town/app/pG5KDCM8CxCY4oZz/vsr21",
+          icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/logo-gather.png",
+          openForNewbies: true,
+        });
+      } else {
+        rooms.push({
+          groupId: "abendprogramm",
+          meetingId: freizeitEntry.MeetingIds[0],
+          joinUrl: meeting ? meeting.joinUrl : freizeitEntry.JoinUrl,
+          name: freizeitEntry.Title,
+          subtitle: `${freizeitEntry.Start} - ${freizeitEntry.End}`,
+          openForNewbies: true,
+          links: [
+            ...(meeting
+              ? [
+                  {
+                    href: "#",
+                    icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
+                    text: `Host-Key: ${meeting.hostKey}`,
+                  },
+                ]
+              : []),
+          ],
+        });
+      }
     }
   }
   return {
@@ -323,25 +327,38 @@ export function generateSaturdayOffice(
   for (const freizeitEntry of freizeit) {
     if (freizeitEntry.Day === "Freitag") {
       const meeting = freizeitEntry.MeetingIds[0] ? meetings[freizeitEntry.MeetingIds[0]] : undefined;
-      rooms.push({
-        groupId: "abendprogramm",
-        meetingId: freizeitEntry.MeetingIds[0],
-        joinUrl: meeting ? meeting.joinUrl : freizeitEntry.JoinUrl,
-        name: freizeitEntry.Title,
-        subtitle: `${freizeitEntry.Start} - ${freizeitEntry.End}`,
-        openForNewbies: true,
-        links: [
-          ...(meeting
-            ? [
-                {
-                  href: "#",
-                  icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
-                  text: `Host-Key: ${meeting.hostKey}`,
-                },
-              ]
-            : []),
-        ],
-      });
+      if (freizeitEntry.Title === "gather.town") {
+        rooms.push({
+          roomId: `gather-abend`,
+          name: freizeitEntry.Title,
+          links: [],
+          groupId: "abendprogramm",
+          meetingId: "",
+          joinUrl: "https://gather.town/app/pG5KDCM8CxCY4oZz/vsr21",
+          icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/logo-gather.png",
+          openForNewbies: true,
+        });
+      } else {
+        rooms.push({
+          groupId: "abendprogramm",
+          meetingId: freizeitEntry.MeetingIds[0],
+          joinUrl: meeting ? meeting.joinUrl : freizeitEntry.JoinUrl,
+          name: freizeitEntry.Title,
+          subtitle: `${freizeitEntry.Start} - ${freizeitEntry.End}`,
+          openForNewbies: true,
+          links: [
+            ...(meeting
+              ? [
+                  {
+                    href: "#",
+                    icon: "https://virtual-office-icons.s3.eu-central-1.amazonaws.com/zoom-icon.png",
+                    text: `Host-Key: ${meeting.hostKey}`,
+                  },
+                ]
+              : []),
+          ],
+        });
+      }
     } else if (freizeitEntry.Day === "Samstag") {
       const meeting = freizeitEntry.MeetingIds[0] ? meetings[freizeitEntry.MeetingIds[0]] : undefined;
       rooms.push({
@@ -380,6 +397,8 @@ export function generateSaturdayOffice(
 
 const ThemenKaffeekuechen = [
   "gather.town",
+  "Gehaltsmodell ff.",
+  "Abschluss-Session ff.",
   "Strech and Move your Body",
   "Freizeit",
   "Fußball EM und Sport",
